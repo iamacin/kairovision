@@ -42,55 +42,52 @@
     </header>
 
     <main>
-        <!-- Section Héro avec recherche avancée -->
+        <!-- Section Héro avec recherche avancée - Version Invitation Only -->
         <section id="accueil" class="hero">
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1>Trouvez Votre Maison de Rêve au Sénégal</h1>
-                <h2>La plateforme immobilière qui simplifie vos recherches</h2>
+                <span class="waitlist-badge"><i class="fas fa-lock"></i> Accès sur invitation uniquement</span>
+                <h1>L'Avenir de l'Immobilier au Sénégal Arrive Bientôt</h1>
+                <h2>Rejoignez la liste d'attente pour être parmi les premiers à découvrir Kairo</h2>
                 
-                <!-- Barre de recherche avancée style Zillow -->
+                <!-- Container de recherche modifié pour la waitlist -->
                 <div class="search-container">
                     <div class="search-tabs">
-                        <button class="search-tab active" data-tab="acheter">Acheter</button>
-                        <button class="search-tab" data-tab="louer">Louer</button>
-                        <button class="search-tab" data-tab="estimer">Estimer</button>
+                        <button class="search-tab active" data-tab="agent">Agent Immobilier</button>
+                        <button class="search-tab" data-tab="promoteur">Promoteur</button>
+                        <button class="search-tab" data-tab="client">Client</button>
                     </div>
                     <div class="search-box">
                         <div class="search-input-container">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Adresse, quartier ou ville" class="search-input">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" placeholder="Votre adresse email" class="search-input">
                         </div>
                         <div class="search-filters">
                             <select class="filter-select">
-                                <option value="">Type de bien</option>
-                                <option value="maison">Maison</option>
-                                <option value="appartement">Appartement</option>
-                                <option value="villa">Villa</option>
-                                <option value="terrain">Terrain</option>
-                                <option value="bureau">Bureau</option>
+                                <option value="">Nombre de propriétés</option>
+                                <option value="1-5">1-5 propriétés</option>
+                                <option value="6-20">6-20 propriétés</option>
+                                <option value="21-50">21-50 propriétés</option>
+                                <option value="50+">Plus de 50 propriétés</option>
                             </select>
                             <select class="filter-select">
-                                <option value="">Prix max</option>
-                                <option value="5000000">5 millions FCFA</option>
-                                <option value="10000000">10 millions FCFA</option>
-                                <option value="25000000">25 millions FCFA</option>
-                                <option value="50000000">50 millions FCFA</option>
-                                <option value="100000000">100 millions FCFA</option>
-                                <option value="custom">Personnalisé</option>
+                                <option value="">Localisation principale</option>
+                                <option value="dakar">Dakar</option>
+                                <option value="saly">Saly</option>
+                                <option value="mbour">Mbour</option>
+                                <option value="thies">Thiès</option>
+                                <option value="autre">Autre</option>
                             </select>
-                            <select class="filter-select">
-                                <option value="">Chambres</option>
-                                <option value="1">1+</option>
-                                <option value="2">2+</option>
-                                <option value="3">3+</option>
-                                <option value="4">4+</option>
-                                <option value="5">5+</option>
-                            </select>
-                            <button class="filter-advanced-btn">Plus de filtres</button>
                         </div>
-                        <button class="search-button">Rechercher</button>
+                        <button class="waitlist-button">Rejoindre la liste d'attente</button>
+                        <p class="waitlist-info">Soyez parmi les premiers agents et promoteurs à présenter vos biens sur notre plateforme moderne.</p>
                     </div>
+                </div>
+                
+                <!-- Mockup de la plateforme -->
+                <div class="mockup-container">
+                    <img src="https://i.imgur.com/YD0wBSF.jpg" alt="Aperçu de Kairo" class="mockup-browser">
+                    <p class="mockup-caption">Aperçu de la future plateforme Kairo - Interface moderne et intuitive</p>
                 </div>
             </div>
         </section>
@@ -98,7 +95,7 @@
         <!-- Section propriétés récentes -->
         <section class="recent-properties">
             <div class="section-header">
-                <h2>Propriétés Récentes</h2>
+                <h2>Propriétés à Venir</h2>
                 <a href="resultats.html" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="properties-grid">
@@ -191,27 +188,27 @@
             <div class="steps-container">
                 <div class="step">
                     <div class="step-icon">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-user-plus"></i>
                     </div>
                     <div class="step-number">1</div>
-                    <h3>Recherchez</h3>
-                    <p>Utilisez notre moteur de recherche avancé pour trouver le bien idéal selon vos critères</p>
+                    <h3>Inscrivez-vous</h3>
+                    <p>Rejoignez notre liste d'attente pour être parmi les premiers à accéder à Kairo</p>
                 </div>
                 <div class="step">
                     <div class="step-icon">
                         <i class="fas fa-home"></i>
                     </div>
                     <div class="step-number">2</div>
-                    <h3>Visitez</h3>
-                    <p>Prenez rendez-vous directement via notre plateforme pour visiter les biens qui vous intéressent</p>
+                    <h3>Ajoutez vos biens</h3>
+                    <p>Listez vos propriétés avec des photos de qualité, descriptions détaillées et prix</p>
                 </div>
                 <div class="step">
                     <div class="step-icon">
                         <i class="fas fa-handshake"></i>
                     </div>
                     <div class="step-number">3</div>
-                    <h3>Achetez ou Louez</h3>
-                    <p>Finalisez votre transaction en toute sécurité avec notre accompagnement personnalisé</p>
+                    <h3>Connectez-vous avec des clients</h3>
+                    <p>Recevez des demandes qualifiées et gérez vos transactions en toute simplicité</p>
                 </div>
             </div>
         </section>
@@ -254,69 +251,6 @@
             </div>
         </section>
 
-        <!-- Section Témoignages -->
-        <section class="testimonials">
-            <h2>Ce Que Disent Nos Clients</h2>
-            <div class="testimonials-slider">
-                <div class="testimonial-card">
-                    <div class="testimonial-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">"Grâce à Kairo, j'ai trouvé ma maison idéale en seulement 3 semaines. La plateforme est intuitive et les agents sont très professionnels."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Aïssatou">
-                        <div>
-                            <h4>Aïssatou Diallo</h4>
-                            <p>Propriétaire à Dakar</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">"En tant qu'agent immobilier, Kairo m'a permis d'élargir ma clientèle et de conclure plus de transactions. Un outil indispensable !"</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Mamadou">
-                        <div>
-                            <h4>Mamadou Seck</h4>
-                            <p>Agent Immobilier</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <p class="testimonial-text">"J'ai facilement trouvé un appartement à louer à distance depuis la France. La transparence des informations m'a beaucoup aidé dans ma décision."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/36.jpg" alt="Omar">
-                        <div>
-                            <h4>Omar Mbaye</h4>
-                            <p>Locataire à Dakar</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
-        </section>
-
         <!-- Section Partenaires -->
         <section class="partners">
             <h2>Nos Partenaires</h2>
@@ -332,11 +266,11 @@
         <!-- Section CTA -->
         <section class="cta-section">
             <div class="cta-content">
-                <h2>Prêt à Trouver Votre Propriété Idéale ?</h2>
-                <p>Rejoignez des milliers d'utilisateurs satisfaits et commencez votre recherche dès aujourd'hui.</p>
+                <h2>Êtes-vous un agent immobilier ou un promoteur ?</h2>
+                <p>Rejoignez notre plateforme en avant-première et présentez vos biens à des milliers de clients potentiels.</p>
                 <div class="cta-buttons">
-                    <a href="inscription.html" class="btn-primary">Créer un compte</a>
-                    <a href="resultats.html" class="btn-secondary">Explorer les propriétés</a>
+                    <a href="#accueil" class="btn-primary">Rejoindre la liste d'attente</a>
+                    <a href="a-propos.html" class="btn-secondary">En savoir plus</a>
                 </div>
             </div>
             <div class="cta-image">
@@ -387,7 +321,7 @@
                         <li><a href="guides.html">Guides immobiliers</a></li>
                         <li><a href="financement.html">Options de financement</a></li>
                         <li><a href="outils.html">Calculateurs</a></li>
-                        <li><a href="tendances.html">Tendances du marché</a></li>
+                        <li><a href="temoignages.html">Témoignages</a></li>
                     </ul>
                 </div>
             </div>
