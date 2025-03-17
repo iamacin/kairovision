@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import Image from '../common/Image';
+import { images } from '../../utils/images';
 
 const HeaderWrapper = styled.header`
   position: fixed;
@@ -107,16 +110,23 @@ const Header = () => {
     <HeaderWrapper>
       <Nav>
         <NavBrand>
-          <a href="/">
-            <img src="/assets/logo.svg" alt="Kairo" className="logo" />
-          </a>
+          <Link to="/">
+            <Image
+              src={images.logo}
+              alt="Kairo"
+              className="logo"
+              width="40px"
+              height="40px"
+              objectFit="contain"
+            />
+          </Link>
         </NavBrand>
         
         <NavLinks>
-          <a href="#properties">Acheter</a>
-          <a href="#properties">Louer</a>
-          <a href="#kairo-vision">Kairo Vision</a>
-          <a href="/waitlist">Liste d'attente</a>
+          <Link to="/#properties">Acheter</Link>
+          <Link to="/#properties">Louer</Link>
+          <Link to="/#kairo-vision">Kairo Vision</Link>
+          <Link to="/waitlist">Liste d'attente</Link>
         </NavLinks>
         
         <NavButtons>
