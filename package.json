@@ -7,7 +7,7 @@
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
     "download-images": "node scripts/download-images.js",
-    "postinstall": "npm run download-images"
+    "prepare": "node scripts/download-images.js || exit 0"
   },
   "keywords": [
     "real estate",

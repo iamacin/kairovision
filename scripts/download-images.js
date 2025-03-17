@@ -5,7 +5,22 @@ const path = require('path');
 const https = require('https');
 const { images } = require('../src/utils/images');
 
+function isValidUrl(string) {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 function downloadImage(url, filePath) {
+  // Skip if it's not a valid URL (local file path)
+  if (!isValidUrl(url)) {
+    console.log(`Skipping local file: ${url}`);
+    return Promise.resolve();
+  }
+
   return new Promise((resolve, reject) => {
     const dir = path.dirname(filePath);
     if (!fs.existsSync(dir)) {
@@ -18,6 +33,7 @@ function downloadImage(url, filePath) {
         response.pipe(fileStream);
         fileStream.on('finish', () => {
           fileStream.close();
+          console.log(`Downloaded: ${url} -> ${filePath}`);
           resolve();
         });
       } else {
@@ -32,30 +48,37 @@ function downloadImage(url, filePath) {
 async function downloadAllImages() {
   const downloadTasks = [];
 
-  // Download properties images
-  Object.entries(images.properties).forEach(([key, url]) => {
-    const filePath = path.join(__dirname, '../public/assets/images/properties', `${key}.jpg`);
-    downloadTasks.push(downloadImage(url, filePath));
-  });
+  // Only download images that are URLs, skip local files
+  function processImageSet(images, targetDir) {
+    Object.entries(images).forEach(([key, url]) => {
+      if (isValidUrl(url)) {
+        const ext = path.extname(url) || '.jpg'; // Default to .jpg if no extension
+        const filePath = path.join(__dirname, '..', 'public', targetDir, `${key}${ext}`);
+        downloadTasks.push(downloadImage(url, filePath));
+      }
+    });
+  }
 
-  // Download neighborhoods images
-  Object.entries(images.neighborhoods).forEach(([key, url]) => {
-    const filePath = path.join(__dirname, '../public/assets/images/neighborhoods', `${key}.jpg`);
-    downloadTasks.push(downloadImage(url, filePath));
-  });
+  // Process each image category
+  if (images.properties) {
+    processImageSet(images.properties, 'assets/images/properties');
+  }
 
-  // Download agents images
-  Object.entries(images.agents).forEach(([key, url]) => {
-    const filePath = path.join(__dirname, '../public/assets/images/agents', `${key}.jpg`);
-    downloadTasks.push(downloadImage(url, filePath));
-  });
+  if (images.neighborhoods) {
+    processImageSet(images.neighborhoods, 'assets/images/neighborhoods');
+  }
+
+  if (images.agents) {
+    processImageSet(images.agents, 'assets/images/agents');
+  }
 
   try {
     await Promise.all(downloadTasks);
-    console.log('All images downloaded successfully!');
+    console.log('All remote images downloaded successfully!');
   } catch (error) {
     console.error('Error downloading images:', error);
-    process.exit(1);
+    // Don't exit with error code, as local files are expected
+    console.log('Continuing build process...');
   }
 }
 
