@@ -30,4 +30,33 @@ ehthumbs.db
 Thumbs.db
 
 # Build output
-styles/css/prefixed/ 
+styles/css/prefixed/
+
+# Build
+dist/
+build/
+
+# OS files
+.DS_Store
+*.log
+
+# Large media files
+*.mp4
+*.mov
+*.wmv
+
+# Image files (uncomment if you want to exclude them)
+# public/assets/images/**/*.jpg
+# public/assets/images/**/*.png
+# public/assets/images/**/*.webp
+# public/assets/partners/**/*
+
+# Keep specific images (uncomment and modify as needed)
+!public/assets/images/logo.svg
+!public/assets/images/favicon.ico
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo 
