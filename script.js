@@ -1,5 +1,189 @@
 // Attendre que le DOM soit complètement chargé
 document.addEventListener('DOMContentLoaded', function() {
+    // Menu mobile
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    const navButtons = document.querySelector('.nav-buttons');
+    
+    if (hamburger) {
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            navButtons.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    }
+
+    // Onglets de recherche
+    const searchTabs = document.querySelectorAll('.search-tab');
+    if (searchTabs.length > 0) {
+        searchTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Retirer la classe active de tous les onglets
+                searchTabs.forEach(t => t.classList.remove('active'));
+                // Ajouter la classe active à l'onglet cliqué
+                this.classList.add('active');
+                
+                // Changer le formulaire en fonction de l'onglet sélectionné
+                const tabType = this.getAttribute('data-tab');
+                document.querySelector('.search-button').textContent = 
+                    tabType === 'acheter' ? 'Rechercher' : 
+                    tabType === 'louer' ? 'Rechercher' : 'Estimer';
+                
+                // Changer les filtres disponibles selon le type de recherche
+                updateFilters(tabType);
+            });
+        });
+    }
+
+    // Fonction pour mettre à jour les filtres selon le type de recherche
+    function updateFilters(tabType) {
+        const priceSelect = document.querySelector('.filter-select:nth-child(2)');
+        if (priceSelect) {
+            if (tabType === 'acheter') {
+                priceSelect.innerHTML = `
+                    <option value="">Prix max</option>
+                    <option value="5000000">5 millions FCFA</option>
+                    <option value="10000000">10 millions FCFA</option>
+                    <option value="25000000">25 millions FCFA</option>
+                    <option value="50000000">50 millions FCFA</option>
+                    <option value="100000000">100 millions FCFA</option>
+                    <option value="custom">Personnalisé</option>
+                `;
+            } else if (tabType === 'louer') {
+                priceSelect.innerHTML = `
+                    <option value="">Prix max</option>
+                    <option value="200000">200 000 FCFA/mois</option>
+                    <option value="350000">350 000 FCFA/mois</option>
+                    <option value="500000">500 000 FCFA/mois</option>
+                    <option value="750000">750 000 FCFA/mois</option>
+                    <option value="1000000">1 million FCFA/mois</option>
+                    <option value="custom">Personnalisé</option>
+                `;
+            } else if (tabType === 'estimer') {
+                priceSelect.innerHTML = `
+                    <option value="">Type d'estimation</option>
+                    <option value="vente">Estimation de vente</option>
+                    <option value="location">Estimation de location</option>
+                `;
+            }
+        }
+    }
+
+    // Bouton "Plus de filtres"
+    const advancedFilterBtn = document.querySelector('.filter-advanced-btn');
+    if (advancedFilterBtn) {
+        advancedFilterBtn.addEventListener('click', function() {
+            // Simulation d'ouverture de modal
+            alert('Les filtres avancés seront disponibles prochainement !');
+        });
+    }
+
+    // Bouton de recherche
+    const searchButton = document.querySelector('.search-button');
+    if (searchButton) {
+        searchButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const searchInput = document.querySelector('.search-input').value;
+            const activeTab = document.querySelector('.search-tab.active').getAttribute('data-tab');
+            
+            if (searchInput.trim() === '') {
+                showMessage('Veuillez entrer une adresse, un quartier ou une ville', 'error');
+                return;
+            }
+            
+            // Simulation de redirection vers la page de résultats
+            if (activeTab === 'estimer') {
+                showMessage('Service d\'estimation en cours de développement', 'info');
+            } else {
+                // Redirection vers la page de résultats avec les paramètres de recherche
+                // window.location.href = `resultats.html?type=${activeTab}&lieu=${encodeURIComponent(searchInput)}`;
+                showMessage(`Recherche de propriétés à ${activeTab} à "${searchInput}"`, 'success');
+            }
+        });
+    }
+
+    // Boutons "J'aime" pour les propriétés
+    const favoriteBtns = document.querySelectorAll('.favorite-btn');
+    if (favoriteBtns.length > 0) {
+        favoriteBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault(); // Empêcher la navigation si le bouton est dans un lien
+                const icon = this.querySelector('i');
+                
+                if (icon.classList.contains('far')) {
+                    // Passer de l'icône vide à l'icône pleine
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    showMessage('Propriété ajoutée à vos favoris', 'success');
+                } else {
+                    // Passer de l'icône pleine à l'icône vide
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    showMessage('Propriété retirée de vos favoris', 'info');
+                }
+            });
+        });
+    }
+
+    // Slider de témoignages
+    const testimonialDots = document.querySelectorAll('.testimonial-dots .dot');
+    const testimonialSlider = document.querySelector('.testimonials-slider');
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    
+    if (testimonialDots.length > 0 && testimonialSlider && testimonialCards.length > 0) {
+        testimonialDots.forEach((dot, index) => {
+            dot.addEventListener('click', function() {
+                // Retirer la classe active de tous les points
+                testimonialDots.forEach(d => d.classList.remove('active'));
+                // Ajouter la classe active au point cliqué
+                this.classList.add('active');
+                
+                // Faire défiler le slider jusqu'au témoignage correspondant
+                if (index < testimonialCards.length) {
+                    // Simuler un carousel simple
+                    testimonialCards.forEach(card => {
+                        card.style.display = 'none';
+                    });
+                    testimonialCards[index].style.display = 'block';
+                }
+            });
+        });
+    }
+
+    // Toggle de langue
+    const languageToggle = document.querySelector('.language-toggle');
+    if (languageToggle) {
+        const languageOptions = languageToggle.querySelectorAll('span');
+        languageOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Retirer la classe active de toutes les options
+                languageOptions.forEach(opt => opt.classList.remove('active'));
+                // Ajouter la classe active à l'option cliquée
+                this.classList.add('active');
+                
+                const language = this.textContent;
+                showMessage(`La langue a été changée en ${language}. Cette fonctionnalité sera bientôt disponible.`, 'info');
+            });
+        });
+    }
+
+    // Formulaire de newsletter
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const emailInput = this.querySelector('input[type="email"]');
+            const email = emailInput.value.trim();
+            
+            if (isValidEmail(email)) {
+                showMessage('Merci de vous être inscrit à notre newsletter !', 'success');
+                emailInput.value = '';
+            } else {
+                showMessage('Veuillez entrer une adresse e-mail valide.', 'error');
+            }
+        });
+    }
+
     // Animation au défilement
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -12,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Sélectionner tous les éléments à animer
-    const animatedElements = document.querySelectorAll('.feature-card, .step, .partner-logo');
+    const animatedElements = document.querySelectorAll('.property-card, .neighborhood-card, .step, .testimonial-card');
     animatedElements.forEach(el => {
         el.classList.add('fade-in');
         observer.observe(el);
@@ -34,70 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Gestion du formulaire d'inscription à la liste d'attente
-    const waitlistForm = document.querySelector('.waitlist-form');
-    if (waitlistForm) {
-        waitlistForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const emailInput = this.querySelector('input[type="email"]');
-            const email = emailInput.value.trim();
-            
-            if (isValidEmail(email)) {
-                // Simuler l'envoi du formulaire
-                showMessage('Merci de vous être inscrit ! Nous vous contacterons bientôt.', 'success');
-                emailInput.value = '';
-            } else {
-                showMessage('Veuillez entrer une adresse e-mail valide.', 'error');
-            }
-        });
-    }
-
-    // Gestion du formulaire de contact
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nameInput = this.querySelector('input[type="text"]');
-            const emailInput = this.querySelector('input[type="email"]');
-            const phoneInput = this.querySelector('input[type="tel"]');
-            
-            const name = nameInput.value.trim();
-            const email = emailInput.value.trim();
-            
-            if (name === '') {
-                showMessage('Veuillez entrer votre nom.', 'error');
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                showMessage('Veuillez entrer une adresse e-mail valide.', 'error');
-                return;
-            }
-            
-            // Simuler l'envoi du formulaire
-            showMessage('Merci pour votre inscription ! Nous vous contacterons dès que Kairo sera lancé.', 'success');
-            nameInput.value = '';
-            emailInput.value = '';
-            phoneInput.value = '';
-        });
-    }
-
-    // Basculement de langue
-    const languageButtons = document.querySelectorAll('.language-toggle button');
-    languageButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Retirer la classe active de tous les boutons
-            languageButtons.forEach(btn => btn.classList.remove('active'));
-            // Ajouter la classe active au bouton cliqué
-            this.classList.add('active');
-            
-            // Ici, vous pourriez implémenter la logique de changement de langue
-            // Pour l'instant, affichons juste un message
-            const language = this.textContent;
-            showMessage(`La langue a été changée en ${language}. Cette fonctionnalité sera bientôt disponible.`, 'info');
-        });
-    });
-
     // Navigation fixe au défilement
     const header = document.querySelector('header');
     let lastScrollTop = 0;
@@ -111,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             header.classList.remove('scrolled');
         }
         
-        if (scrollTop > lastScrollTop) {
+        if (scrollTop > lastScrollTop && scrollTop > 200) {
             // Défilement vers le bas
             header.style.transform = 'translateY(-100%)';
         } else {
@@ -238,6 +358,19 @@ messageStyles.textContent = `
         background-color: rgba(255, 255, 255, 0.95);
         box-shadow: 0 4px 20px rgba(138, 43, 226, 0.15);
         transition: all 0.3s ease;
+    }
+
+    /* Animation pour hamburger */
+    .hamburger.active .line:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    
+    .hamburger.active .line:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger.active .line:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
     }
 `;
 document.head.appendChild(messageStyles); 
