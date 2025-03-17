@@ -14,22 +14,21 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="nav-logo">
-                <img src="assets/logo.svg" alt="Kairo">
+            <div class="nav-brand">
+                <img src="assets/logo.svg" alt="Kairo" class="logo">
             </div>
             <div class="nav-links">
                 <a href="#properties">Acheter</a>
                 <a href="#properties">Louer</a>
-                <a href="#about">À propos</a>
-                <a href="#contact">Contact</a>
+                <a href="#kairo-vision">Kairo Vision</a>
             </div>
             <div class="nav-buttons">
                 <div class="language-toggle">
                     <span class="active">FR</span>
                     <span>EN</span>
                 </div>
-                <button class="btn-connexion">Connexion</button>
-                <button class="btn-inscription">Inscription</button>
+                <button class="btn-connexion">Se connecter</button>
+                <button class="btn-inscription">S'inscrire</button>
             </div>
         </nav>
     </header>
@@ -37,166 +36,81 @@
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-content">
-                <h1 class="neon-text">L'immobilier de demain, aujourd'hui</h1>
-                <h2>Une nouvelle approche de l'immobilier, plus transparente et plus efficace</h2>
-                <button class="waitlist-button neon-border" onclick="openWaitlist()">Rejoindre Kairo</button>
-            </div>
-            <div class="hero-right">
-                <div class="hero-image-container">
-                    <img src="assets/hero-image.jpg" alt="Kairo Immobilier">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-left">
+                        <h1 class="neon-text">L'immobilier de demain, aujourd'hui</h1>
+                        <h2>Une nouvelle approche de l'immobilier, plus transparente et plus efficace</h2>
+                    </div>
+                    <div class="hero-right">
+                        <div class="hero-image-container">
+                            <img src="assets/hero-image.jpg" alt="Kairo Platform Preview">
+                        </div>
+                    </div>
+                </div>
+                <div class="waitlist-container">
+                    <form class="waitlist-form" id="waitlistForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Prénom</label>
+                                <input type="text" id="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Nom</label>
+                                <input type="text" id="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Téléphone</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="company">Entreprise</label>
+                                <input type="text" id="company" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userType">Je suis</label>
+                            <select id="userType" required>
+                                <option value="">Sélectionnez votre profil</option>
+                                <option value="agent">Agent immobilier</option>
+                                <option value="developer">Promoteur</option>
+                                <option value="partner">Partenaire</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="waitlist-button">Rejoindre la liste d'attente</button>
+                    </form>
                 </div>
             </div>
         </section>
 
-        <!-- Waitlist Modal -->
-        <div id="waitlistModal" class="modal">
-            <div class="modal-content">
-                <h2>Rejoignez Kairo</h2>
-                <form class="waitlist-form">
-                    <div class="form-group">
-                        <label for="firstName">Prénom</label>
-                        <input type="text" id="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Nom</label>
-                        <input type="text" id="lastName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Téléphone</label>
-                        <input type="tel" id="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="company">Entreprise</label>
-                        <input type="text" id="company">
-                    </div>
-                    <div class="form-group">
-                        <label for="userType">Vous êtes</label>
-                        <select id="userType" required>
-                            <option value="">Sélectionnez votre profil</option>
-                            <option value="agent">Agent immobilier</option>
-                            <option value="developer">Promoteur</option>
-                            <option value="partner">Partenaire</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="waitlist-button">Rejoindre la liste d'attente</button>
-                </form>
-            </div>
-        </div>
-
         <!-- Properties Section -->
-        <section class="recent-properties">
+        <section class="recent-properties" id="properties">
             <div class="section-header">
-                <h2 class="neon-text">Nos Incontournables</h2>
+                <h2 class="section-title neon-text">Nos Incontournables</h2>
                 <a href="#" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
             </div>
-            <div class="properties-grid">
-                <!-- Propriété 1 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Villa moderne à Dakar">
-                        <span class="property-tag vente">À Vendre</span>
-                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <span class="property-price">125 000 000 FCFA</span>
-                        <h3 class="property-title">Villa Moderne avec Vue Mer</h3>
-                        <p class="property-address"><i class="fas fa-map-marker-alt"></i> Les Almadies, Dakar</p>
-                        <div class="property-features">
-                            <span><i class="fas fa-bed"></i> 4 Chambres</span>
-                            <span><i class="fas fa-bath"></i> 3 SdB</span>
-                            <span><i class="fas fa-ruler-combined"></i> 250 m²</span>
-                        </div>
-                        <div class="property-footer">
-                            <div class="agent-info">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Agent" class="agent-image">
-                                <span>Abdou Diop</span>
-                            </div>
-                            <span class="property-date">Il y a 2 jours</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Propriété 2 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Appartement à Mermoz">
-                        <span class="property-tag location">À Louer</span>
-                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <span class="property-price">850 000 FCFA/mois</span>
-                        <h3 class="property-title">Appartement Neuf Haut Standing</h3>
-                        <p class="property-address"><i class="fas fa-map-marker-alt"></i> Mermoz, Dakar</p>
-                        <div class="property-features">
-                            <span><i class="fas fa-bed"></i> 3 Chambres</span>
-                            <span><i class="fas fa-bath"></i> 2 SdB</span>
-                            <span><i class="fas fa-ruler-combined"></i> 120 m²</span>
-                        </div>
-                        <div class="property-footer">
-                            <div class="agent-info">
-                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Agent" class="agent-image">
-                                <span>Fatou Ndiaye</span>
-                            </div>
-                            <span class="property-date">Il y a 5 jours</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Propriété 3 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="https://images.unsplash.com/photo-1602941525421-8f8b81d3edbb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Terrain à Saly">
-                        <span class="property-tag vente">À Vendre</span>
-                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <span class="property-price">35 000 000 FCFA</span>
-                        <h3 class="property-title">Terrain Viabilisé avec Titre Foncier</h3>
-                        <p class="property-address"><i class="fas fa-map-marker-alt"></i> Saly, Mbour</p>
-                        <div class="property-features">
-                            <span><i class="fas fa-ruler-combined"></i> 500 m²</span>
-                            <span><i class="fas fa-file-contract"></i> Titre Foncier</span>
-                            <span><i class="fas fa-check-circle"></i> Viabilisé</span>
-                        </div>
-                        <div class="property-footer">
-                            <div class="agent-info">
-                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Agent" class="agent-image">
-                                <span>Moussa Fall</span>
-                            </div>
-                            <span class="property-date">Il y a 1 semaine</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section-cta">
-                <a href="resultats.html" class="btn-primary">Découvrir plus de propriétés</a>
-            </div>
+            <!-- Property cards here -->
         </section>
 
         <!-- Advantages Section -->
-        <section class="advantages-section">
+        <section class="advantages" id="advantages">
             <div class="container">
                 <h2 class="section-title neon-text">Les Avantages Kairo</h2>
                 <div class="advantages-grid">
-                    <div class="advantage-card">
-                        <div class="advantage-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3>Transparence Totale</h3>
-                        <p>Accédez à toutes les informations nécessaires pour prendre les meilleures décisions.</p>
-                    </div>
-                    <!-- More advantage cards -->
+                    <!-- Add your advantages cards here -->
                 </div>
             </div>
         </section>
 
         <!-- Partners Section -->
-        <section class="partners-section">
+        <section class="partners">
             <div class="container">
                 <h2 class="section-title neon-text">Nos Partenaires</h2>
                 <div class="partners-grid">
@@ -209,37 +123,46 @@
         </section>
 
         <!-- Join Kairo Section -->
-        <section class="join-section">
+        <section class="join-kairo">
             <div class="container">
-                <h2 class="neon-text">Rejoignez Kairo</h2>
-                <p>Transformez votre façon de travailler dans l'immobilier</p>
-                <button class="waitlist-button neon-border" onclick="openWaitlist()">Commencer maintenant</button>
+                <h2 class="section-title neon-text">Rejoignez Kairo</h2>
+                <p class="join-description">Transformez votre façon de travailler dans l'immobilier</p>
+                <div class="cta-buttons">
+                    <button class="btn-primary">Découvrir les opportunités</button>
+                    <button class="btn-secondary">En savoir plus</button>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer>
+    <footer class="footer">
         <div class="footer-content">
             <div class="footer-company">
                 <img src="assets/logo.svg" alt="Kairo" class="footer-logo">
-                <p>Redéfinir l'expérience immobilière pour tous.</p>
+                <p>Transformons ensemble l'avenir de l'immobilier</p>
             </div>
             <div class="footer-links">
                 <div class="footer-column">
-                    <h3>Navigation</h3>
+                    <h3>Kairo</h3>
                     <ul>
-                        <li><a href="#properties">Acheter</a></li>
-                        <li><a href="#properties">Louer</a></li>
                         <li><a href="#about">À propos</a></li>
                         <li><a href="#contact">Contact</a></li>
+                        <li><a href="#careers">Carrières</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Resources</h3>
                     <ul>
                         <li><a href="#blog">Blog</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                        <li><a href="#contact">Nous contacter</a></li>
+                        <li><a href="#press">Presse</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Légal</h3>
+                    <ul>
+                        <li><a href="#privacy">Confidentialité</a></li>
+                        <li><a href="#terms">Conditions</a></li>
+                        <li><a href="#cookies">Cookies</a></li>
                     </ul>
                 </div>
             </div>
@@ -247,7 +170,7 @@
                 <h3>Newsletter</h3>
                 <form class="newsletter-form">
                     <input type="email" placeholder="Votre email">
-                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    <button type="submit">S'abonner</button>
                 </form>
             </div>
         </div>

@@ -4,9 +4,9 @@
 :root {
     /* Colors */
     --primary: 138, 43, 226;
-    --primary-color: rgba(var(--primary), 0.65);
-    --primary-color-light: rgba(185, 128, 255, 0.65);
-    --primary-color-dark: rgba(106, 28, 183, 0.7);
+    --primary-color: rgba(var(--primary), 0.85);
+    --primary-color-light: rgba(185, 128, 255, 0.85);
+    --primary-color-dark: rgba(106, 28, 183, 0.9);
     
     /* Text Colors */
     --text-color: #333;
@@ -41,13 +41,6 @@
     /* Transitions */
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-transform: transform var(--transition);
-    
-    /* Neon Effects */
-    --neon-border: 0 0 2px rgba(var(--primary), 0.3),
-                   0 0 4px rgba(var(--primary), 0.2),
-                   0 0 6px rgba(var(--primary), 0.1);
-    --neon-text: 0 0 1px rgba(var(--primary), 0.2),
-                 0 0 2px rgba(var(--primary), 0.1);
 }
 
 /* Utility Classes */
@@ -109,39 +102,152 @@
 
 /* Hero Section */
 .hero {
-    position: relative;
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: center;
-    padding: 2rem;
-    overflow: hidden;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                      url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
     position: relative;
-    z-index: 2;
-    padding-right: 2rem;
+}
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
 .hero-right {
     position: relative;
     height: 100%;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.hero-image-container {
+.waitlist-container {
+    position: absolute;
+    bottom: -100px;
+    left: 0;
+    right: 0;
+    background: var(--glass-background);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: var(--border-radius-lg);
+    padding: 30px;
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
+    z-index: 10;
+}
+
+/* Updated neon effect - lighter and only on borders */
+.neon-text {
+    color: white;
+    text-shadow: none;
     position: relative;
-    width: 100%;
-    height: 80vh;
-    border-radius: 30px;
-    overflow: hidden;
 }
 
-.hero-title {
-    font-size: clamp(36px, 5vw, 64px);
-    line-height: 1.1;
+.neon-text::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 1px solid rgba(var(--primary), 0.3);
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(var(--primary), 0.2),
+                inset 0 0 5px rgba(var(--primary), 0.2);
+    pointer-events: none;
+}
+
+/* Updated section titles */
+.section-title {
+    font-size: 32px;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: rgba(var(--primary), 0.3);
+    box-shadow: 0 0 5px rgba(var(--primary), 0.2);
+}
+
+/* Updated Waitlist Form */
+.waitlist-form {
+    display: grid;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: rgba(var(--primary), 0.5);
+    box-shadow: 0 0 0 2px rgba(var(--primary), 0.1);
+    outline: none;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Partner Logos Section */
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 40px;
+    align-items: center;
+    justify-items: center;
+    padding: 40px 0;
+}
+
+.partner-logo {
+    max-width: 120px;
+    height: auto;
+    filter: grayscale(1) opacity(0.7);
+    transition: var(--transition);
+}
+
+.partner-logo:hover {
+    filter: grayscale(0) opacity(1);
 }
 
 /* Cards Base Styles */
@@ -222,17 +328,14 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .hero {
+    .hero-content,
+    .tools-grid {
         grid-template-columns: 1fr;
-        text-align: center;
     }
-
-    .hero-content {
-        padding-right: 0;
-    }
-
-    .waitlist-form {
-        grid-template-columns: 1fr;
+    
+    .vision-grid,
+    .benefits-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -249,14 +352,6 @@
     
     .hero-title {
         text-align: center;
-    }
-
-    .advantages-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .partners-grid {
-        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -360,6 +455,21 @@
     opacity: 0.8;
 }
 
+.hero-image-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transform: perspective(1000px) rotateY(-15deg);
+    transition: transform 0.5s ease;
+}
+
+.hero-image-container:hover {
+    transform: perspective(1000px) rotateY(-5deg);
+}
+
 .hero-image-container img {
     width: 100%;
     height: 100%;
@@ -413,113 +523,220 @@
     transform: translateX(5px);
 }
 
-/* Waitlist Section */
-.waitlist-section {
-    position: relative;
-    padding: 4rem 0;
-    background: var(--gradient-dark);
-    margin-top: 4rem;
+/* Responsive design pour le nouveau hero et Kairo Vision */
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+    }
+
+    .hero h1 {
+        font-size: 48px;
+    }
+
+    .hero-image-container {
+        transform: none;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .vision-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.waitlist-container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 2rem;
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .vision-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-.waitlist-form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+/* Container de recherche avec effet glass */
+.search-container {
+    background-color: var(--glass-background);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: var(--border-radius);
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 0 auto;
 }
 
-.form-group {
+.search-tabs {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--glass-border);
 }
 
-.form-group label {
+.search-tab {
+    flex: 1;
+    padding: 15px;
+    background: none;
+    border: none;
+    font-weight: 500;
     color: white;
-    font-size: 0.9rem;
-}
-
-.form-group input,
-.form-group select {
-    padding: 1rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-    backdrop-filter: blur(10px);
-}
-
-/* Text avec effet néon léger */
-.neon-text {
-    color: white;
-    text-shadow: var(--neon-text);
-}
-
-.neon-border {
-    border: 1px solid rgba(var(--primary), 0.3);
-    box-shadow: var(--neon-border);
-}
-
-/* Section Avantages (remplace Comment ça marche) */
-.advantages-section {
-    padding: 6rem 0;
-    background: linear-gradient(to bottom, var(--background-color), var(--background-color-alt));
-}
-
-.advantages-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.advantage-card {
+    cursor: pointer;
+    transition: var(--transition);
     position: relative;
-    padding: 2rem;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease;
 }
 
-.advantage-card:hover {
-    transform: translateY(-5px);
+.search-tab.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Section Partenaires avec Logos */
-.partners-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 2rem;
-    align-items: center;
-    justify-items: center;
+.search-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color-light);
 }
 
-.partner-logo {
-    max-width: 150px;
+.search-box {
+    padding: 20px;
+}
+
+.search-input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.search-input-container i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    transition: var(--transition);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-input:focus {
+    border-color: var(--primary-color-light);
+    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.15);
+    outline: none;
+}
+
+.search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.filter-select {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 15px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-select:focus {
+    border-color: var(--primary-color-light);
+    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.15);
+    outline: none;
+}
+
+.filter-select option {
+    background-color: #333;
+    color: white;
+}
+
+.filter-advanced-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 10px 15px;
+}
+
+.filter-advanced-btn:hover {
+    text-decoration: underline;
+}
+
+/* Bouton waitlist avec style glass */
+.waitlist-button {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: 1px solid var(--glass-border);
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 10px rgba(138, 43, 226, 0.2);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.waitlist-button:hover {
+    background-color: var(--primary-color-dark);
+    box-shadow: 0 6px 15px rgba(138, 43, 226, 0.25);
+    transform: translateY(-2px);
+}
+
+.waitlist-info {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+}
+
+/* Section "coming soon" mockup */
+.mockup-container {
+    position: relative;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.mockup-browser {
+    max-width: 90%;
     height: auto;
-    filter: grayscale(1);
-    opacity: 0.7;
-    transition: all 0.3s ease;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+    transition: var(--transition);
+    transform: perspective(1000px) rotateX(5deg);
 }
 
-.partner-logo:hover {
-    filter: grayscale(0);
-    opacity: 1;
-}
-
-/* Mise à jour du footer */
-.footer-resources ul {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+.mockup-caption {
+    margin-top: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-style: italic;
 }
 
 /* Section propriétés récentes - ajout de l'effet glass */
