@@ -1,0 +1,27 @@
+{
+  "name": "kairovision",
+  "version": "1.0.0",
+  "description": "Plateforme immobilière moderne avec des outils avancés",
+  "main": "script.js",
+  "scripts": {
+    "start": "npm run watch:sass",
+    "build": "npm run build:sass",
+    "watch:sass": "sass --watch styles/scss:styles/css",
+    "build:sass": "sass styles/scss:styles/css --style compressed",
+    "prefix": "postcss styles/css/*.css --use autoprefixer -d styles/css/prefixed/",
+    "compress": "npm run build:sass && npm run prefix"
+  },
+  "keywords": ["real estate", "immobilier", "kairo", "property"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "sass": "^1.59.3"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 1%",
+    "not dead"
+  ]
+}
