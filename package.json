@@ -11,7 +11,12 @@
     "prefix": "postcss styles/css/*.css --use autoprefixer -d styles/css/prefixed/",
     "compress": "npm run build:sass && npm run prefix"
   },
-  "keywords": ["real estate", "immobilier", "kairo", "property"],
+  "keywords": [
+    "real estate",
+    "immobilier",
+    "kairo",
+    "property"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -23,5 +28,17 @@
     "last 2 versions",
     "> 1%",
     "not dead"
-  ]
+  ],
+  "dependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "babel-loader": "^10.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "styled-components": "^6.1.16",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  }
 }
