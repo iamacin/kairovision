@@ -111,10 +111,12 @@
 }
 
 .hero-content {
+    min-height: 80vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
+    padding: 60px 0;
 }
 
 .hero-title {
@@ -1248,5 +1250,143 @@
 
     .agents-header h2 {
         font-size: 36px;
+    }
+}
+
+/* Waitlist Page Styles */
+.waitlist-page {
+    padding: 100px 0;
+    min-height: calc(100vh - 200px);
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.05) 0%, rgba(138, 43, 226, 0.1) 100%);
+}
+
+.waitlist-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.waitlist-subtitle {
+    font-size: 20px;
+    color: var(--text-color-light);
+    margin-top: 20px;
+}
+
+.waitlist-form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: var(--border-radius-lg);
+}
+
+/* Remove estimation and agents related styles */
+.nav-links a[href*="estimation"],
+.nav-links a[href*="agents"],
+.footer-links a[href*="estimation"],
+.footer-links a[href*="agents"] {
+    display: none;
+}
+
+/* Update hero section without waitlist overlay */
+.hero-content {
+    min-height: 80vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding: 60px 0;
+}
+
+/* Partners section with logos */
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 40px;
+    align-items: center;
+    justify-items: center;
+}
+
+.partner-logo {
+    max-width: 150px;
+    height: auto;
+    filter: grayscale(1) opacity(0.7);
+    transition: var(--transition);
+}
+
+.partner-logo:hover {
+    filter: grayscale(0) opacity(1);
+    transform: scale(1.05);
+}
+
+/* Advantages section (replacing Comment ça marche) */
+.advantages {
+    padding: 100px 0;
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.advantage-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.advantage-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.advantage-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.advantage-icon i {
+    font-size: 24px;
+    color: white;
+}
+
+.advantage-card h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.advantage-card p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
+
+/* Responsive design updates */
+@media (max-width: 1024px) {
+    .advantages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .advantages-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .waitlist-form-container {
+        padding: 20px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
     }
 } 

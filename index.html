@@ -13,348 +13,156 @@
 </head>
 <body>
     <header>
-        <nav>
-            <div class="logo">
-                <h1>Kairo</h1>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <img src="assets/logo.svg" alt="Kairo" class="logo">
             </div>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Accueil</a></li>
-                <li><a href="acheter.html">Acheter</a></li>
-                <li><a href="louer.html">Louer</a></li>
-                <li><a href="vendre.html">Vendre</a></li>
-                <li><a href="estimation.html">Estimation</a></li>
-                <li><a href="agents.html">Agents</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="#properties">Acheter</a>
+                <a href="#properties">Louer</a>
+                <a href="#kairo-vision">Kairo Vision</a>
+                <a href="waitlist.html">Liste d'attente</a>
+            </div>
             <div class="nav-buttons">
-                <button class="language-toggle">
+                <div class="language-toggle">
                     <span class="active">FR</span>
                     <span>EN</span>
-                </button>
-                <a href="connexion.html" class="btn-connexion">Connexion</a>
-                <a href="inscription.html" class="btn-inscription">Inscription</a>
-            </div>
-            <div class="hamburger">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
+                </div>
+                <button class="btn-connexion">Se connecter</button>
+                <button class="btn-inscription">S'inscrire</button>
             </div>
         </nav>
     </header>
 
     <main>
-        <!-- Section Héro avec recherche avancée - Version Invitation Only -->
-        <section id="accueil" class="hero">
+        <!-- Hero Section -->
+        <section class="hero">
             <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <span class="waitlist-badge"><i class="fas fa-lock"></i> Accès sur invitation uniquement</span>
-                <h1>L'Avenir de l'Immobilier au Sénégal Arrive Bientôt</h1>
-                <h2>Rejoignez la liste d'attente pour être parmi les premiers à découvrir Kairo</h2>
-                
-                <!-- Container de recherche modifié pour la waitlist -->
-                <div class="search-container">
-                    <div class="search-tabs">
-                        <button class="search-tab active" data-tab="agent">Agent Immobilier</button>
-                        <button class="search-tab" data-tab="promoteur">Promoteur</button>
-                        <button class="search-tab" data-tab="client">Client</button>
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-left">
+                        <h1 class="neon-text">L'immobilier de demain, aujourd'hui</h1>
+                        <h2>Une nouvelle approche de l'immobilier, plus transparente et plus efficace</h2>
+                        <a href="waitlist.html" class="btn-primary">Rejoindre la liste d'attente</a>
                     </div>
-                    <div class="search-box">
-                        <div class="search-input-container">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" placeholder="Votre adresse email" class="search-input">
+                    <div class="hero-right">
+                        <div class="hero-image-container">
+                            <img src="assets/hero-image.jpg" alt="Kairo Platform Preview">
                         </div>
-                        <div class="search-filters">
-                            <select class="filter-select">
-                                <option value="">Nombre de propriétés</option>
-                                <option value="1-5">1-5 propriétés</option>
-                                <option value="6-20">6-20 propriétés</option>
-                                <option value="21-50">21-50 propriétés</option>
-                                <option value="50+">Plus de 50 propriétés</option>
-                            </select>
-                            <select class="filter-select">
-                                <option value="">Localisation principale</option>
-                                <option value="dakar">Dakar</option>
-                                <option value="saly">Saly</option>
-                                <option value="mbour">Mbour</option>
-                                <option value="thies">Thiès</option>
-                                <option value="autre">Autre</option>
-                            </select>
-                        </div>
-                        <button class="waitlist-button">Rejoindre la liste d'attente</button>
-                        <p class="waitlist-info">Soyez parmi les premiers agents et promoteurs à présenter vos biens sur notre plateforme moderne.</p>
                     </div>
-                </div>
-                
-                <!-- Mockup de la plateforme -->
-                <div class="mockup-container">
-                    <img src="https://i.imgur.com/YD0wBSF.jpg" alt="Aperçu de Kairo" class="mockup-browser">
-                    <p class="mockup-caption">Aperçu de la future plateforme Kairo - Interface moderne et intuitive</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section propriétés récentes -->
-        <section class="recent-properties">
+        <!-- Properties Section -->
+        <section class="recent-properties" id="properties">
             <div class="section-header">
-                <h2>Propriétés à Venir</h2>
-                <a href="resultats.html" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
+                <h2 class="section-title neon-text">Nos Incontournables</h2>
+                <a href="#" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="properties-grid">
-                <!-- Propriété 1 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Villa moderne à Dakar">
-                        <span class="property-tag vente">À Vendre</span>
-                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <span class="property-price">125 000 000 FCFA</span>
-                        <h3 class="property-title">Villa Moderne avec Vue Mer</h3>
-                        <p class="property-address"><i class="fas fa-map-marker-alt"></i> Les Almadies, Dakar</p>
-                        <div class="property-features">
-                            <span><i class="fas fa-bed"></i> 4 Chambres</span>
-                            <span><i class="fas fa-bath"></i> 3 SdB</span>
-                            <span><i class="fas fa-ruler-combined"></i> 250 m²</span>
-                        </div>
-                        <div class="property-footer">
-                            <div class="agent-info">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Agent" class="agent-image">
-                                <span>Abdou Diop</span>
-                            </div>
-                            <span class="property-date">Il y a 2 jours</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Propriété 2 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Appartement à Mermoz">
-                        <span class="property-tag location">À Louer</span>
-                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <span class="property-price">850 000 FCFA/mois</span>
-                        <h3 class="property-title">Appartement Neuf Haut Standing</h3>
-                        <p class="property-address"><i class="fas fa-map-marker-alt"></i> Mermoz, Dakar</p>
-                        <div class="property-features">
-                            <span><i class="fas fa-bed"></i> 3 Chambres</span>
-                            <span><i class="fas fa-bath"></i> 2 SdB</span>
-                            <span><i class="fas fa-ruler-combined"></i> 120 m²</span>
-                        </div>
-                        <div class="property-footer">
-                            <div class="agent-info">
-                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Agent" class="agent-image">
-                                <span>Fatou Ndiaye</span>
-                            </div>
-                            <span class="property-date">Il y a 5 jours</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Propriété 3 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="https://images.unsplash.com/photo-1602941525421-8f8b81d3edbb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Terrain à Saly">
-                        <span class="property-tag vente">À Vendre</span>
-                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <span class="property-price">35 000 000 FCFA</span>
-                        <h3 class="property-title">Terrain Viabilisé avec Titre Foncier</h3>
-                        <p class="property-address"><i class="fas fa-map-marker-alt"></i> Saly, Mbour</p>
-                        <div class="property-features">
-                            <span><i class="fas fa-ruler-combined"></i> 500 m²</span>
-                            <span><i class="fas fa-file-contract"></i> Titre Foncier</span>
-                            <span><i class="fas fa-check-circle"></i> Viabilisé</span>
-                        </div>
-                        <div class="property-footer">
-                            <div class="agent-info">
-                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Agent" class="agent-image">
-                                <span>Moussa Fall</span>
-                            </div>
-                            <span class="property-date">Il y a 1 semaine</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section-cta">
-                <a href="resultats.html" class="btn-primary">Découvrir plus de propriétés</a>
+                <!-- Property cards here -->
             </div>
         </section>
 
-        <!-- Section Comment Ça Marche -->
-        <section id="comment-ca-marche" class="how-it-works">
-            <h2>Comment Ça Marche</h2>
-            <div class="steps-container">
-                <div class="step">
-                    <div class="step-icon">
-                        <i class="fas fa-user-plus"></i>
+        <!-- Advantages Section -->
+        <section class="advantages" id="advantages">
+            <div class="container">
+                <h2 class="section-title neon-text">Les Avantages Kairo</h2>
+                <div class="advantages-grid">
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Transparence Totale</h3>
+                        <p>Accédez à toutes les informations nécessaires pour prendre les meilleures décisions immobilières</p>
                     </div>
-                    <div class="step-number">1</div>
-                    <h3>Inscrivez-vous</h3>
-                    <p>Rejoignez notre liste d'attente pour être parmi les premiers à accéder à Kairo</p>
-                </div>
-                <div class="step">
-                    <div class="step-icon">
-                        <i class="fas fa-home"></i>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Processus Simplifié</h3>
+                        <p>Une expérience fluide et intuitive pour tous vos projets immobiliers</p>
                     </div>
-                    <div class="step-number">2</div>
-                    <h3>Ajoutez vos biens</h3>
-                    <p>Listez vos propriétés avec des photos de qualité, descriptions détaillées et prix</p>
-                </div>
-                <div class="step">
-                    <div class="step-icon">
-                        <i class="fas fa-handshake"></i>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Analyse du Marché</h3>
+                        <p>Des outils d'analyse avancés pour comprendre les tendances du marché</p>
                     </div>
-                    <div class="step-number">3</div>
-                    <h3>Connectez-vous avec des clients</h3>
-                    <p>Recevez des demandes qualifiées et gérez vos transactions en toute simplicité</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section Quartiers Populaires -->
-        <section class="popular-neighborhoods">
-            <div class="section-header">
-                <h2>Quartiers Populaires</h2>
-                <a href="quartiers.html" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="neighborhoods-grid">
-                <a href="resultats.html?quartier=almadies" class="neighborhood-card">
-                    <img src="https://images.unsplash.com/photo-1572949645841-094f3a9c4c94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" alt="Les Almadies">
-                    <div class="neighborhood-overlay">
-                        <h3>Les Almadies</h3>
-                        <p>145 propriétés</p>
-                    </div>
-                </a>
-                <a href="resultats.html?quartier=plateau" class="neighborhood-card">
-                    <img src="https://images.unsplash.com/photo-1595880511746-57a8f339cc3a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Plateau">
-                    <div class="neighborhood-overlay">
-                        <h3>Plateau</h3>
-                        <p>89 propriétés</p>
-                    </div>
-                </a>
-                <a href="resultats.html?quartier=ngor" class="neighborhood-card">
-                    <img src="https://images.unsplash.com/photo-1580154233043-6ed22176cf4c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" alt="Ngor">
-                    <div class="neighborhood-overlay">
-                        <h3>Ngor</h3>
-                        <p>124 propriétés</p>
-                    </div>
-                </a>
-                <a href="resultats.html?quartier=mermoz" class="neighborhood-card">
-                    <img src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Mermoz">
-                    <div class="neighborhood-overlay">
-                        <h3>Mermoz</h3>
-                        <p>78 propriétés</p>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Section Partenaires -->
+        <!-- Partners Section -->
         <section class="partners">
-            <h2>Nos Partenaires</h2>
-            <div class="partners-logos">
-                <div class="partner-logo">Haddad 3H</div>
-                <div class="partner-logo">Banque Atlantique</div>
-                <div class="partner-logo">BICIS</div>
-                <div class="partner-logo">Ecobank</div>
-                <div class="partner-logo">Sonatel</div>
+            <div class="container">
+                <h2 class="section-title neon-text">Nos Partenaires</h2>
+                <div class="partners-grid">
+                    <img src="assets/partners/partner1.svg" alt="Partner 1" class="partner-logo">
+                    <img src="assets/partners/partner2.svg" alt="Partner 2" class="partner-logo">
+                    <img src="assets/partners/partner3.svg" alt="Partner 3" class="partner-logo">
+                    <img src="assets/partners/partner4.svg" alt="Partner 4" class="partner-logo">
+                </div>
             </div>
         </section>
 
-        <!-- Section CTA -->
-        <section class="cta-section">
-            <div class="cta-content">
-                <h2>Êtes-vous un agent immobilier ou un promoteur ?</h2>
-                <p>Rejoignez notre plateforme en avant-première et présentez vos biens à des milliers de clients potentiels.</p>
+        <!-- Join Kairo Section -->
+        <section class="join-kairo">
+            <div class="container">
+                <h2 class="section-title neon-text">Rejoignez Kairo</h2>
+                <p class="join-description">Transformez votre façon de travailler dans l'immobilier</p>
                 <div class="cta-buttons">
-                    <a href="#accueil" class="btn-primary">Rejoindre la liste d'attente</a>
-                    <a href="a-propos.html" class="btn-secondary">En savoir plus</a>
+                    <a href="waitlist.html" class="btn-primary">Découvrir les opportunités</a>
+                    <a href="#advantages" class="btn-secondary">En savoir plus</a>
                 </div>
-            </div>
-            <div class="cta-image">
-                <img src="https://images.unsplash.com/photo-1626178793926-22b28830aa30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Maison moderne">
             </div>
         </section>
     </main>
 
-    <footer>
+    <footer class="footer">
         <div class="footer-content">
             <div class="footer-company">
-                <div class="footer-logo">
-                    <h2>Kairo</h2>
-                </div>
-                <p>Votre plateforme immobilière de confiance au Sénégal, connectant acheteurs, vendeurs et locataires avec des annonces vérifiées.</p>
-                <div class="social-icons">
-                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+                <img src="assets/logo.svg" alt="Kairo" class="footer-logo">
+                <p>Transformons ensemble l'avenir de l'immobilier</p>
             </div>
             <div class="footer-links">
                 <div class="footer-column">
-                    <h3>Explorer</h3>
+                    <h3>Kairo</h3>
                     <ul>
-                        <li><a href="acheter.html">Acheter</a></li>
-                        <li><a href="louer.html">Louer</a></li>
-                        <li><a href="vendre.html">Vendre</a></li>
-                        <li><a href="estimation.html">Estimation</a></li>
-                        <li><a href="agents.html">Agents</a></li>
+                        <li><a href="#about">À propos</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#careers">Carrières</a></li>
+                        <li><a href="waitlist.html">Liste d'attente</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>À Propos</h3>
+                    <h3>Resources</h3>
                     <ul>
-                        <li><a href="a-propos.html">Qui sommes-nous</a></li>
-                        <li><a href="carriere.html">Carrières</a></li>
-                        <li><a href="presse.html">Presse</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#press">Presse</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3>Ressources</h3>
+                    <h3>Légal</h3>
                     <ul>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="guides.html">Guides immobiliers</a></li>
-                        <li><a href="financement.html">Options de financement</a></li>
-                        <li><a href="outils.html">Calculateurs</a></li>
-                        <li><a href="temoignages.html">Témoignages</a></li>
+                        <li><a href="#privacy">Confidentialité</a></li>
+                        <li><a href="#terms">Conditions</a></li>
+                        <li><a href="#cookies">Cookies</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-newsletter">
-                <h3>Restez Informé</h3>
-                <p>Abonnez-vous à notre newsletter pour recevoir nos dernières actualités et offres exclusives.</p>
+                <h3>Newsletter</h3>
                 <form class="newsletter-form">
-                    <input type="email" placeholder="Votre adresse email" required>
-                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    <input type="email" placeholder="Votre email">
+                    <button type="submit">S'abonner</button>
                 </form>
-                <div class="app-download">
-                    <p>Téléchargez notre application</p>
-                    <div class="app-buttons">
-                        <a href="#" class="app-button">
-                            <i class="fab fa-apple"></i>
-                            <span>App Store</span>
-                        </a>
-                        <a href="#" class="app-button">
-                            <i class="fab fa-google-play"></i>
-                            <span>Google Play</span>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2023 Kairo. Tous droits réservés.</p>
-            <div class="footer-legal">
-                <a href="conditions.html">Conditions d'utilisation</a>
-                <a href="confidentialite.html">Politique de confidentialité</a>
-                <a href="cookies.html">Politique de cookies</a>
-                <a href="accessibilite.html">Accessibilité</a>
-            </div>
+            <p>© 2025 Kairo. Tous droits réservés.</p>
         </div>
     </footer>
 

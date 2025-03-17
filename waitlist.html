@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejoindre Kairo - Liste d'attente</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="kairo-zillow.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="assets/logo.svg" alt="Kairo" class="logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#properties">Acheter</a>
+                <a href="index.html#properties">Louer</a>
+                <a href="index.html#kairo-vision">Kairo Vision</a>
+                <a href="waitlist.html" class="active">Liste d'attente</a>
+            </div>
+            <div class="nav-buttons">
+                <div class="language-toggle">
+                    <span class="active">FR</span>
+                    <span>EN</span>
+                </div>
+                <button class="btn-connexion">Se connecter</button>
+                <button class="btn-inscription">S'inscrire</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="waitlist-page">
+            <div class="container">
+                <div class="waitlist-header">
+                    <h1 class="section-title neon-text">Rejoignez l'avenir de l'immobilier</h1>
+                    <p class="waitlist-subtitle">Inscrivez-vous à notre liste d'attente pour être parmi les premiers à découvrir Kairo</p>
+                </div>
+                <div class="waitlist-form-container glass-effect">
+                    <form class="waitlist-form" id="waitlistForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Prénom</label>
+                                <input type="text" id="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Nom</label>
+                                <input type="text" id="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Téléphone</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="company">Entreprise</label>
+                                <input type="text" id="company" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userType">Je suis</label>
+                            <select id="userType" required>
+                                <option value="">Sélectionnez votre profil</option>
+                                <option value="agent">Agent immobilier</option>
+                                <option value="developer">Promoteur</option>
+                                <option value="partner">Partenaire</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="waitlist-button">Rejoindre la liste d'attente</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-company">
+                <img src="assets/logo.svg" alt="Kairo" class="footer-logo">
+                <p>Transformons ensemble l'avenir de l'immobilier</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Kairo</h3>
+                    <ul>
+                        <li><a href="#about">À propos</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#careers">Carrières</a></li>
+                        <li><a href="waitlist.html">Liste d'attente</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#press">Presse</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Légal</h3>
+                    <ul>
+                        <li><a href="#privacy">Confidentialité</a></li>
+                        <li><a href="#terms">Conditions</a></li>
+                        <li><a href="#cookies">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-newsletter">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Votre email">
+                    <button type="submit">S'abonner</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Kairo. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
