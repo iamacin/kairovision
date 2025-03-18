@@ -205,7 +205,7 @@ export const GlobalStyles = createGlobalStyle`
   @media print {
     * {
       background: transparent !important;
-      color: #000 !important;
+      color: ${({ theme }) => theme.colors.text} !important;
       box-shadow: none !important;
       text-shadow: none !important;
     }

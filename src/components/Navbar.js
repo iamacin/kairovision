@@ -13,7 +13,11 @@ const Nav = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: ${props => props.scrolled ? 'rgba(255, 255, 255, 0.9)' : 'transparent'};
+  background: ${props => props.scrolled 
+    ? props.theme.mode === 'light' 
+      ? 'rgba(255, 255, 255, 0.9)' 
+      : 'rgba(22, 22, 37, 0.9)'
+    : 'transparent'};
   backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
   transition: all 0.3s ease;
 `
@@ -21,7 +25,9 @@ const Nav = styled(motion.nav)`
 const Logo = styled(Link)`
   font-size: 1.5rem;
   font-weight: 800;
-  color: ${props => props.scrolled ? '#1a1a1a' : '#ffffff'};
+  color: ${props => props.scrolled 
+    ? props.theme.colors.text
+    : '#ffffff'};
   text-decoration: none;
   font-family: 'Inter', sans-serif;
   display: flex;
@@ -45,14 +51,18 @@ const MenuItems = styled.div`
 `
 
 const MenuItem = styled(Link)`
-  color: ${props => props.scrolled ? '#1a1a1a' : '#ffffff'};
+  color: ${props => props.scrolled 
+    ? props.theme.colors.text
+    : '#ffffff'};
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
   transition: color 0.2s ease;
 
   &:hover {
-    color: ${props => props.scrolled ? '#4f46e5' : '#e0e0e0'};
+    color: ${props => props.scrolled 
+      ? props.theme.colors.primary
+      : '#e0e0e0'};
   }
 `
 
@@ -74,11 +84,19 @@ const AuthButton = styled(motion.button)`
     }
   ` : `
     background: transparent;
-    color: ${props.scrolled ? '#1a1a1a' : '#ffffff'};
-    border: 2px solid ${props.scrolled ? '#1a1a1a' : '#ffffff'};
+    color: ${props.scrolled 
+      ? props.theme.colors.text
+      : '#ffffff'};
+    border: 2px solid ${props.scrolled 
+      ? props.theme.colors.border
+      : '#ffffff'};
     
     &:hover {
-      background: ${props.scrolled ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.1)'};
+      background: ${props.scrolled 
+        ? props.theme.mode === 'light'
+          ? 'rgba(0, 0, 0, 0.05)'
+          : 'rgba(255, 255, 255, 0.05)'
+        : 'rgba(255, 255, 255, 0.1)'};
     }
   `}
 `
@@ -87,7 +105,9 @@ const MobileMenuButton = styled.button`
   display: none;
   background: none;
   border: none;
-  color: ${props => props.scrolled ? '#1a1a1a' : '#ffffff'};
+  color: ${props => props.scrolled 
+    ? props.theme.colors.text
+    : '#ffffff'};
   font-size: 1.5rem;
   cursor: pointer;
 
@@ -103,7 +123,9 @@ const MobileMenu = styled(motion.div)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.98);
+  background: ${({ theme }) => theme.mode === 'light'
+    ? 'rgba(255, 255, 255, 0.98)'
+    : 'rgba(22, 22, 37, 0.98)'};
   padding: 5rem 2rem;
   z-index: 999;
 
@@ -115,7 +137,7 @@ const MobileMenu = styled(motion.div)`
 `
 
 const MobileMenuItem = styled(Link)`
-  color: #1a1a1a;
+  color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: 600;
