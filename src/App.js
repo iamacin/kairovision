@@ -8,6 +8,7 @@ import '@fontsource/inter/700.css';
 import '@fontsource/inter/800.css';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
 import Waitlist from './pages/Waitlist';
 import { GlobalStyles } from './styles/globalStyles';
@@ -39,6 +40,7 @@ const App = () => {
               <Route path="/waitlist" element={<Waitlist />} />
             </Routes>
           </Main>
+          <Footer />
         </AppWrapper>
       </Router>
     </ThemeProvider>

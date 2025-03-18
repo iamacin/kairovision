@@ -402,7 +402,7 @@ const Home = () => {
       </StatsSection>
 
       <FeaturesSection>
-        <SectionTitle>Pourquoi choisir Kairos ?</SectionTitle>
+        <SectionTitle>Pourquoi choisir Kairo ?</SectionTitle>
         <FeaturesGrid>
           <FeatureCard
             variants={itemVariants}
