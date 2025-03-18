@@ -23,7 +23,7 @@ const HeroSection = styled.section`
       ? 'rgba(250, 250, 255, 0.9), rgba(240, 240, 255, 0.95)'
       : 'rgba(10, 10, 20, 0.85), rgba(20, 20, 35, 0.9)'
     }),
-    url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&q=80');
+    url('/images/vKairo-AI.jpg');
   background-size: cover;
   background-position: center;
   
