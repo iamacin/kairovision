@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
@@ -10,13 +10,16 @@ import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Home from './pages/Home';
 import Waitlist from './pages/Waitlist';
-import { theme } from './styles/theme';
 import { GlobalStyles } from './styles/globalStyles';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+  transition: background-color 0.3s ease, color 0.3s ease;
 `;
 
 const Main = styled.main`
@@ -25,7 +28,7 @@ const Main = styled.main`
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <GlobalStyles />
       <Router>
         <AppWrapper>

@@ -5,7 +5,7 @@ import { supabase } from '../utils/supabase'
 
 const WaitlistContainer = styled.div`
   min-height: 100vh;
-  background-color: var(--background-alt);
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
   padding: 120px 5% 80px;
   position: relative;
   overflow: hidden;
@@ -17,7 +17,7 @@ const WaitlistContainer = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.03) 0%, rgba(var(--primary-rgb), 0.01) 100%);
+    background: linear-gradient(135deg, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.03) 0%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.01) 100%);
     z-index: 0;
   }
 `
@@ -48,8 +48,8 @@ const Title = styled(motion.h1)`
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: ${({ theme }) => theme.colors.text};
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -64,7 +64,7 @@ const Title = styled(motion.h1)`
 const Description = styled(motion.p)`
   font-size: 1.2rem;
   line-height: 1.7;
-  color: var(--text-secondary);
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin-bottom: 2.5rem;
   max-width: 500px;
 
@@ -84,13 +84,13 @@ const BenefitItem = styled(motion.li)`
   align-items: center;
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: ${({ theme }) => theme.colors.textSecondary};
 
   svg {
     width: 24px;
     height: 24px;
     margin-right: 1rem;
-    color: var(--primary);
+    color: ${({ theme }) => theme.colors.primary};
   }
 
   @media (max-width: 968px) {
@@ -128,7 +128,7 @@ const Label = styled.label`
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: ${({ theme }) => theme.colors.text};
   font-size: 0.95rem;
 `
 
@@ -143,9 +143,9 @@ const Input = styled.input`
   
   &:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: ${({ theme }) => theme.colors.primary};
     background: white;
-    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    box-shadow: 0 0 0 3px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
   }
 `
 
@@ -161,16 +161,16 @@ const Select = styled.select`
   
   &:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: ${({ theme }) => theme.colors.primary};
     background: white;
-    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+    box-shadow: 0 0 0 3px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
   }
 `
 
 const SubmitButton = styled(motion.button)`
   width: 100%;
   padding: 1rem;
-  background: var(--primary);
+  background: ${({ theme }) => theme.colors.primary};
   color: white;
   border: none;
   border-radius: 8px;
@@ -181,9 +181,9 @@ const SubmitButton = styled(motion.button)`
   margin-top: 1rem;
   
   &:hover {
-    background: var(--primary-dark);
+    background: ${({ theme }) => theme.colors.primaryDark};
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2);
+    box-shadow: 0 10px 20px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.2);
   }
 
   &:disabled {

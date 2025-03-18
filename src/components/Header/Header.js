@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Image from '../common/Image';
 import { images } from '../../utils/images';
+import ThemeToggle from '../ThemeToggle';
 
 const HeaderWrapper = styled.header`
   position: fixed;
@@ -130,6 +131,7 @@ const Header = () => {
         </NavLinks>
         
         <NavButtons>
+          <ThemeToggle />
           <LanguageToggle>
             <span className="active">FR</span>
             <span>EN</span>

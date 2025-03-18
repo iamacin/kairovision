@@ -6,7 +6,7 @@ import { FiSearch, FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe } from 'rea
 
 const HomeContainer = styled.div`
   min-height: 100vh;
-  background-color: var(--background-alt);
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 const HeroSection = styled.section`
@@ -28,7 +28,7 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     left: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(var(--primary-rgb), 0.05), transparent 60%);
+    background: radial-gradient(circle at 70% 30%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.05), transparent 60%);
   }
 `
 
@@ -47,11 +47,11 @@ const MainTitle = styled(motion.h1)`
   margin-bottom: 1.5rem;
   line-height: 1.1;
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+  text-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -65,7 +65,7 @@ const SubTitle = styled(motion.p)`
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  color: var(--text-secondary);
+  color: ${({ theme }) => theme.colors.textSecondary};
 
   @media (max-width: 768px) {
     font-size: 1.1rem;
@@ -75,19 +75,19 @@ const SubTitle = styled(motion.p)`
 const CTAButton = styled(motion(Link))`
   display: inline-block;
   padding: 1rem 2.5rem;
-  background: var(--primary);
+  background: ${({ theme }) => theme.colors.primary};
   color: white;
   text-decoration: none;
   border-radius: 50px;
   font-weight: 600;
   font-size: 1.1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2);
+  box-shadow: 0 10px 20px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.2);
 
   &:hover {
-    background: var(--primary-dark);
+    background: ${({ theme }) => theme.colors.primaryDark};
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(var(--primary-rgb), 0.3);
+    box-shadow: 0 15px 30px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
   }
 `
 
@@ -129,9 +129,9 @@ const StatCard = styled(motion.div)`
 const StatNumber = styled.div`
   font-size: 3rem;
   font-weight: 800;
-  color: var(--primary);
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -140,13 +140,13 @@ const StatNumber = styled.div`
 
 const StatLabel = styled.div`
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: ${({ theme }) => theme.colors.textSecondary};
   font-weight: 500;
 `
 
 const FeaturesSection = styled.section`
   padding: 100px 5%;
-  background: var(--background-alt);
+  background: ${({ theme }) => theme.colors.backgroundAlt};
   position: relative;
   overflow: hidden;
 `
@@ -156,7 +156,7 @@ const SectionTitle = styled.h2`
   font-weight: 800;
   text-align: center;
   margin-bottom: 5rem;
-  color: var(--text-primary);
+  color: ${({ theme }) => theme.colors.textPrimary};
   position: relative;
   
   &:after {
@@ -167,7 +167,7 @@ const SectionTitle = styled.h2`
     transform: translateX(-50%);
     width: 60px;
     height: 4px;
-    background: var(--primary);
+    background: ${({ theme }) => theme.colors.primary};
     border-radius: 2px;
   }
 `
@@ -206,7 +206,7 @@ const FeatureCard = styled(motion.div)`
   svg {
     width: 40px;
     height: 40px;
-    color: var(--primary);
+    color: ${({ theme }) => theme.colors.primary};
     margin-bottom: 1.5rem;
   }
 `
@@ -215,13 +215,13 @@ const FeatureTitle = styled.h3`
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: var(--text-primary);
+  color: ${({ theme }) => theme.colors.text};
 `
 
 const FeatureDescription = styled.p`
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--text-secondary);
+  color: ${({ theme }) => theme.colors.textSecondary};
   flex-grow: 1;
 `
 
@@ -244,7 +244,7 @@ const TestimonialsGrid = styled.div`
 
 const TestimonialCard = styled(motion.div)`
   padding: 2.5rem;
-  background: var(--background-alt);
+  background: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
   transition: transform 0.3s ease;
@@ -258,7 +258,7 @@ const TestimonialCard = styled(motion.div)`
 const Quote = styled.blockquote`
   font-size: 1.1rem;
   line-height: 1.7;
-  color: var(--text-primary);
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 1.5rem;
   position: relative;
   padding-left: 2rem;
@@ -269,7 +269,7 @@ const Quote = styled.blockquote`
     left: 0;
     top: -10px;
     font-size: 3rem;
-    color: var(--primary);
+    color: ${({ theme }) => theme.colors.primary};
     opacity: 0.3;
     font-family: serif;
   }
@@ -284,7 +284,7 @@ const AuthorImage = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: var(--primary);
+  background: ${({ theme }) => theme.colors.primary};
   margin-right: 1rem;
   position: relative;
   overflow: hidden;
@@ -296,7 +296,7 @@ const AuthorImage = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom right, var(--primary), var(--primary-dark));
+    background: linear-gradient(to bottom right, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
     opacity: 0.8;
   }
 `
@@ -305,11 +305,11 @@ const AuthorInfo = styled.div`
   h4 {
     font-weight: 600;
     margin-bottom: 0.25rem;
-    color: var(--text-primary);
+    color: ${({ theme }) => theme.colors.textPrimary};
   }
 
   p {
-    color: var(--text-secondary);
+    color: ${({ theme }) => theme.colors.textSecondary};
     font-size: 0.9rem;
   }
 `
