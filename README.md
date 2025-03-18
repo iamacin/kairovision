@@ -1,4 +1,12 @@
-# Kairo - Plateforme Immobilière au Sénégal
+# Kairo Ghost Protocol
+
+## Test Deployment
+
+Testing Supabase deployment configuration - $(date)
+
+## About
+
+This repository contains the Kairo Ghost Protocol project, integrated with Supabase for backend services.
 
 ## À propos du projet
 
