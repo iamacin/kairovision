@@ -4,7 +4,11 @@ import { useTheme } from '../contexts/ThemeContext';
 import { FiSun, FiMoon } from 'react-icons/fi';
 
 const ToggleButton = styled.button`
-  background: ${({ theme }) => theme.glass.background};
+  background: ${({ theme }) => 
+    theme.mode === 'light' 
+      ? 'rgba(245, 245, 255, 0.9)' 
+      : 'rgba(30, 30, 45, 0.9)'
+  };
   border: 1px solid ${({ theme }) => theme.glass.border};
   border-radius: 50%;
   width: 40px;
@@ -12,7 +16,11 @@ const ToggleButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => 
+    theme.mode === 'light'
+      ? '#6a1cb7' 
+      : '#ffffff'
+  };
   cursor: pointer;
   transition: ${({ theme }) => theme.transitions.default};
   box-shadow: ${({ theme }) => theme.shadows.small};
@@ -22,6 +30,8 @@ const ToggleButton = styled.button`
   &:hover {
     transform: translateY(-3px);
     box-shadow: ${({ theme }) => theme.shadows.medium};
+    background: ${({ theme }) => theme.colors.primary};
+    color: white;
   }
   
   svg {

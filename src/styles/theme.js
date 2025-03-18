@@ -111,24 +111,24 @@ export const darkTheme = {
   ...baseTheme,
   mode: 'dark',
   colors: {
-    primary: '#9d50ef',
-    primaryRgb: '157, 80, 239',
+    primary: '#ab5bf5',
+    primaryRgb: '171, 91, 245',
     primaryLight: '#c884ff',
-    primaryDark: '#7330c0',
-    primaryTransparent: 'rgba(157, 80, 239, 0.85)',
+    primaryDark: '#8637d6',
+    primaryTransparent: 'rgba(171, 91, 245, 0.85)',
     
     // Text colors
-    text: '#f0f0f0',
-    textSecondary: '#c0c0c0',
-    textLight: '#a0a0a0',
+    text: '#ffffff',
+    textSecondary: '#dddddd',
+    textLight: '#aaaaaa',
     
     // Background colors
-    background: '#121212',
-    backgroundAlt: '#1e1e2f',
+    background: '#0a0a0a',
+    backgroundAlt: '#161625',
     
     // Utility colors
     border: '#333333',
-    shadow: 'rgba(0, 0, 0, 0.3)',
+    shadow: 'rgba(0, 0, 0, 0.5)',
     success: '#4CAF50',
     error: '#f44336',
     warning: '#ff9800',
@@ -136,25 +136,25 @@ export const darkTheme = {
   },
   
   glass: {
-    background: 'rgba(30, 30, 40, 0.2)',
-    border: 'rgba(80, 80, 80, 0.1)',
-    shadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+    background: 'rgba(20, 20, 30, 0.75)',
+    border: 'rgba(80, 80, 120, 0.2)',
+    shadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
     blur: 'blur(12px)'
   },
   
   gradients: {
-    primary: 'linear-gradient(135deg, rgba(157, 80, 239, 0.9), rgba(106, 28, 183, 0.95))',
-    dark: 'linear-gradient(135deg, rgba(18, 18, 18, 0.95), rgba(30, 30, 40, 0.95))',
-    light: 'linear-gradient(135deg, rgba(40, 40, 50, 0.95), rgba(30, 30, 40, 0.95))',
-    text: 'linear-gradient(135deg, #f0f0f0, #c0c0c0)'
+    primary: 'linear-gradient(135deg, rgba(171, 91, 245, 0.9), rgba(126, 58, 203, 0.95))',
+    dark: 'linear-gradient(135deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 35, 0.95))',
+    light: 'linear-gradient(135deg, rgba(30, 30, 45, 0.95), rgba(20, 20, 30, 0.95))',
+    text: 'linear-gradient(135deg, #ffffff, #dddddd)'
   },
   
   shadows: {
-    small: '0 2px 10px rgba(0, 0, 0, 0.3)',
-    medium: '0 10px 30px rgba(0, 0, 0, 0.3)',
-    large: '0 15px 50px rgba(0, 0, 0, 0.4)',
-    button: '0 10px 20px rgba(157, 80, 239, 0.2)',
-    buttonHover: '0 15px 30px rgba(157, 80, 239, 0.3)'
+    small: '0 2px 10px rgba(0, 0, 0, 0.5)',
+    medium: '0 10px 30px rgba(0, 0, 0, 0.5)',
+    large: '0 15px 50px rgba(0, 0, 0, 0.7)',
+    button: '0 5px 15px rgba(171, 91, 245, 0.3)',
+    buttonHover: '0 8px 25px rgba(171, 91, 245, 0.4)'
   }
 };
 

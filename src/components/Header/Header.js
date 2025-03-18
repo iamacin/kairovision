@@ -19,9 +19,15 @@ const Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  ${({ theme }) => theme.glass.background};
+  background: ${({ theme }) => 
+    theme.mode === 'light' 
+      ? 'rgba(255, 255, 255, 0.8)' 
+      : 'rgba(18, 18, 18, 0.8)'
+  };
+  border-bottom: 1px solid ${({ theme }) => theme.glass.border};
   backdrop-filter: ${({ theme }) => theme.glass.blur};
   -webkit-backdrop-filter: ${({ theme }) => theme.glass.blur};
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
 `;
 
 const NavBrand = styled.div`
@@ -37,15 +43,35 @@ const NavLinks = styled.div`
 
   a {
     color: ${({ theme }) => theme.colors.text};
-    font-weight: 500;
+    font-weight: 600;
     transition: ${({ theme }) => theme.transitions.default};
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: ${({ theme }) => theme.colors.primary};
+      transition: ${({ theme }) => theme.transitions.default};
+    }
 
     &:hover {
       color: ${({ theme }) => theme.colors.primary};
+      
+      &:after {
+        width: 100%;
+      }
     }
 
     &.active {
       color: ${({ theme }) => theme.colors.primary};
+      
+      &:after {
+        width: 100%;
+      }
     }
   }
 
@@ -65,12 +91,18 @@ const LanguageToggle = styled.div`
   align-items: center;
   padding: 0.25rem;
   border-radius: ${({ theme }) => theme.layout.borderRadius};
-  background: ${({ theme }) => theme.glass.background};
+  background: ${({ theme }) => 
+    theme.mode === 'light' 
+      ? 'rgba(245, 245, 255, 0.9)' 
+      : 'rgba(40, 40, 60, 0.9)'
+  };
   border: 1px solid ${({ theme }) => theme.glass.border};
 
   span {
     padding: 0.25rem 0.5rem;
     cursor: pointer;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.text};
     transition: ${({ theme }) => theme.transitions.default};
 
     &.active {
@@ -90,15 +122,21 @@ const Button = styled.button`
   &.login {
     color: ${({ theme }) => theme.colors.primary};
     border: 1px solid ${({ theme }) => theme.colors.primary};
+    background: transparent;
 
     &:hover {
-      background: rgba(138, 43, 226, 0.1);
+      background: ${({ theme }) => 
+        theme.mode === 'light'
+          ? 'rgba(138, 43, 226, 0.1)'
+          : 'rgba(157, 80, 239, 0.2)'
+      };
     }
   }
 
   &.signup {
     background: ${({ theme }) => theme.colors.primary};
     color: white;
+    border: 1px solid ${({ theme }) => theme.colors.primary};
 
     &:hover {
       background: ${({ theme }) => theme.colors.primaryDark};
