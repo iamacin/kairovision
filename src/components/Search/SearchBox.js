@@ -74,7 +74,7 @@ const SearchInputWrapper = styled.div`
   background: ${({ theme }) => 
     theme.mode === 'light' 
       ? 'rgba(255, 255, 255, 0.8)' 
-      : 'rgba(30, 30, 45, 0.8)'
+      : 'rgba(22, 22, 37, 0.8)'
   };
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   border: 1px solid ${({ theme }) => theme.glass.border};
@@ -151,7 +151,7 @@ const FilterButton = styled.button`
         : 'rgba(171, 91, 245, 0.2)'
       : theme.mode === 'light' 
         ? 'rgba(255, 255, 255, 0.8)' 
-        : 'rgba(30, 30, 45, 0.8)'
+        : 'rgba(22, 22, 37, 0.8)'
   };
   border: 1px solid ${({ theme, active }) => 
     active ? theme.colors.primary : theme.glass.border
@@ -183,7 +183,7 @@ const FilterDropdownContent = styled(motion.div)`
   background: ${({ theme }) => 
     theme.mode === 'light' 
       ? 'rgba(255, 255, 255, 0.95)' 
-      : 'rgba(20, 20, 30, 0.95)'
+      : 'rgba(22, 22, 37, 0.95)'
   };
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   border: 1px solid ${({ theme }) => theme.glass.border};
@@ -362,7 +362,7 @@ const ResultCard = styled(motion.div)`
   background: ${({ theme }) => 
     theme.mode === 'light' 
       ? 'rgba(255, 255, 255, 0.9)' 
-      : 'rgba(30, 30, 45, 0.9)'
+      : 'rgba(22, 22, 37, 0.9)'
   };
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   border: 1px solid ${({ theme }) => theme.glass.border};

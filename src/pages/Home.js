@@ -21,7 +21,7 @@ const HeroSection = styled.section`
     to bottom right,
     ${({ theme }) => theme.mode === 'light' 
       ? 'rgba(250, 250, 255, 0.9), rgba(240, 240, 255, 0.95)'
-      : 'rgba(10, 10, 20, 0.85), rgba(20, 20, 35, 0.9)'
+      : 'rgba(22, 22, 37, 0.85), rgba(30, 30, 45, 0.9)'
     }),
     url('/images/vKairo-AI.jpg');
   background-size: cover;
