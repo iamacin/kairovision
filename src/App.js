@@ -6,33 +6,33 @@ import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import '@fontsource/inter/800.css';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
 import { Routes, Route } from 'react-router-dom';
-import Header from '@components/Header/Header';
-import Home from '@pages/Home';
-import Waitlist from '@pages/Waitlist';
+import Header from './components/Header/Header';
+import Home from './pages/Home';
+import Waitlist from './pages/Waitlist';
 
 const GlobalStyle = createGlobalStyle`
   :root {
     --primary-rgb: 138, 43, 226;
+    --primary-dark-rgb: 106, 28, 183;
     --primary: #8a2be2;
     --primary-dark: #6a1cb7;
     --text-primary: #1a1a1a;
     --text-secondary: #666666;
     --background: #ffffff;
-    --background-alt: #f5f5f5;
+    --background-alt: #f9f9ff;
     --border: #e5e5e5;
     
     /* Glass Effect */
-    --glass-background: rgba(255, 255, 255, 0.25);
-    --glass-border: rgba(255, 255, 255, 0.18);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --glass-blur: blur(8px);
+    --glass-background: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --glass-blur: blur(12px);
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, rgba(var(--primary-rgb), 0.95), rgba(106, 28, 183, 0.95));
+    --gradient-primary: linear-gradient(135deg, rgba(var(--primary-rgb), 0.9), rgba(var(--primary-dark-rgb), 0.95));
     --gradient-dark: linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(30, 30, 30, 0.95));
+    --gradient-light: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 255, 0.95));
   }
 
   * {
@@ -83,7 +83,6 @@ const AppWrapper = styled.div`
 
 const Main = styled.main`
   flex: 1;
-  margin-top: 80px; // Height of the header
 `;
 
 const App = () => {
@@ -99,8 +98,6 @@ const App = () => {
           </Routes>
         </Main>
       </AppWrapper>
-      <Navbar />
-      <Hero />
     </Router>
   );
 };

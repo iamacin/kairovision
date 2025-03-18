@@ -5,21 +5,20 @@ import { supabase } from '../utils/supabase'
 
 const WaitlistContainer = styled.div`
   min-height: 100vh;
-  background: var(--gradient-primary);
+  background-color: var(--background-alt);
   padding: 120px 5% 80px;
-  color: white;
   position: relative;
   overflow: hidden;
-
+  
   &::before {
     content: '';
     position: absolute;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
-    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1), transparent);
-    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.03) 0%, rgba(var(--primary-rgb), 0.01) 100%);
+    z-index: 0;
   }
 `
 
@@ -30,33 +29,32 @@ const ContentWrapper = styled.div`
   z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 60px;
   align-items: center;
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 40px;
   }
 `
 
-const InfoSection = styled.div`
-  background: var(--glass-background);
-  padding: 3rem;
-  border-radius: 24px;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+const InfoSection = styled(motion.div)`
+  @media (max-width: 968px) {
+    text-align: center;
+  }
 `
 
 const Title = styled(motion.h1)`
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: 'Inter', sans-serif;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -65,9 +63,9 @@ const Title = styled(motion.h1)`
 
 const Description = styled(motion.p)`
   font-size: 1.2rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text-secondary);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   max-width: 500px;
 
   @media (max-width: 968px) {
@@ -84,9 +82,9 @@ const BenefitsList = styled(motion.ul)`
 const BenefitItem = styled(motion.li)`
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   font-size: 1.1rem;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 
   svg {
     width: 24px;
@@ -100,14 +98,11 @@ const BenefitItem = styled(motion.li)`
   }
 `
 
-const FormSection = styled.div`
-  background: var(--glass-background);
+const FormSection = styled(motion.div)`
+  background: white;
   padding: 3rem;
-  border-radius: 24px;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  border-radius: 20px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
 `
 
 const Form = styled.form`
@@ -116,73 +111,79 @@ const Form = styled.form`
   gap: 1.5rem;
 `
 
-const FormGroup = styled.div`
+const InputGroup = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
+
+  @media (max-width: 568px) {
+    flex-direction: column;
+  }
+`
+
+const FormGroup = styled.div`
+  flex: 1;
 `
 
 const Label = styled.label`
-  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
+  font-size: 0.95rem;
 `
 
 const Input = styled.input`
-  padding: 0.75rem 1rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 2px solid #f0f0f5;
   border-radius: 8px;
-  border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
   font-size: 1rem;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-  }
-
+  transition: all 0.2s ease;
+  background: #f9f9ff;
+  
   &:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
   }
 `
 
 const Select = styled.select`
-  padding: 0.75rem 1rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 2px solid #f0f0f5;
   border-radius: 8px;
-  border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
   font-size: 1rem;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-
-  option {
-    background: var(--primary-dark);
-    color: white;
-  }
-
+  transition: all 0.2s ease;
+  background: #f9f9ff;
+  cursor: pointer;
+  
   &:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
   }
 `
 
-const SubmitButton = styled.button`
+const SubmitButton = styled(motion.button)`
+  width: 100%;
   padding: 1rem;
-  border-radius: 8px;
+  background: var(--primary);
+  color: white;
   border: none;
-  background: white;
-  color: var(--primary);
+  border-radius: 8px;
+  font-size: 1.1rem;
   font-weight: 600;
-  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-
+  transition: transform 0.2s ease;
+  margin-top: 1rem;
+  
   &:hover {
+    background: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2);
   }
 
   &:disabled {
@@ -198,6 +199,7 @@ const SuccessMessage = styled(motion.div)`
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
+  font-weight: 500;
 `
 
 const ErrorMessage = styled(motion.div)`
@@ -207,6 +209,7 @@ const ErrorMessage = styled(motion.div)`
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
+  font-weight: 500;
 `
 
 const Waitlist = () => {
@@ -263,22 +266,24 @@ const Waitlist = () => {
   }
 
   const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
+        staggerChildren: 0.2
       }
     }
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
-      y: 0
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.25, 0.1, 0.25, 1.0]
+      }
     }
   }
 
@@ -326,29 +331,30 @@ const Waitlist = () => {
           animate="visible"
         >
           <Form onSubmit={handleSubmit}>
-            <FormGroup>
-              <Label htmlFor="firstName">Prénom</Label>
-              <Input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label htmlFor="lastName">Nom</Label>
-              <Input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </FormGroup>
+            <InputGroup>
+              <FormGroup>
+                <Label htmlFor="firstName">Prénom</Label>
+                <Input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="lastName">Nom</Label>
+                <Input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </FormGroup>
+            </InputGroup>
 
             <FormGroup>
               <Label htmlFor="email">Email</Label>
@@ -362,28 +368,29 @@ const Waitlist = () => {
               />
             </FormGroup>
 
-            <FormGroup>
-              <Label htmlFor="phone">Téléphone</Label>
-              <Input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label htmlFor="company">Entreprise</Label>
-              <Input
-                type="text"
-                id="company"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-              />
-            </FormGroup>
+            <InputGroup>
+              <FormGroup>
+                <Label htmlFor="phone">Téléphone</Label>
+                <Input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="company">Entreprise</Label>
+                <Input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                />
+              </FormGroup>
+            </InputGroup>
 
             <FormGroup>
               <Label htmlFor="userType">Je suis</Label>
@@ -406,6 +413,8 @@ const Waitlist = () => {
             <SubmitButton
               type="submit"
               disabled={isSubmitting}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               {isSubmitting ? 'Inscription...' : 'Rejoindre la liste d\'attente'}
             </SubmitButton>

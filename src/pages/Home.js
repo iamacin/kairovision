@@ -6,16 +6,21 @@ import { FiSearch, FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe } from 'rea
 
 const HomeContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+  background-color: var(--background-alt);
 `
 
 const HeroSection = styled.section`
-  padding: 120px 5% 80px;
-  background: var(--gradient-primary);
-  color: white;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  overflow: hidden;
-
+  padding: 60px 5%;
+  background-image: linear-gradient(to bottom right, rgba(250, 250, 255, 0.9), rgba(240, 240, 255, 0.95)), 
+                   url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3');
+  background-size: cover;
+  background-position: center;
+  
   &::before {
     content: '';
     position: absolute;
@@ -23,8 +28,7 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     left: 0;
-    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1), transparent);
-    z-index: 1;
+    background: radial-gradient(circle at 70% 30%, rgba(var(--primary-rgb), 0.05), transparent 60%);
   }
 `
 
@@ -34,22 +38,20 @@ const HeroContent = styled.div`
   position: relative;
   z-index: 2;
   text-align: center;
-  background: var(--glass-background);
   padding: 3rem;
-  border-radius: 24px;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
 `
 
 const MainTitle = styled(motion.h1)`
-  font-size: 4rem;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
-  line-height: 1.2;
+  line-height: 1.1;
   font-family: 'Inter', sans-serif;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -57,41 +59,40 @@ const MainTitle = styled(motion.h1)`
 `
 
 const SubTitle = styled(motion.p)`
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  opacity: 0.9;
+  color: var(--text-secondary);
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 `
 
 const CTAButton = styled(motion(Link))`
   display: inline-block;
-  padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 2.5rem;
+  background: var(--primary);
   color: white;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-weight: 600;
   font-size: 1.1rem;
   transition: all 0.3s ease;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--primary-dark);
     transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(var(--primary-rgb), 0.3);
   }
 `
 
 const StatsSection = styled.section`
-  padding: 80px 5%;
+  padding: 100px 5%;
   background: white;
 `
 
@@ -100,7 +101,7 @@ const StatsGrid = styled.div`
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 40px;
 
   @media (max-width: 968px) {
     grid-template-columns: repeat(2, 1fr);
@@ -112,58 +113,63 @@ const StatsGrid = styled.div`
 `
 
 const StatCard = styled(motion.div)`
-  padding: 2rem;
-  background: var(--glass-background);
-  border-radius: 16px;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  padding: 2.5rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
   text-align: center;
   transition: transform 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
   }
 `
 
 const StatNumber = styled.div`
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 800;
   color: var(--primary);
   margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 `
 
 const StatLabel = styled.div`
   font-size: 1.1rem;
   color: var(--text-secondary);
+  font-weight: 500;
 `
 
 const FeaturesSection = styled.section`
-  padding: 80px 5%;
-  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+  padding: 100px 5%;
+  background: var(--background-alt);
   position: relative;
   overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: radial-gradient(circle at top left, rgba(var(--primary-rgb), 0.03), transparent);
-  }
 `
 
 const SectionTitle = styled.h2`
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 3vw, 3rem);
   font-weight: 800;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
   color: var(--text-primary);
   position: relative;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
 `
 
 const FeaturesGrid = styled.div`
@@ -171,7 +177,7 @@ const FeaturesGrid = styled.div`
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 40px;
 
   @media (max-width: 968px) {
     grid-template-columns: repeat(2, 1fr);
@@ -183,43 +189,44 @@ const FeaturesGrid = styled.div`
 `
 
 const FeatureCard = styled(motion.div)`
-  padding: 2rem;
-  background: var(--glass-background);
-  border-radius: 16px;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  padding: 2.5rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
   transition: transform 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
   }
 
   svg {
     width: 40px;
     height: 40px;
     color: var(--primary);
-    margin-bottom: 1rem;
-    opacity: 0.9;
+    margin-bottom: 1.5rem;
   }
 `
 
 const FeatureTitle = styled.h3`
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 700;
   margin-bottom: 1rem;
   color: var(--text-primary);
 `
 
 const FeatureDescription = styled.p`
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text-secondary);
+  flex-grow: 1;
 `
 
 const TestimonialsSection = styled.section`
-  padding: 80px 5%;
+  padding: 100px 5%;
   background: white;
 `
 
@@ -228,7 +235,7 @@ const TestimonialsGrid = styled.div`
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
+  gap: 40px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -236,25 +243,36 @@ const TestimonialsGrid = styled.div`
 `
 
 const TestimonialCard = styled(motion.div)`
-  padding: 2rem;
-  background: var(--glass-background);
-  border-radius: 16px;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  padding: 2.5rem;
+  background: var(--background-alt);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
   transition: transform 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
   }
 `
 
 const Quote = styled.blockquote`
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text-primary);
   margin-bottom: 1.5rem;
+  position: relative;
+  padding-left: 2rem;
+  
+  &:before {
+    content: '"';
+    position: absolute;
+    left: 0;
+    top: -10px;
+    font-size: 3rem;
+    color: var(--primary);
+    opacity: 0.3;
+    font-family: serif;
+  }
 `
 
 const Author = styled.div`
@@ -265,15 +283,29 @@ const Author = styled.div`
 const AuthorImage = styled.div`
   width: 50px;
   height: 50px;
-  border-radius: 25px;
-  background: #ddd;
+  border-radius: 50%;
+  background: var(--primary);
   margin-right: 1rem;
+  position: relative;
+  overflow: hidden;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom right, var(--primary), var(--primary-dark));
+    opacity: 0.8;
+  }
 `
 
 const AuthorInfo = styled.div`
   h4 {
     font-weight: 600;
     margin-bottom: 0.25rem;
+    color: var(--text-primary);
   }
 
   p {
@@ -284,22 +316,24 @@ const AuthorInfo = styled.div`
 
 const Home = () => {
   const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
+        staggerChildren: 0.2
       }
     }
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
-      y: 0
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.25, 0.1, 0.25, 1.0]
+      }
     }
   }
 
@@ -341,7 +375,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <StatNumber>2000+</StatNumber>
             <StatLabel>Annonces immobilières</StatLabel>
@@ -350,7 +384,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <StatNumber>200+</StatNumber>
             <StatLabel>Agents partenaires</StatLabel>
@@ -359,7 +393,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <StatNumber>5000+</StatNumber>
             <StatLabel>Utilisateurs actifs</StatLabel>
@@ -374,7 +408,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <FiSearch />
             <FeatureTitle>Recherche personnalisée</FeatureTitle>
@@ -387,7 +421,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <FiShield />
             <FeatureTitle>Mise en relation directe</FeatureTitle>
@@ -400,7 +434,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <FiTrendingUp />
             <FeatureTitle>Données du marché</FeatureTitle>
@@ -413,7 +447,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <FiUsers />
             <FeatureTitle>Agents vérifiés</FeatureTitle>
@@ -426,7 +460,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <FiClock />
             <FeatureTitle>Outils pour agents</FeatureTitle>
@@ -439,7 +473,7 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <FiGlobe />
             <FeatureTitle>Marketing digital</FeatureTitle>
@@ -458,12 +492,12 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <Quote>
-              "Kairo m'a permis de trouver rapidement le parfait appartement à Dakar. 
+              Kairo m'a permis de trouver rapidement le parfait appartement à Dakar. 
               La plateforme m'a mise en relation avec un agent professionnel qui a 
-              parfaitement compris mes besoins."
+              parfaitement compris mes besoins.
             </Quote>
             <Author>
               <AuthorImage />
@@ -477,12 +511,12 @@ const Home = () => {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <Quote>
-              "En tant qu'agent immobilier indépendant, Kairo me donne accès à des 
+              En tant qu'agent immobilier indépendant, Kairo me donne accès à des 
               outils puissants et à une clientèle qualifiée. C'est un véritable 
-              accélérateur pour mon activité."
+              accélérateur pour mon activité.
             </Quote>
             <Author>
               <AuthorImage />
