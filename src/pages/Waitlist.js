@@ -99,10 +99,11 @@ const BenefitItem = styled(motion.li)`
 `
 
 const FormSection = styled(motion.div)`
-  background: white;
+  background: ${({ theme }) => theme.colors.background};
   padding: 3rem;
   border-radius: 20px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+  border: 1px solid ${({ theme }) => theme.glass.border};
 `
 
 const Form = styled.form`
@@ -135,16 +136,17 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   padding: 0.9rem 1rem;
-  border: 2px solid #f0f0f5;
+  border: 2px solid ${({ theme }) => theme.glass.border};
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s ease;
-  background: #f9f9ff;
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  color: ${({ theme }) => theme.colors.text};
   
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
-    background: white;
+    background: ${({ theme }) => theme.colors.background};
     box-shadow: 0 0 0 3px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
   }
 `
@@ -152,16 +154,18 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   padding: 0.9rem 1rem;
-  border: 2px solid #f0f0f5;
+  border: 2px solid ${({ theme }) => theme.glass.border};
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s ease;
-  background: #f9f9ff;
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
   
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.background};
     background: white;
     box-shadow: 0 0 0 3px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
   }
@@ -194,22 +198,24 @@ const SubmitButton = styled(motion.button)`
 
 const SuccessMessage = styled(motion.div)`
   text-align: center;
-  color: #059669;
-  background: #ecfdf5;
+  color: ${({ theme }) => theme.mode === 'light' ? '#059669' : '#10b981'};
+  background: ${({ theme }) => theme.mode === 'light' ? '#ecfdf5' : 'rgba(16, 185, 129, 0.1)'};
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
   font-weight: 500;
+  border: 1px solid ${({ theme }) => theme.mode === 'light' ? '#a7f3d0' : 'rgba(16, 185, 129, 0.2)'};
 `
 
 const ErrorMessage = styled(motion.div)`
   text-align: center;
-  color: #dc2626;
-  background: #fef2f2;
+  color: ${({ theme }) => theme.mode === 'light' ? '#dc2626' : '#ef4444'};
+  background: ${({ theme }) => theme.mode === 'light' ? '#fef2f2' : 'rgba(239, 68, 68, 0.1)'};
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
   font-weight: 500;
+  border: 1px solid ${({ theme }) => theme.mode === 'light' ? '#fecaca' : 'rgba(239, 68, 68, 0.2)'};
 `
 
 const Waitlist = () => {
