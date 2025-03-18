@@ -48,7 +48,7 @@ const HeroContent = styled.div`
 `
 
 const MainTitle = styled(motion.h1)`
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
   line-height: 1.1;
@@ -60,12 +60,12 @@ const MainTitle = styled(motion.h1)`
   text-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 `
 
 const SubTitle = styled(motion.p)`
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
   line-height: 1.6;
   margin-bottom: 2.5rem;
   max-width: 800px;
@@ -74,7 +74,7 @@ const SubTitle = styled(motion.p)`
   color: ${({ theme }) => theme.colors.textSecondary};
 
   @media (max-width: 768px) {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 `
 
@@ -95,6 +95,48 @@ const CTAButton = styled(motion(Link))`
     transform: translateY(-2px);
     box-shadow: 0 15px 30px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
   }
+`
+
+const KairoButton = styled(CTAButton)`
+  background: ${({ theme }) => theme.colors.secondary};
+  &:hover {
+    background: ${({ theme }) => theme.colors.secondaryDark};
+  }
+`
+
+const BentoSection = styled.section`
+  padding: 100px 5%;
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+`
+
+const BentoBox = styled.div`
+  width: 300px;
+  height: 200px;
+  background: ${({ theme }) => theme.colors.background};
+  border-radius: 20px;
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: ${({ theme }) => theme.shadows.large};
+  }
+`
+
+const BentoImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
 `
 
 const StatsSection = styled.section`
@@ -132,6 +174,12 @@ const StatCard = styled(motion.div)`
   }
 `
 
+const StatIcon = styled.div`
+  font-size: 2rem;
+  color: ${({ theme }) => theme.colors.primary};
+  margin-bottom: 0.5rem;
+`
+
 const StatNumber = styled.div`
   font-size: 3rem;
   font-weight: 800;
@@ -158,24 +206,20 @@ const FeaturesSection = styled.section`
 `
 
 const SectionTitle = styled.h2`
-  font-size: clamp(2rem, 3vw, 3rem);
-  font-weight: 800;
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
   text-align: center;
-  margin-bottom: 5rem;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  position: relative;
-  
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background: ${({ theme }) => theme.colors.primary};
-    border-radius: 2px;
-  }
+  color: ${({ theme }) => theme.colors.text};
+`
+
+const SectionSubtitle = styled.p`
+  font-size: 1.1rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
 `
 
 const FeaturesGrid = styled.div`
@@ -218,17 +262,16 @@ const FeatureCard = styled(motion.div)`
 `
 
 const FeatureTitle = styled.h3`
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.text};
 `
 
 const FeatureDescription = styled.p`
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.6;
   color: ${({ theme }) => theme.colors.textSecondary};
-  flex-grow: 1;
 `
 
 const TestimonialsSection = styled.section`
@@ -362,20 +405,32 @@ const Home = () => {
             Connectez-vous avec les meilleurs agents immobiliers du Sénégal et trouvez 
             votre bien idéal grâce à notre plateforme innovante.
           </SubTitle>
-          <CTAButton
-            to="/waitlist"
+          <KairoButton
+            to="/kairo"
             variants={itemVariants}
             initial="hidden"
             animate="visible"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Rejoindre la liste d'attente
-          </CTAButton>
+            Explore Kairo
+          </KairoButton>
         </HeroContent>
       </HeroSection>
 
       <SearchBox />
+
+      <BentoSection>
+        <BentoBox>
+          <BentoImage src="/images/platform-mockup.jpg" alt="Platform Mockup" />
+        </BentoBox>
+        <BentoBox>
+          <BentoImage src="/images/agent-dashboard.jpg" alt="Agent Dashboard" />
+        </BentoBox>
+        <BentoBox>
+          <BentoImage src="/images/market-analysis.jpg" alt="Market Analysis" />
+        </BentoBox>
+      </BentoSection>
 
       <StatsSection>
         <StatsGrid>
@@ -385,8 +440,9 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <StatNumber>2000+</StatNumber>
-            <StatLabel>Annonces immobilières</StatLabel>
+            <StatIcon><FiUsers /></StatIcon>
+            <StatNumber>500+</StatNumber>
+            <StatLabel>Utilisateurs</StatLabel>
           </StatCard>
           <StatCard
             variants={itemVariants}
@@ -394,8 +450,9 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <StatNumber>200+</StatNumber>
-            <StatLabel>Agents partenaires</StatLabel>
+            <StatIcon><FiTrendingUp /></StatIcon>
+            <StatNumber>98%</StatNumber>
+            <StatLabel>Taux de succès</StatLabel>
           </StatCard>
           <StatCard
             variants={itemVariants}
@@ -403,14 +460,18 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <StatNumber>5000+</StatNumber>
-            <StatLabel>Utilisateurs actifs</StatLabel>
+            <StatIcon><FiClock /></StatIcon>
+            <StatNumber>24/7</StatNumber>
+            <StatLabel>Support expert</StatLabel>
           </StatCard>
         </StatsGrid>
       </StatsSection>
 
       <FeaturesSection>
         <SectionTitle>Pourquoi choisir Kairo ?</SectionTitle>
+        <SectionSubtitle>
+          Kairo est conçu pour simplifier et accélérer votre processus d'achat ou de vente d'un bien immobilier.
+        </SectionSubtitle>
         <FeaturesGrid>
           <FeatureCard
             variants={itemVariants}
