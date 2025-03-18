@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiMap, FiList, FiHome, FiDollarSign, FiBed, FiBath, FiSquare, FiSliders, FiChevronDown, FiX } from 'react-icons/fi';
+import { FiSearch, FiMap, FiList, FiHome, FiDollarSign, FiUser, FiDroplet, FiSquare, FiSliders, FiChevronDown, FiX } from 'react-icons/fi';
 
 // Container principal du moteur de recherche
 const SearchContainer = styled.div`
@@ -665,7 +665,7 @@ const SearchBox = () => {
             active={activeFilter === 'beds'} 
             onClick={() => toggleFilter('beds')}
           >
-            <FiBed /> Chambres
+            <FiUser /> Chambres
             <FiChevronDown size={16} />
           </FilterButton>
           <AnimatePresence>
@@ -866,10 +866,10 @@ const SearchBox = () => {
                     <ResultLocation>{result.location}</ResultLocation>
                     <ResultFeatures>
                       <ResultFeature>
-                        <FiBed /> {result.beds}
+                        <FiUser /> {result.beds}
                       </ResultFeature>
                       <ResultFeature>
-                        <FiBath /> {result.baths}
+                        <FiDroplet /> {result.baths}
                       </ResultFeature>
                       <ResultFeature>
                         <FiSquare /> {result.area} m²
