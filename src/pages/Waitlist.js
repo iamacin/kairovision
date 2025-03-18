@@ -5,28 +5,48 @@ import { supabase } from '../utils/supabase'
 
 const WaitlistContainer = styled.div`
   min-height: 100vh;
+  background: var(--gradient-primary);
   padding: 120px 5% 80px;
-  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1), transparent);
+    z-index: 1;
+  }
 `
 
 const ContentWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  gap: 4rem;
   align-items: center;
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 2rem;
   }
 `
 
-const InfoSection = styled(motion.div)`
-  @media (max-width: 968px) {
-    text-align: center;
-  }
+const InfoSection = styled.div`
+  background: var(--glass-background);
+  padding: 3rem;
+  border-radius: 24px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 `
 
 const Title = styled(motion.h1)`
@@ -80,11 +100,14 @@ const BenefitItem = styled(motion.li)`
   }
 `
 
-const FormSection = styled(motion.div)`
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+const FormSection = styled.div`
+  background: var(--glass-background);
+  padding: 3rem;
+  border-radius: 24px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 `
 
 const Form = styled.form`
@@ -93,69 +116,74 @@ const Form = styled.form`
   gap: 1.5rem;
 `
 
-const InputGroup = styled.div`
-  display: flex;
-  gap: 1rem;
-
-  @media (max-width: 568px) {
-    flex-direction: column;
-  }
-`
-
 const FormGroup = styled.div`
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `
 
 const Label = styled.label`
-  display: block;
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
 `
 
 const Input = styled.input`
-  width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--border);
   border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
 
   &:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
   }
 `
 
 const Select = styled.select`
-  width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid var(--border);
   border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   font-size: 1rem;
-  transition: all 0.2s ease;
-  background: white;
-  cursor: pointer;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  option {
+    background: var(--primary-dark);
+    color: white;
+  }
 
   &:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
   }
 `
 
-const SubmitButton = styled(motion.button)`
-  width: 100%;
+const SubmitButton = styled.button`
   padding: 1rem;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
-  border: none;
   border-radius: 8px;
-  font-size: 1.1rem;
+  border: none;
+  background: white;
+  color: var(--primary);
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glass-shadow);
+  }
 
   &:disabled {
     opacity: 0.7;
@@ -298,30 +326,29 @@ const Waitlist = () => {
           animate="visible"
         >
           <Form onSubmit={handleSubmit}>
-            <InputGroup>
-              <FormGroup>
-                <Label htmlFor="firstName">Prénom</Label>
-                <Input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="lastName">Nom</Label>
-                <Input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </FormGroup>
-            </InputGroup>
+            <FormGroup>
+              <Label htmlFor="firstName">Prénom</Label>
+              <Input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="lastName">Nom</Label>
+              <Input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </FormGroup>
 
             <FormGroup>
               <Label htmlFor="email">Email</Label>
@@ -335,29 +362,28 @@ const Waitlist = () => {
               />
             </FormGroup>
 
-            <InputGroup>
-              <FormGroup>
-                <Label htmlFor="phone">Téléphone</Label>
-                <Input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="company">Entreprise</Label>
-                <Input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                />
-              </FormGroup>
-            </InputGroup>
+            <FormGroup>
+              <Label htmlFor="phone">Téléphone</Label>
+              <Input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="company">Entreprise</Label>
+              <Input
+                type="text"
+                id="company"
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
+              />
+            </FormGroup>
 
             <FormGroup>
               <Label htmlFor="userType">Je suis</Label>
@@ -380,8 +406,6 @@ const Waitlist = () => {
             <SubmitButton
               type="submit"
               disabled={isSubmitting}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
               {isSubmitting ? 'Inscription...' : 'Rejoindre la liste d\'attente'}
             </SubmitButton>

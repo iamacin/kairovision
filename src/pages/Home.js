@@ -11,11 +11,10 @@ const HomeContainer = styled.div`
 
 const HeroSection = styled.section`
   padding: 120px 5% 80px;
-  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.95) 0%, rgba(var(--primary-dark-rgb), 0.95) 100%);
+  background: var(--gradient-primary);
   color: white;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(10px);
 
   &::before {
     content: '';
@@ -35,12 +34,13 @@ const HeroContent = styled.div`
   position: relative;
   z-index: 2;
   text-align: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-background);
   padding: 3rem;
   border-radius: 24px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 `
 
 const MainTitle = styled(motion.h1)`
@@ -113,11 +113,12 @@ const StatsGrid = styled.div`
 
 const StatCard = styled(motion.div)`
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--glass-background);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   text-align: center;
   transition: transform 0.3s ease;
 
@@ -183,11 +184,12 @@ const FeaturesGrid = styled.div`
 
 const FeatureCard = styled(motion.div)`
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--glass-background);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   transition: transform 0.3s ease;
 
   &:hover {
@@ -235,11 +237,12 @@ const TestimonialsGrid = styled.div`
 
 const TestimonialCard = styled(motion.div)`
   padding: 2rem;
-  background: rgba(248, 249, 255, 0.95);
+  background: var(--glass-background);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   transition: transform 0.3s ease;
 
   &:hover {
