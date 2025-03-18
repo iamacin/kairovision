@@ -94,7 +94,7 @@ const CTAButton = styled(motion(Link))`
 
 const StatsSection = styled.section`
   padding: 100px 5%;
-  background: white;
+  background: ${({ theme }) => theme.colors.background};
 `
 
 const StatsGrid = styled.div`
@@ -115,15 +115,15 @@ const StatsGrid = styled.div`
 
 const StatCard = styled(motion.div)`
   padding: 2.5rem;
-  background: white;
+  background: ${({ theme }) => theme.colors.background};
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+  box-shadow: ${({ theme }) => theme.shadows.medium};
   text-align: center;
   transition: transform 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.large};
   }
 `
 
@@ -191,9 +191,9 @@ const FeaturesGrid = styled.div`
 
 const FeatureCard = styled(motion.div)`
   padding: 2.5rem;
-  background: white;
+  background: ${({ theme }) => theme.colors.background};
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+  box-shadow: ${({ theme }) => theme.shadows.medium};
   transition: transform 0.3s ease;
   height: 100%;
   display: flex;
@@ -201,7 +201,7 @@ const FeatureCard = styled(motion.div)`
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.large};
   }
 
   svg {
@@ -228,7 +228,7 @@ const FeatureDescription = styled.p`
 
 const TestimonialsSection = styled.section`
   padding: 100px 5%;
-  background: white;
+  background: ${({ theme }) => theme.colors.background};
 `
 
 const TestimonialsGrid = styled.div`
@@ -247,12 +247,12 @@ const TestimonialCard = styled(motion.div)`
   padding: 2.5rem;
   background: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+  box-shadow: ${({ theme }) => theme.shadows.medium};
   transition: transform 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.large};
   }
 `
 
