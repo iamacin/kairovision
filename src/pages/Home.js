@@ -17,8 +17,13 @@ const HeroSection = styled.section`
   justify-content: center;
   position: relative;
   padding: 60px 5%;
-  background-image: linear-gradient(to bottom right, rgba(250, 250, 255, 0.9), rgba(240, 240, 255, 0.95)), 
-                   url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3');
+  background-image: linear-gradient(
+    to bottom right,
+    ${({ theme }) => theme.mode === 'light' 
+      ? 'rgba(250, 250, 255, 0.9), rgba(240, 240, 255, 0.95)'
+      : 'rgba(10, 10, 20, 0.85), rgba(20, 20, 35, 0.9)'
+    }),
+    url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&q=80');
   background-size: cover;
   background-position: center;
   
@@ -29,7 +34,7 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     left: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.05), transparent 60%);
+    background: radial-gradient(circle at 70% 30%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1), transparent 70%);
   }
 `
 
