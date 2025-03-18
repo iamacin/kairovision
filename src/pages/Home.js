@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FiSearch, FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe } from 'react-icons/fi'
+import SearchBox from '../components/Search/SearchBox'
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -368,6 +369,8 @@ const Home = () => {
           </CTAButton>
         </HeroContent>
       </HeroSection>
+
+      <SearchBox />
 
       <StatsSection>
         <StatsGrid>
