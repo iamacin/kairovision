@@ -12,20 +12,24 @@ const ImageUploadContainer = styled.div`
 
 const UploadButton = styled.button`
   padding: 0.5rem 1rem;
-  background-color: var(--primary-color);
-  color: white;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.text};
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
 
   &:hover {
-    background-color: var(--primary-color-dark);
+    background-color: ${({ theme }) => theme.colors.primaryDark};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px ${({ theme }) => theme.colors.primaryRgb}20;
   }
 
   &:disabled {
-    background-color: #ccc;
+    background-color: ${({ theme }) => theme.colors.disabled};
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `
 
@@ -34,11 +38,14 @@ const PreviewImage = styled.img`
   max-height: 300px;
   object-fit: contain;
   margin-top: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px ${({ theme }) => theme.colors.shadow};
 `
 
 const ErrorMessage = styled.p`
-  color: red;
+  color: ${({ theme }) => theme.colors.error};
   margin: 0.5rem 0;
+  font-size: 0.9rem;
 `
 
 const ImageUpload = ({ onUploadComplete, bucket }) => {

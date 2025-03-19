@@ -16,9 +16,10 @@ const ImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 400px;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 8px;
   overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.glass.border};
 `
 
 const HeroImage = styled.img`
@@ -32,21 +33,25 @@ const UploadButton = styled.button`
   bottom: 1rem;
   right: 1rem;
   padding: 0.5rem 1rem;
-  background-color: var(--primary-color);
+  background: ${({ theme }) => theme.colors.primary};
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   z-index: 2;
 
   &:hover {
-    background-color: var(--primary-color-dark);
+    background: ${({ theme }) => theme.colors.primaryDark};
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.2);
   }
 
   &:disabled {
-    background-color: #ccc;
+    background: ${({ theme }) => theme.colors.textLight};
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `
 
@@ -56,7 +61,10 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: ${({ theme }) => theme.mode === 'light' 
+    ? 'rgba(0, 0, 0, 0.3)' 
+    : 'rgba(0, 0, 0, 0.5)'
+  };
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,8 +73,9 @@ const Overlay = styled.div`
 `
 
 const ErrorMessage = styled.p`
-  color: red;
+  color: ${({ theme }) => theme.colors.error};
   margin: 0.5rem 0;
+  font-size: 0.9rem;
 `
 
 const HeroImageUpload = () => {

@@ -18,7 +18,7 @@ const SearchContainer = styled.div`
   margin-top: -60px;
   position: relative;
   z-index: 10;
-  overflow: hidden;
+  overflow: visible;
 `;
 
 // Tab pour basculer entre la recherche par liste et par carte

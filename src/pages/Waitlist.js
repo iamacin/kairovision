@@ -283,21 +283,27 @@ const Waitlist = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setStatus({ type: '', message: '' })
+    e.preventDefault();
+    setIsSubmitting(true);
+    setStatus({ type: '', message: '' });
 
     try {
-      const { error } = await supabase
-        .from('waitlist')
-        .insert([formData])
+      const response = await fetch('/.netlify/functions/supabase-handler', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'addToWaitlist',
+          data: formData
+        })
+      });
 
-      if (error) throw error
+      const result = await response.json();
+
+      if (!response.ok) throw new Error(result.error);
 
       setStatus({
         type: 'success',
         message: 'Merci de votre inscription ! Nous vous contacterons bientôt.'
-      })
+      });
       setFormData({
         firstName: '',
         lastName: '',
@@ -305,16 +311,16 @@ const Waitlist = () => {
         phone: '',
         company: '',
         userType: ''
-      })
+      });
     } catch (error) {
       setStatus({
         type: 'error',
         message: 'Une erreur est survenue. Veuillez réessayer.'
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
