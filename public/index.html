@@ -11,6 +11,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Prevent flash of incorrect theme */
+        html {
+            background: #ffffff;
+        }
+        @media (prefers-color-scheme: dark) {
+            html {
+                background: #161625;
+            }
+        }
+    </style>
+    <script>
+        // Theme initialization
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+            
+            // Set theme attributes
+            document.documentElement.setAttribute('data-theme', initialTheme);
+            document.documentElement.style.background = initialTheme === 'dark' ? '#161625' : '#ffffff';
+            
+            // Listen for theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function(e) {
+                if (!localStorage.getItem('theme')) {
+                    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                    document.documentElement.style.background = e.matches ? '#161625' : '#ffffff';
+                }
+            });
+        })();
+    </script>
 </head>
 <body>
     <div id="root"></div>

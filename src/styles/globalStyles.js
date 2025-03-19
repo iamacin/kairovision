@@ -29,6 +29,7 @@ export const GlobalStyles = createGlobalStyle`
   html {
     font-size: ${({ theme }) => theme.typography.fontSizeBase};
     scroll-behavior: smooth;
+    min-height: 100%;
   }
   
   body {
@@ -38,7 +39,15 @@ export const GlobalStyles = createGlobalStyle`
     background-color: ${({ theme }) => theme.colors.background};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+  }
+  
+  /* Smooth transitions for theme changes */
+  body, 
+  body * {
+    transition: background-color 0.2s ease-in-out,
+                border-color 0.2s ease-in-out,
+                color 0.2s ease-in-out;
   }
   
   /* Typography */
@@ -264,7 +273,9 @@ export const GlobalStyles = createGlobalStyle`
   
   /* Reduced Motion */
   @media (prefers-reduced-motion: reduce) {
-    * {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;

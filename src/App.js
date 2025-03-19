@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import styled from 'styled-components';
 import '@fontsource/inter/400.css';
@@ -21,30 +21,41 @@ const AppWrapper = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
-  transition: background-color 0.3s ease, color 0.3s ease;
 `;
 
 const Main = styled.main`
   flex: 1;
 `;
 
+// Loading fallback
+const LoadingFallback = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+`;
+
 const App = () => {
   return (
     <ThemeProvider>
       <GlobalStyles />
-      <Router>
-        <AppWrapper>
-          <Header />
-          <Main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/waitlist" element={<Waitlist />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </Main>
-          <Footer />
-        </AppWrapper>
-      </Router>
+      <Suspense fallback={<LoadingFallback>Loading...</LoadingFallback>}>
+        <Router>
+          <AppWrapper>
+            <Header />
+            <Main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/waitlist" element={<Waitlist />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </Main>
+            <Footer />
+          </AppWrapper>
+        </Router>
+      </Suspense>
     </ThemeProvider>
   );
 };
