@@ -5,10 +5,6 @@ const dotenv = require('dotenv');
 
 // Load environment variables from .env file
 const env = dotenv.config().parsed || {};
-const envKeys = Object.keys(env).reduce((prev, next) => {
-  prev[`process.env.${next}`] = JSON.stringify(env[next]);
-  return prev;
-}, {});
 
 module.exports = {
   entry: './src/index.js',
@@ -59,8 +55,11 @@ module.exports = {
       template: './public/index.html'
     }),
     new webpack.DefinePlugin({
-      'process.env.REACT_APP_SUPABASE_URL': JSON.stringify(process.env.REACT_APP_SUPABASE_URL || 'https://placeholder-url.supabase.co'),
-      'process.env.REACT_APP_SUPABASE_ANON_KEY': JSON.stringify(process.env.REACT_APP_SUPABASE_ANON_KEY || 'placeholder-key')
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        REACT_APP_SUPABASE_URL: JSON.stringify(process.env.REACT_APP_SUPABASE_URL),
+        REACT_APP_SUPABASE_ANON_KEY: JSON.stringify(process.env.REACT_APP_SUPABASE_ANON_KEY)
+      }
     })
   ],
   devServer: {
