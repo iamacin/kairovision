@@ -8,6 +8,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const env = dotenv.config().parsed || {};
 
 module.exports = {
+  mode: process.env.NODE_ENV || 'development',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -23,7 +24,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: ['@babel/plugin-transform-runtime']
           }
         }
       },
@@ -70,9 +72,7 @@ module.exports = {
       }
     }),
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
-      }
+      'process.env': JSON.stringify(process.env)
     }),
     new CopyPlugin({
       patterns: [
