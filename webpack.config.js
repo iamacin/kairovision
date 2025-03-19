@@ -32,7 +32,7 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
         type: 'asset/resource'
       },
       {
@@ -55,10 +55,24 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      favicon: './public/favicon.ico'
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true
+      }
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+      }
     }),
     new CopyPlugin({
       patterns: [
@@ -66,7 +80,7 @@ module.exports = {
           from: 'public',
           to: '',
           globOptions: {
-            ignore: ['**/index.html', '**/favicon.ico']
+            ignore: ['**/index.html']
           }
         }
       ]
@@ -76,5 +90,29 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     port: 3000
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: 'all',
+      minSize: 20000,
+      maxSize: 244000,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      automaticNameDelimiter: '~',
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
   }
 }; 
