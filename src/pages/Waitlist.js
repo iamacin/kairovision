@@ -428,7 +428,7 @@ const Waitlist = () => {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Inscription en cours...' : 'Rejoindre la liste d'attente'}
+              {isSubmitting ? "Inscription en cours..." : "Rejoindre la liste d'attente"}
             </SubmitButton>
           </Form>
         </FormSection>
