@@ -173,23 +173,23 @@ const Navbar = () => {
         </Logo>
 
         <MenuItems>
-          <MenuItem to="/properties" scrolled={scrolled}>Properties</MenuItem>
+          <MenuItem to="/search" scrolled={scrolled}>Rechercher</MenuItem>
           <MenuItem to="/agents" scrolled={scrolled}>Agents</MenuItem>
-          <MenuItem to="/about" scrolled={scrolled}>About</MenuItem>
+          <MenuItem to="/about" scrolled={scrolled}>À propos</MenuItem>
           <MenuItem to="/contact" scrolled={scrolled}>Contact</MenuItem>
           <AuthButton
             scrolled={scrolled}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Sign In
+            Se connecter
           </AuthButton>
           <AuthButton
             primary
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            List Property
+            Publier une annonce
           </AuthButton>
         </MenuItems>
 
@@ -209,20 +209,20 @@ const Navbar = () => {
             exit={{ x: '100%' }}
             transition={{ type: 'tween' }}
           >
-            <MobileMenuItem to="/properties" onClick={() => setMobileMenuOpen(false)}>
-              Properties
+            <MobileMenuItem to="/search" onClick={() => setMobileMenuOpen(false)}>
+              Rechercher
             </MobileMenuItem>
             <MobileMenuItem to="/agents" onClick={() => setMobileMenuOpen(false)}>
               Agents
             </MobileMenuItem>
             <MobileMenuItem to="/about" onClick={() => setMobileMenuOpen(false)}>
-              About
+              À propos
             </MobileMenuItem>
             <MobileMenuItem to="/contact" onClick={() => setMobileMenuOpen(false)}>
               Contact
             </MobileMenuItem>
-            <AuthButton primary>List Property</AuthButton>
-            <AuthButton>Sign In</AuthButton>
+            <AuthButton primary>Publier une annonce</AuthButton>
+            <AuthButton>Se connecter</AuthButton>
           </MobileMenu>
         )}
       </AnimatePresence>

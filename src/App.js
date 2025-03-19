@@ -11,6 +11,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
 import Waitlist from './pages/Waitlist';
+import Contact from './pages/Contact';
 import { GlobalStyles } from './styles/globalStyles';
 import { ThemeProvider } from './contexts/ThemeContext';
 
@@ -38,6 +39,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/waitlist" element={<Waitlist />} />
+              <Route path="/contact" element={<Contact />} />
             </Routes>
           </Main>
           <Footer />

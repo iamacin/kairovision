@@ -73,13 +73,13 @@ const Description = styled(motion.p)`
   }
 `
 
-const BenefitsList = styled(motion.ul)`
+const FeaturesList = styled(motion.ul)`
   list-style: none;
   padding: 0;
   margin: 2rem 0;
 `
 
-const BenefitItem = styled(motion.li)`
+const Feature = styled(motion.li)`
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem;
@@ -98,6 +98,65 @@ const BenefitItem = styled(motion.li)`
   }
 `
 
+const FeatureTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: ${({ theme }) => theme.colors.text};
+`
+
+const FeatureDescription = styled.p`
+  font-size: 1rem;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.textSecondary};
+`
+
+const ProcessSection = styled(motion.div)`
+  margin-top: 2rem;
+`
+
+const ProcessTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.colors.text};
+`
+
+const ProcessSteps = styled.ol`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`
+
+const Step = styled.li`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+
+  svg {
+    width: 24px;
+    height: 24px;
+    margin-right: 1rem;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  @media (max-width: 968px) {
+    justify-content: center;
+  }
+`
+
+const StepNumber = styled.span`
+  font-weight: 600;
+  margin-right: 1rem;
+`
+
+const StepText = styled.span`
+  font-size: 1rem;
+  line-height: 1.5;
+`
+
 const FormSection = styled(motion.div)`
   background: ${({ theme }) => theme.colors.background};
   padding: 3rem;
@@ -106,31 +165,17 @@ const FormSection = styled(motion.div)`
   border: 1px solid ${({ theme }) => theme.glass.border};
 `
 
+const FormTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: ${({ theme }) => theme.colors.text};
+`
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-`
-
-const InputGroup = styled.div`
-  display: flex;
-  gap: 1rem;
-
-  @media (max-width: 568px) {
-    flex-direction: column;
-  }
-`
-
-const FormGroup = styled.div`
-  flex: 1;
-`
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 0.95rem;
 `
 
 const Input = styled.input`
@@ -296,152 +341,95 @@ const Waitlist = () => {
   return (
     <WaitlistContainer>
       <ContentWrapper>
-        <InfoSection
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <Title variants={itemVariants}>
-            Rejoignez l'avenir de l'immobilier
-          </Title>
-          <Description variants={itemVariants}>
-            Soyez parmi les premiers à découvrir notre plateforme révolutionnaire 
-            qui transforme l'expérience immobilière au Sénégal.
+        <InfoSection>
+          <Title>Publiez Votre Annonce</Title>
+          <Description>
+            Kairo est une plateforme dédiée aux agents immobiliers et professionnels.
           </Description>
+          <FeaturesList>
+            <Feature>
+              <FeatureTitle>Inscription requise</FeatureTitle>
+              <FeatureDescription>
+                L'accès à la plateforme est réservé aux agents enregistrés.
+              </FeatureDescription>
+            </Feature>
+            <Feature>
+              <FeatureTitle>Création de profil</FeatureTitle>
+              <FeatureDescription>
+                Chaque agent doit disposer d'un profil validé pour publier des annonces.
+              </FeatureDescription>
+            </Feature>
+            <Feature>
+              <FeatureTitle>Liste d'attente</FeatureTitle>
+              <FeatureDescription>
+                L'inscription des agents est en cours de déploiement. Inscrivez-vous dès maintenant pour être informé dès l'ouverture.
+              </FeatureDescription>
+            </Feature>
+          </FeaturesList>
           
-          <BenefitsList variants={containerVariants}>
-            <BenefitItem variants={itemVariants}>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-              </svg>
-              Accès prioritaire aux nouvelles fonctionnalités
-            </BenefitItem>
-            <BenefitItem variants={itemVariants}>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-              </svg>
-              Support dédié pour votre onboarding
-            </BenefitItem>
-            <BenefitItem variants={itemVariants}>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-              </svg>
-              Offres exclusives pour les premiers inscrits
-            </BenefitItem>
-          </BenefitsList>
+          <ProcessSection>
+            <ProcessTitle>Comment ça marche ?</ProcessTitle>
+            <ProcessSteps>
+              <Step>
+                <StepNumber>1</StepNumber>
+                <StepText>Inscrivez-vous sur la waitlist et créez votre profil d'agent.</StepText>
+              </Step>
+              <Step>
+                <StepNumber>2</StepNumber>
+                <StepText>Accédez à la plateforme après validation de votre inscription.</StepText>
+              </Step>
+              <Step>
+                <StepNumber>3</StepNumber>
+                <StepText>Publiez vos annonces et connectez-vous avec des acheteurs et locataires sérieux.</StepText>
+              </Step>
+            </ProcessSteps>
+          </ProcessSection>
         </InfoSection>
 
-        <FormSection
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <FormSection>
+          <FormTitle>S'inscrire sur la waitlist</FormTitle>
           <Form onSubmit={handleSubmit}>
-            <InputGroup>
-              <FormGroup>
-                <Label htmlFor="firstName">Prénom</Label>
-                <Input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="lastName">Nom</Label>
-                <Input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </FormGroup>
-            </InputGroup>
-
-            <FormGroup>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </FormGroup>
-
-            <InputGroup>
-              <FormGroup>
-                <Label htmlFor="phone">Téléphone</Label>
-                <Input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="company">Entreprise</Label>
-                <Input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                />
-              </FormGroup>
-            </InputGroup>
-
-            <FormGroup>
-              <Label htmlFor="userType">Je suis</Label>
-              <Select
-                id="userType"
-                name="userType"
-                value={formData.userType}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Sélectionnez votre profil</option>
-                <option value="agent">Agent immobilier</option>
-                <option value="developer">Promoteur</option>
-                <option value="buyer">Acheteur</option>
-                <option value="seller">Vendeur</option>
-                <option value="partner">Partenaire</option>
-              </Select>
-            </FormGroup>
-
+            <Input
+              type="text"
+              name="fullName"
+              placeholder="Nom complet"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              type="email"
+              name="email"
+              placeholder="Email professionnel"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              type="tel"
+              name="phone"
+              placeholder="Numéro de téléphone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+            <Select
+              name="agencyType"
+              value={formData.agencyType}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Type d'agence</option>
+              <option value="independent">Agent indépendant</option>
+              <option value="agency">Agence immobilière</option>
+              <option value="developer">Promoteur immobilier</option>
+            </Select>
             <SubmitButton
               type="submit"
               disabled={isSubmitting}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
-              {isSubmitting ? 'Inscription...' : 'Rejoindre la liste d\'attente'}
+              {isSubmitting ? 'Inscription en cours...' : 'Rejoindre la liste d'attente'}
             </SubmitButton>
-
-            {status.type === 'success' && (
-              <SuccessMessage
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                {status.message}
-              </SuccessMessage>
-            )}
-
-            {status.type === 'error' && (
-              <ErrorMessage
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                {status.message}
-              </ErrorMessage>
-            )}
           </Form>
         </FormSection>
       </ContentWrapper>

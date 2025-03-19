@@ -395,26 +395,37 @@ const Home = () => {
             initial="hidden"
             animate="visible"
           >
-            La Plateforme Immobilière Intelligente du Sénégal
+            Bienvenue sur Kairo, votre plateforme immobilière digitale au Sénégal
           </MainTitle>
           <SubTitle
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            Connectez-vous avec les meilleurs agents immobiliers du Sénégal et trouvez 
-            votre bien idéal grâce à notre plateforme innovante.
+            Acheter, vendre ou louer un bien immobilier n'a jamais été aussi simple. Kairo connecte clients, agents et partenaires sur une plateforme unique et transparente. Nous facilitons les transactions en centralisant les annonces et en mettant en relation des professionnels qualifiés.
           </SubTitle>
-          <KairoButton
-            to="/kairo"
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Explore Kairo
-          </KairoButton>
+          <CTAContainer>
+            <PrimaryButton
+              to="/search"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Commencez votre recherche
+            </PrimaryButton>
+            <SecondaryButton
+              to="/agents"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Trouvez un agent partenaire
+            </SecondaryButton>
+          </CTAContainer>
         </HeroContent>
       </HeroSection>
 
@@ -468,9 +479,9 @@ const Home = () => {
       </StatsSection>
 
       <FeaturesSection>
-        <SectionTitle>Pourquoi choisir Kairo ?</SectionTitle>
+        <SectionTitle>Pourquoi Choisir Kairo ?</SectionTitle>
         <SectionSubtitle>
-          Kairo est conçu pour simplifier et accélérer votre processus d'achat ou de vente d'un bien immobilier.
+          Une plateforme conçue pour rendre l'achat, la vente et la location plus fluides et accessibles.
         </SectionSubtitle>
         <FeaturesGrid>
           <FeatureCard
@@ -479,24 +490,10 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <FiSearch />
-            <FeatureTitle>Recherche personnalisée</FeatureTitle>
-            <FeatureDescription>
-              Trouvez le bien idéal grâce à nos filtres avancés et 
-              connectez-vous directement avec les agents.
-            </FeatureDescription>
-          </FeatureCard>
-          <FeatureCard
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
             <FiShield />
-            <FeatureTitle>Mise en relation directe</FeatureTitle>
+            <FeatureTitle>Accès à des annonces vérifiées</FeatureTitle>
             <FeatureDescription>
-              Communiquez directement avec des agents vérifiés pour 
-              une expérience immobilière transparente.
+              Parcourez des biens publiés par des agents et vendeurs professionnels.
             </FeatureDescription>
           </FeatureCard>
           <FeatureCard
@@ -506,10 +503,9 @@ const Home = () => {
             viewport={{ once: true, margin: "-100px" }}
           >
             <FiTrendingUp />
-            <FeatureTitle>Données du marché</FeatureTitle>
+            <FeatureTitle>Outils pratiques</FeatureTitle>
             <FeatureDescription>
-              Prenez des décisions éclairées grâce à nos analyses 
-              détaillées du marché immobilier sénégalais.
+              Estimez les prix du marché et suivez les tendances immobilières au Sénégal.
             </FeatureDescription>
           </FeatureCard>
           <FeatureCard
@@ -519,23 +515,9 @@ const Home = () => {
             viewport={{ once: true, margin: "-100px" }}
           >
             <FiUsers />
-            <FeatureTitle>Agents vérifiés</FeatureTitle>
+            <FeatureTitle>Un réseau de partenaires</FeatureTitle>
             <FeatureDescription>
-              Collaborez en toute confiance avec des agents immobiliers 
-              soigneusement sélectionnés et vérifiés.
-            </FeatureDescription>
-          </FeatureCard>
-          <FeatureCard
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <FiClock />
-            <FeatureTitle>Outils pour agents</FeatureTitle>
-            <FeatureDescription>
-              Agents, gérez vos annonces, suivez vos leads et organisez 
-              vos visites efficacement sur une seule plateforme.
+              Kairo connecte acheteurs, vendeurs et professionnels de l'immobilier.
             </FeatureDescription>
           </FeatureCard>
           <FeatureCard
@@ -545,10 +527,9 @@ const Home = () => {
             viewport={{ once: true, margin: "-100px" }}
           >
             <FiGlobe />
-            <FeatureTitle>Marketing digital</FeatureTitle>
+            <FeatureTitle>Des solutions adaptées</FeatureTitle>
             <FeatureDescription>
-              Agents, bénéficiez d'une visibilité optimale de vos annonces 
-              auprès d'une audience ciblée et qualifiée.
+              Trouvez des financements et des assurances grâce à nos partenaires bancaires.
             </FeatureDescription>
           </FeatureCard>
         </FeaturesGrid>
