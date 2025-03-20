@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../utils/supabase'
-import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiList, FiBriefcase } from 'react-icons/fi'
+import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiList, FiBriefcase, FiHome, FiUsers } from 'react-icons/fi'
 
 const WaitlistContainer = styled.div`
   min-height: 100vh;
@@ -239,7 +239,38 @@ const PhoneInput = styled.div`
   gap: 1rem;
 `
 
+const TabsContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+`
+
+const Tab = styled(motion.button)`
+  padding: 1rem 2rem;
+  background: ${({ active, theme }) => active ? theme.colors.primary : 'transparent'};
+  color: ${({ active, theme }) => active ? 'white' : theme.colors.text};
+  border: 2px solid ${({ active, theme }) => active ? theme.colors.primary : theme.colors.border};
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background: ${({ active, theme }) => active ? theme.colors.primary : 'rgba(138, 43, 226, 0.1)'};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`
+
 const Waitlist = () => {
+  const [userType, setUserType] = useState('client'); // 'client' or 'agent'
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     email: '',
@@ -417,13 +448,9 @@ const Waitlist = () => {
         }
         break;
       case 3:
-        if (!formData.role) {
-          setError('Le rôle est requis');
-          return false;
-        }
-        if (formData.role === 'agent') {
+        if (userType === 'agent') {
           if (!formData.agencyName) {
-            setError('Le nom de l\'agence est requis pour les agents immobiliers');
+            setError('Le nom de l\'agence est requis');
             return false;
           }
           if (formData.agencyWebsite && !validateWebsite(formData.agencyWebsite)) {
@@ -431,7 +458,12 @@ const Waitlist = () => {
             return false;
           }
           if (!formData.experience) {
-            setError('L\'expérience est requise pour les agents immobiliers');
+            setError('L\'expérience est requise');
+            return false;
+          }
+        } else {
+          if (!formData.role) {
+            setError('Veuillez sélectionner votre objectif');
             return false;
           }
         }
@@ -539,6 +571,33 @@ const Waitlist = () => {
     }));
   };
 
+  const handleTabChange = (type) => {
+    setUserType(type);
+    setCurrentStep(1);
+    setError('');
+    setSuccess('');
+    setFormData(prev => ({
+      ...prev,
+      role: type === 'agent' ? 'agent' : '',
+      agencyName: '',
+      agencyWebsite: '',
+      experience: ''
+    }));
+  };
+
+  const getStepTitle = () => {
+    switch (currentStep) {
+      case 1:
+        return 'Inscription';
+      case 2:
+        return 'Profil';
+      case 3:
+        return userType === 'agent' ? 'Informations professionnelles' : 'Préférences';
+      default:
+        return '';
+    }
+  };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -643,55 +702,34 @@ const Waitlist = () => {
           </>
         );
       case 3:
-        return (
-          <>
-            <InputGroup>
-              <Label>Rôle</Label>
-              <Select
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-              >
-                <option value="">Sélectionnez votre rôle</option>
-                <option value="agent">Agent immobilier</option>
-                <option value="buyer">Acheteur</option>
-                <option value="seller">Vendeur</option>
-                <option value="renter">Locataire</option>
-                <option value="landlord">Propriétaire</option>
-              </Select>
-            </InputGroup>
-
-            {formData.role === 'agent' && (
-              <>
-                <InputGroup>
-                  <Label>Nom de l'agence *</Label>
-                  <Input
-                    type="text"
-                    name="agencyName"
-                    value={formData.agencyName}
-                    onChange={handleInputChange}
-                    placeholder="Nom de votre agence immobilière"
-                  />
-                </InputGroup>
-                <InputGroup>
-                  <Label>Site web de l'agence (optionnel)</Label>
-                  <Input
-                    type="url"
-                    name="agencyWebsite"
-                    value={formData.agencyWebsite}
-                    onChange={handleInputChange}
-                    placeholder="https://www.votreagence.com"
-                  />
-                  <small style={{ color: '#666', marginTop: '0.25rem' }}>
-                    Format: https://www.example.com
-                  </small>
-                </InputGroup>
-              </>
-            )}
-
-            {formData.role && (
+        if (userType === 'agent') {
+          return (
+            <>
               <InputGroup>
-                <Label>{formData.role === 'agent' ? "Expérience dans l'immobilier *" : "Expérience avec l'immobilier"}</Label>
+                <Label>Nom de l'agence *</Label>
+                <Input
+                  type="text"
+                  name="agencyName"
+                  value={formData.agencyName}
+                  onChange={handleInputChange}
+                  placeholder="Nom de votre agence immobilière"
+                />
+              </InputGroup>
+              <InputGroup>
+                <Label>Site web de l'agence (optionnel)</Label>
+                <Input
+                  type="url"
+                  name="agencyWebsite"
+                  value={formData.agencyWebsite}
+                  onChange={handleInputChange}
+                  placeholder="https://www.votreagence.com"
+                />
+                <small style={{ color: '#666', marginTop: '0.25rem' }}>
+                  Format: https://www.example.com
+                </small>
+              </InputGroup>
+              <InputGroup>
+                <Label>Expérience dans l'immobilier *</Label>
                 <Select
                   name="experience"
                   value={formData.experience}
@@ -704,9 +742,42 @@ const Waitlist = () => {
                   <option value="5+">5+ ans</option>
                 </Select>
               </InputGroup>
-            )}
-          </>
-        );
+            </>
+          );
+        } else {
+          return (
+            <>
+              <InputGroup>
+                <Label>Type de bien recherché</Label>
+                <Select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Sélectionnez votre objectif</option>
+                  <option value="buyer">Achat</option>
+                  <option value="renter">Location</option>
+                  <option value="seller">Vente</option>
+                  <option value="landlord">Mise en location</option>
+                </Select>
+              </InputGroup>
+              <InputGroup>
+                <Label>Expérience avec l'immobilier</Label>
+                <Select
+                  name="experience"
+                  value={formData.experience}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Sélectionnez votre expérience</option>
+                  <option value="0-1">Première fois</option>
+                  <option value="1-3">Quelques transactions</option>
+                  <option value="3-5">Expérimenté</option>
+                  <option value="5+">Expert</option>
+                </Select>
+              </InputGroup>
+            </>
+          );
+        }
       default:
         return null;
     }
@@ -722,10 +793,32 @@ const Waitlist = () => {
         >
           <Title>Rejoignez la révolution immobilière au Sénégal</Title>
           <Description>
-            Inscrivez-vous dès maintenant pour faire partie des premiers utilisateurs de Kairo. 
-            Bénéficiez d'un accès prioritaire et d'avantages exclusifs.
+            {userType === 'client' 
+              ? "Inscrivez-vous pour accéder à notre plateforme et découvrir les meilleures opportunités immobilières."
+              : "Vous êtes un professionnel de l'immobilier ? Rejoignez notre réseau d'agents et promoteurs certifiés."}
           </Description>
           
+          <TabsContainer>
+            <Tab
+              active={userType === 'client'}
+              onClick={() => handleTabChange('client')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <FiUser />
+              Client
+            </Tab>
+            <Tab
+              active={userType === 'agent'}
+              onClick={() => handleTabChange('agent')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <FiBriefcase />
+              Agent / Promoteur
+            </Tab>
+          </TabsContainer>
+
           <StepsContainer>
             <StepsList>
               <Step active={currentStep === 1} completed={currentStep > 1}>
@@ -740,7 +833,7 @@ const Waitlist = () => {
               </Step>
               <Step active={currentStep === 3} completed={currentStep > 3}>
                 <StepLabel active={currentStep === 3} completed={currentStep > 3}>
-                  Préférences
+                  {userType === 'agent' ? 'Informations pro' : 'Préférences'}
                 </StepLabel>
               </Step>
             </StepsList>
@@ -755,7 +848,7 @@ const Waitlist = () => {
           <Form onSubmit={handleSubmit}>
             <AnimatePresence mode="wait">
               <motion.div
-                key={currentStep}
+                key={`${userType}-${currentStep}`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}

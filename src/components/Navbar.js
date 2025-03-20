@@ -144,12 +144,12 @@ const Navbar = () => {
             Accueil
           </NavLink>
           <JoinButton
+            as={Link}
             to="/waitlist"
-            as={motion.a}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Rejoindre Kairo
+            Rejoignez-nous
           </JoinButton>
           <ThemeToggle />
         </NavLinks>
