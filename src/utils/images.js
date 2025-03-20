@@ -8,7 +8,7 @@
 const images = {
   // Images principales
   logo: '/assets/images/kairo-logo.png',
-  hero: '/assets/images/home-hero.png',
+  hero: '/assets/optimized/home-hero.webp',
   mockup: '/assets/images/platform-preview.jpg',
 
   // Logos des partenaires
@@ -37,7 +37,7 @@ const images = {
   // Photos des agents
   agents: {
     agent1: '/assets/images/agents/agent1.jpg',
-    agent2: '/assets/images/agents/agent2.jpg',
+    agent2: '/assets/optimized/agent2.webp',
     agent3: '/assets/images/agents/agent3.jpg',
   }
 };

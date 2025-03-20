@@ -10,31 +10,17 @@ const HomeContainer = styled.div`
 `
 
 const HeroSection = styled.section`
-  min-height: 85vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 80px 5%;
-  background-image: linear-gradient(
-    to bottom right,
-    ${({ theme }) => theme.mode === 'light' 
-      ? 'rgba(250, 250, 255, 0.97), rgba(240, 240, 255, 0.99)'
-      : 'rgba(22, 22, 37, 0.94), rgba(30, 30, 45, 0.97)'
-    }),
-    url('/images/vKairo-AI.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('/assets/optimized/home-hero.webp') no-repeat center;
   background-size: cover;
-  background-position: center;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.12), transparent 75%);
-  }
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  color: white;
 `
 
 const HeroContent = styled.div`

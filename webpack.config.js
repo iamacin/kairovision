@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 const CopyPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 // Load environment variables from .env file
 const env = dotenv.config().parsed || {};
@@ -22,7 +25,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
     publicPath: '/',
-    clean: true
+    clean: true,
+    assetModuleFilename: 'assets/[name][ext]'
   },
   module: {
     rules: [
@@ -48,12 +52,20 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
-        type: 'asset/resource'
+        test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 4 * 1024 // 4kb
+          }
+        }
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]'
+        }
       }
     ]
   },
@@ -89,13 +101,37 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { 
-          from: 'public',
-          to: '',
-          globOptions: {
-            ignore: ['**/index.html']
-          }
+          from: 'public/assets/optimized',
+          to: 'assets/optimized'
+        },
+        {
+          from: 'public/_redirects',
+          to: '_redirects'
         }
       ]
+    }),
+    new CompressionPlugin({
+      test: /\.(js|css|html|svg)$/,
+      algorithm: 'gzip'
+    }),
+    new ImageMinimizerPlugin({
+      minimizer: {
+        implementation: ImageMinimizerPlugin.sharpMinify,
+        options: {
+          encodeOptions: {
+            webp: {
+              quality: 50,
+              effort: 6,
+              reductionEffort: 6,
+              nearLossless: false,
+              alphaQuality: 70,
+              smartSubsample: true,
+              mixed: true,
+              force: true
+            }
+          }
+        }
+      }
     })
   ],
   devServer: {
@@ -104,27 +140,39 @@ module.exports = {
     port: 3000
   },
   optimization: {
-    minimize: process.env.NODE_ENV === 'production',
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true,
+          },
+        },
+      })
+    ],
     splitChunks: {
       chunks: 'all',
-      minSize: 20000,
-      maxSize: 244000,
-      minChunks: 1,
-      maxAsyncRequests: 30,
-      maxInitialRequests: 30,
-      automaticNameDelimiter: '~',
-      enforceSizeThreshold: 50000,
+      maxInitialRequests: Infinity,
+      minSize: 0,
       cacheGroups: {
-        defaultVendors: {
+        vendor: {
           test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          name(module) {
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+            return `vendor.${packageName.replace('@', '')}`;
+          },
         },
-        default: {
+        common: {
+          name: 'common',
           minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true
+          priority: -10
         }
-      }
-    }
+      },
+    },
+  },
+  performance: {
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+    hints: 'warning'
   }
 }; 

@@ -34,9 +34,26 @@ const ContentWrapper = styled.div`
   align-items: center;
 `
 
-const InfoSection = styled(motion.div)`
+const InfoSection = styled.div`
+  flex: 1;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('/assets/optimized/agent2.webp') no-repeat center;
+  background-size: cover;
+  padding: 2rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  max-width: 800px;
+  border-radius: 10px;
+  margin-right: 2rem;
+
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-bottom: 2rem;
+    min-height: 300px;
+  }
 `
 
 const Title = styled(motion.h1)`
@@ -520,49 +537,111 @@ const Waitlist = () => {
     setError('');
 
     try {
+      console.log('Starting signup process with data:', {
+        email: formData.email,
+        userType,
+        role: formData.role
+      });
+      
+      // First, check if the user already exists
+      const { data: existingUser } = await supabase
+        .from('waitlist')
+        .select('id')
+        .eq('email', formData.email)
+        .single();
+
+      if (existingUser) {
+        throw new Error('Un compte avec cet email existe déjà.');
+      }
+
+      // Create auth user
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
           data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
             access_level: 'pending'
           }
         }
       });
 
-      if (signUpError) throw signUpError;
+      if (signUpError) {
+        console.error('Signup error:', signUpError);
+        throw new Error(
+          signUpError.message === 'User already registered'
+            ? 'Un compte avec cet email existe déjà.'
+            : 'Erreur lors de l\'inscription. Veuillez réessayer.'
+        );
+      }
 
+      if (!data?.user?.id) {
+        throw new Error('Erreur lors de la création du compte.');
+      }
+
+      console.log('Auth signup successful, creating waitlist entry...');
+
+      // Prepare waitlist data
       const waitlistData = {
         user_id: data.user.id,
         first_name: formData.firstName,
         last_name: formData.lastName,
-        phone: formData.phone,
+        phone: formData.phoneCountry + formData.phone.replace(/\s+/g, ''),
         location: formData.country,
-        role: formData.role,
+        role: userType === 'agent' ? 'agent' : formData.role,
         status: 'pending',
-        submission_date: new Date()
+        submission_date: new Date().toISOString()
       };
 
-      // Add agency information and experience if role is agent
+      // Add agent-specific fields
       if (userType === 'agent') {
         waitlistData.agency_name = formData.agencyName;
         waitlistData.agency_website = formData.agencyWebsite;
         waitlistData.experience = formData.experience;
       }
 
+      console.log('Inserting waitlist data:', waitlistData);
+
+      // Insert into waitlist table
       const { error: waitlistError } = await supabase
         .from('waitlist')
         .insert([waitlistData]);
 
-      if (waitlistError) throw waitlistError;
+      if (waitlistError) {
+        console.error('Waitlist insertion error:', waitlistError);
+        throw new Error('Erreur lors de l\'enregistrement des données. Veuillez réessayer.');
+      }
 
+      console.log('Waitlist entry created successfully');
+
+      // Set success message
       setSuccess(
         userType === 'agent'
           ? `Votre demande d'inscription en tant qu'agent immobilier a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé.`
-          : `Votre inscription a été enregistrée avec succès ! Vous pouvez maintenant accéder à votre compte et commencer à explorer les propriétés disponibles sur Kairo.`
+          : `Votre inscription a été enregistrée avec succès ! Vous recevrez un email de confirmation pour activer votre compte.`
       );
+
+      // Reset form
+      setFormData({
+        email: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        phoneCountry: '+221',
+        country: 'Senegal',
+        role: '',
+        agencyName: '',
+        agencyWebsite: '',
+        experience: ''
+      });
+      setCurrentStep(1);
+      
     } catch (error) {
-      setError(error.message);
+      console.error('Form submission error:', error);
+      setError(error.message || 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -818,11 +897,7 @@ const Waitlist = () => {
   return (
     <WaitlistContainer>
       <ContentWrapper>
-        <InfoSection
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <InfoSection>
           <Title>Rejoignez la révolution immobilière au Sénégal</Title>
           <Description>
             {userType === 'client' 

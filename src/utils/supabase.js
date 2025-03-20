@@ -1,11 +1,37 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Add console logging and fallbacks
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || 'https://placeholder-url.supabase.co'
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || 'placeholder-key'
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY
 
-console.log('Supabase initialization:', { 
-  usingPlaceholders: !process.env.REACT_APP_SUPABASE_URL 
-});
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Supabase credentials are missing:', {
+    hasUrl: !!supabaseUrl,
+    hasKey: !!supabaseAnonKey
+  })
+}
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey) 
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+})
+
+// Test connection and log any issues
+const testConnection = async () => {
+  try {
+    const { data, error } = await supabase.from('waitlist').select('count')
+    if (error) throw error
+    console.log('Supabase connection test successful')
+    return true
+  } catch (error) {
+    console.error('Supabase connection test failed:', error.message)
+    return false
+  }
+}
+
+// Run connection test
+testConnection()
+
+export { supabase } 
