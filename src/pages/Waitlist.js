@@ -254,11 +254,35 @@ const Waitlist = () => {
     setError('');
   };
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validateSenegalesePhone = (phone) => {
+    const re = /^(\+221|00221)?[76|77|78|70|33]\d{7}$/;
+    return re.test(phone.replace(/\s/g, ''));
+  };
+
+  const validateWebsite = (url) => {
+    if (!url) return true; // Optional field
+    try {
+      new URL(url);
+      return url.startsWith('http://') || url.startsWith('https://');
+    } catch {
+      return false;
+    }
+  };
+
   const validateStep = () => {
     switch (currentStep) {
       case 1:
         if (!formData.email || !formData.password || !formData.confirmPassword) {
           setError('Tous les champs sont requis');
+          return false;
+        }
+        if (!validateEmail(formData.email)) {
+          setError('Veuillez entrer une adresse email valide');
           return false;
         }
         if (formData.password !== formData.confirmPassword) {
@@ -275,11 +299,29 @@ const Waitlist = () => {
           setError('Tous les champs sont requis');
           return false;
         }
+        if (!validateSenegalesePhone(formData.phone)) {
+          setError('Veuillez entrer un numéro de téléphone sénégalais valide');
+          return false;
+        }
         break;
       case 3:
-        if (!formData.role || !formData.experience) {
-          setError('Tous les champs sont requis');
+        if (!formData.role) {
+          setError('Le rôle est requis');
           return false;
+        }
+        if (formData.role === 'agent') {
+          if (!formData.agencyName) {
+            setError('Le nom de l\'agence est requis pour les agents immobiliers');
+            return false;
+          }
+          if (formData.agencyWebsite && !validateWebsite(formData.agencyWebsite)) {
+            setError('Veuillez entrer une URL de site web valide (commençant par http:// ou https://)');
+            return false;
+          }
+          if (!formData.experience) {
+            setError('L\'expérience est requise pour les agents immobiliers');
+            return false;
+          }
         }
         break;
     }
@@ -563,10 +605,34 @@ const Waitlist = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {isSubmitting ? 'Envoi en cours...' : 'Terminer l\'inscription'}
+                  {isSubmitting ? (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <svg
+                        style={{
+                          animation: 'spin 1s linear infinite',
+                          width: '20px',
+                          height: '20px'
+                        }}
+                        viewBox="0 0 50 50"
+                      >
+                        <circle
+                          style={{
+                            stroke: 'currentColor',
+                            strokeWidth: 4,
+                            fill: 'none'
+                          }}
+                          cx="25"
+                          cy="25"
+                          r="20"
+                        />
+                      </svg>
+                      Envoi en cours...
+                    </span>
+                  ) : (
+                    "Terminer l'inscription"
+                  )}
                 </Button>
               )}
             </ButtonGroup>
@@ -577,4 +643,14 @@ const Waitlist = () => {
   );
 };
 
-export default Waitlist; 
+// Add keyframe animation for spinner
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(style);
+
+export default Waitlist;
