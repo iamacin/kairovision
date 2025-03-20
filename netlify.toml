@@ -8,8 +8,6 @@
   CI = "false"
   # Set correct NODE_ENV for production builds
   NODE_ENV = "production"
-  # Tell Netlify to ignore the Supabase key during secrets scanning
-  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY"
   # Note: Actual Supabase credentials should be set in Netlify UI, not here
 
 # This will still work alongside the _redirects file
