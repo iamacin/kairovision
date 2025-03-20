@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled, { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import '@fontsource/inter/400.css';
@@ -8,15 +8,19 @@ import '@fontsource/inter/700.css';
 import '@fontsource/inter/800.css';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import Home from './pages/Home';
-import Waitlist from './pages/Waitlist';
-import Contact from './pages/Contact';
-import Kairo from './pages/Kairo';
 import { GlobalStyles } from './styles/globalStyles';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import LoadingSpinner from './components/LoadingSpinner';
 import { lightTheme, darkTheme } from './styles/theme';
+import { ErrorBoundary } from 'react-error-boundary';
+
+// Lazy load route components
+const Home = lazy(() => import('./pages/Home'));
+const Waitlist = lazy(() => import('./pages/Waitlist'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Kairo = lazy(() => import('./pages/Kairo'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Wrap styled components that need theme with ThemeWrapper
 const ThemeWrapper = ({ children }) => {
@@ -49,8 +53,8 @@ const LoadingFallback = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors?.background || '#ffffff'};
-  color: ${({ theme }) => theme.colors?.primary || '#8a2be2'};
+  background-color: ${({ theme }) => theme?.colors?.background || '#ffffff'};
+  color: ${({ theme }) => theme?.colors?.primary || '#8a2be2'};
   font-size: 1.2rem;
   font-weight: 500;
 `;
@@ -63,35 +67,40 @@ const ErrorFallback = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background-color: ${({ theme }) => theme.colors?.background || '#ffffff'};
-  color: ${({ theme }) => theme.colors?.error || '#f44336'};
+  background-color: ${({ theme }) => theme?.colors?.background || '#ffffff'};
+  color: ${({ theme }) => theme?.colors?.error || '#f44336'};
+  text-align: center;
+  font-size: 1.2rem;
 `;
 
 const App = () => {
   return (
     <ThemeProvider>
+      <GlobalStyles />
       <ThemeWrapper>
-        <GlobalStyles />
-        <Router>
-          <AppWrapper>
+        <AppWrapper>
+          <Router>
             <Navbar />
             <Main>
-              <Suspense fallback={
-                <LoadingFallback>
-                  <LoadingSpinner />
-                </LoadingFallback>
-              }>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/waitlist" element={<Waitlist />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/kairo" element={<Kairo />} />
-                </Routes>
-              </Suspense>
+              <ErrorBoundary fallback={<ErrorFallback>Something went wrong. Please try refreshing the page.</ErrorFallback>}>
+                <Suspense fallback={
+                  <LoadingFallback>
+                    <LoadingSpinner />
+                  </LoadingFallback>
+                }>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/waitlist" element={<Waitlist />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/kairo" element={<Kairo />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </ErrorBoundary>
             </Main>
             <Footer />
-          </AppWrapper>
-        </Router>
+          </Router>
+        </AppWrapper>
       </ThemeWrapper>
     </ThemeProvider>
   );
