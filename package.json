@@ -18,7 +18,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-plugin-styled-components": "^2.1.4",
     "webpack-dev-server": "^5.0.2"
   },
   "browserslist": [
