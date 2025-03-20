@@ -21,24 +21,28 @@ export const GlobalStyles = createGlobalStyle`
   
   /* Reset & Base Styles */
   * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
   }
   
   html {
-    font-size: ${({ theme }) => theme.typography.fontSizeBase};
     scroll-behavior: smooth;
+    font-size: 16px; /* Base font size */
+    font-display: swap; /* Improve font loading performance */
     min-height: 100%;
   }
   
   body {
-    font-family: ${({ theme }) => theme.typography.fontFamily};
-    line-height: ${({ theme }) => theme.typography.lineHeightBase};
-    color: ${({ theme }) => theme.colors.text};
-    background-color: ${({ theme }) => theme.colors.background};
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.5;
+    background-color: ${({ theme }) => theme?.colors?.background || '#ffffff'};
+    color: ${({ theme }) => theme?.colors?.text || '#1a1a1a'};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease;
     min-height: 100vh;
   }
   
@@ -52,10 +56,10 @@ export const GlobalStyles = createGlobalStyle`
   
   /* Typography */
   h1, h2, h3, h4, h5, h6 {
-    margin-bottom: 1.25rem;
+    font-weight: 700;
     line-height: 1.2;
-    font-weight: ${({ theme }) => theme.typography.fontWeightBold};
-    color: ${({ theme }) => theme.colors.text};
+    margin-bottom: 1rem;
+    color: ${({ theme }) => theme?.colors?.text || '#1a1a1a'};
   }
   
   h1 {
@@ -84,13 +88,17 @@ export const GlobalStyles = createGlobalStyle`
   
   p {
     margin-bottom: 1rem;
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 1rem;
   }
   
   a {
+    color: ${({ theme }) => theme?.colors?.primary || '#8a2be2'};
     text-decoration: none;
-    color: inherit;
-    transition: ${({ theme }) => theme.transitions.default};
+    transition: all 0.3s ease;
+    
+    &:hover {
+      color: ${({ theme }) => theme?.colors?.primaryDark || '#6a1cb7'};
+    }
   }
   
   strong {
@@ -108,17 +116,9 @@ export const GlobalStyles = createGlobalStyle`
   }
   
   /* Form elements */
-  button, input, select, textarea {
-    font-family: ${({ theme }) => theme.typography.fontFamily};
-    font-size: 1rem;
-  }
-  
   button {
-    border: none;
-    background: none;
     cursor: pointer;
     font-family: inherit;
-    transition: ${({ theme }) => theme.transitions.default};
   }
   
   input, select, textarea {
@@ -135,10 +135,9 @@ export const GlobalStyles = createGlobalStyle`
   }
   
   /* Media elements */
-  img, svg, video {
+  img {
     max-width: 100%;
     height: auto;
-    display: block;
   }
   
   /* Layout classes */
@@ -273,13 +272,17 @@ export const GlobalStyles = createGlobalStyle`
   
   /* Reduced Motion */
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    * {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+  
+  /* Better contrast for accessibility */
+  ::selection {
+    background-color: ${({ theme }) => theme?.colors?.primary || '#8a2be2'};
+    color: white;
   }
 `; 

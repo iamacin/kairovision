@@ -1,11 +1,11 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
+// Load only essential font weights to improve performance
 import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
-import '@fontsource/inter/800.css';
+// Remove other font weights
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import { GlobalStyles } from './styles/globalStyles';
@@ -14,9 +14,12 @@ import Navbar from './components/Navbar';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ErrorBoundary } from 'react-error-boundary';
 
-// Lazy load route components
+// Lazy load route components with loading priority
 const Home = lazy(() => import('./pages/Home'));
-const Waitlist = lazy(() => import('./pages/Waitlist'));
+// Add prefetch for common routes
+const Waitlist = lazy(() => 
+  import(/* webpackPrefetch: true */ './pages/Waitlist')
+);
 const Contact = lazy(() => import('./pages/Contact'));
 const Kairo = lazy(() => import('./pages/Kairo'));
 const NotFound = lazy(() => import('./pages/NotFound'));

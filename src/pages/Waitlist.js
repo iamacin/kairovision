@@ -6,7 +6,7 @@ import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiList, FiBriefcase
 
 const WaitlistContainer = styled.div`
   min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme?.colors?.backgroundAlt || '#f9f9ff'};
   padding: 120px 5% 80px;
   position: relative;
   overflow: hidden;
@@ -18,7 +18,7 @@ const WaitlistContainer = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.03) 0%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.01) 100%);
+    background: linear-gradient(135deg, rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.03) 0%, rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.01) 100%);
     z-index: 0;
   }
 `

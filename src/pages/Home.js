@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe, FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
+import OptimizedImage from '../components/OptimizedImage'
 
 const HomeContainer = styled.div`
   min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme?.colors?.backgroundAlt || '#f9f9ff'};
 `
 
 const HeroSection = styled.section`
@@ -20,8 +21,8 @@ const HeroSection = styled.section`
   padding: 2rem;
   color: white;
   background: linear-gradient(135deg, 
-    ${({ theme }) => theme.colors.primary} 0%,
-    ${({ theme }) => theme.colors.primaryDark} 100%
+    rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.85) 0%,
+    rgba(${({ theme }) => theme?.colors?.primaryDark || '#6a1cb7'}, 0.95) 100%
   );
   overflow: hidden;
 
@@ -33,8 +34,8 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     background: radial-gradient(circle at 70% 30%, 
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(0, 0, 0, 0.4) 100%
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(0, 0, 0, 0.6) 100%
     );
     z-index: 1;
   }
@@ -46,6 +47,7 @@ const HeroContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 4rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   
   @media (max-width: 768px) {
     padding: 2rem;
@@ -58,19 +60,8 @@ const MainTitle = styled(motion.h1)`
   margin-bottom: 2rem;
   line-height: 1.1;
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, 
-    ${({ theme }) => theme.colors.primary}, 
-    ${({ theme }) => theme.colors.primaryDark}
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-  }
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 `
 
 const SubTitle = styled(motion.p)`
@@ -230,10 +221,31 @@ const CardDescription = styled.p`
   }
 `
 
+const HeroImage = styled(OptimizedImage)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+`
+
+const AgentImage = styled(OptimizedImage)`
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+`
+
 const Home = () => {
   return (
     <HomeContainer>
       <HeroSection>
+        <HeroImage
+          src="/assets/optimized/home-hero.webp"
+          alt="Kairo Hero Image"
+          height="100%"
+          placeholderColor="#1a1a1a"
+        />
         <HeroContent>
           <MainTitle
             initial={{ opacity: 0, y: 30 }}
