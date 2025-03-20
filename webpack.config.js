@@ -155,7 +155,12 @@ module.exports = {
       resourceRegExp: /^\.\/locale$/,
       contextRegExp: /moment$/,
     }),
-    new webpack.DefinePlugin(stringifiedEnv),
+    new webpack.DefinePlugin({
+      'process.env': {
+        ...stringifiedEnv['process.env'],
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production')
+      }
+    }),
     new CopyPlugin({
       patterns: [
         { 
@@ -250,7 +255,7 @@ module.exports = {
       chunks: 'all',
       maxInitialRequests: Infinity,
       minSize: 10000,
-      maxSize: 80000,
+      maxSize: 100000,
       cacheGroups: {
         react: {
           test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
@@ -262,13 +267,15 @@ module.exports = {
           test: /[\\/]node_modules[\\/](framer-motion)[\\/]/,
           name: 'vendor.framer-motion',
           chunks: 'all',
-          priority: 30
+          priority: 30,
+          enforce: true
         },
         styledComponents: {
           test: /[\\/]node_modules[\\/](styled-components)[\\/]/,
           name: 'vendor.styled-components',
           chunks: 'all',
-          priority: 20
+          priority: 20,
+          enforce: true
         },
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -291,8 +298,8 @@ module.exports = {
     moduleIds: 'deterministic'
   },
   performance: {
-    maxEntrypointSize: 550000,
-    maxAssetSize: 550000,
+    maxEntrypointSize: 900000,
+    maxAssetSize: 900000,
     hints: 'warning'
   }
 }; 
