@@ -227,6 +227,18 @@ const SuccessMessage = styled(motion.div)`
   border: 1px solid ${({ theme }) => theme.colors.success};
 `
 
+const CountryGroup = styled.div`
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+`
+
+const PhoneInput = styled.div`
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+`
+
 const Waitlist = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -236,7 +248,8 @@ const Waitlist = () => {
     firstName: '',
     lastName: '',
     phone: '',
-    location: '',
+    phoneCountry: '+221', // Default to Senegal
+    country: 'Senegal', // Default to Senegal
     role: '',
     experience: '',
     interests: []
@@ -244,6 +257,89 @@ const Waitlist = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Liste complète des pays avec leurs codes téléphoniques
+  const countries = [
+    { name: 'Afghanistan', code: '+93' },
+    { name: 'Albania', code: '+355' },
+    { name: 'Algeria', code: '+213' },
+    { name: 'Angola', code: '+244' },
+    { name: 'Argentina', code: '+54' },
+    { name: 'Australia', code: '+61' },
+    { name: 'Austria', code: '+43' },
+    { name: 'Belgium', code: '+32' },
+    { name: 'Benin', code: '+229' },
+    { name: 'Brazil', code: '+55' },
+    { name: 'Burkina Faso', code: '+226' },
+    { name: 'Cameroon', code: '+237' },
+    { name: 'Canada', code: '+1' },
+    { name: 'Cape Verde', code: '+238' },
+    { name: 'Central African Republic', code: '+236' },
+    { name: 'Chad', code: '+235' },
+    { name: 'China', code: '+86' },
+    { name: 'Colombia', code: '+57' },
+    { name: 'Congo', code: '+242' },
+    { name: 'Democratic Republic of the Congo', code: '+243' },
+    { name: 'Denmark', code: '+45' },
+    { name: 'Djibouti', code: '+253' },
+    { name: 'Egypt', code: '+20' },
+    { name: 'Equatorial Guinea', code: '+240' },
+    { name: 'Ethiopia', code: '+251' },
+    { name: 'Finland', code: '+358' },
+    { name: 'France', code: '+33' },
+    { name: 'Gabon', code: '+241' },
+    { name: 'Gambia', code: '+220' },
+    { name: 'Germany', code: '+49' },
+    { name: 'Ghana', code: '+233' },
+    { name: 'Greece', code: '+30' },
+    { name: 'Guinea', code: '+224' },
+    { name: 'Guinea-Bissau', code: '+245' },
+    { name: 'India', code: '+91' },
+    { name: 'Ireland', code: '+353' },
+    { name: 'Italy', code: '+39' },
+    { name: 'Ivory Coast', code: '+225' },
+    { name: 'Japan', code: '+81' },
+    { name: 'Kenya', code: '+254' },
+    { name: 'Liberia', code: '+231' },
+    { name: 'Libya', code: '+218' },
+    { name: 'Madagascar', code: '+261' },
+    { name: 'Malawi', code: '+265' },
+    { name: 'Mali', code: '+223' },
+    { name: 'Mauritania', code: '+222' },
+    { name: 'Mauritius', code: '+230' },
+    { name: 'Mexico', code: '+52' },
+    { name: 'Morocco', code: '+212' },
+    { name: 'Mozambique', code: '+258' },
+    { name: 'Namibia', code: '+264' },
+    { name: 'Netherlands', code: '+31' },
+    { name: 'Niger', code: '+227' },
+    { name: 'Nigeria', code: '+234' },
+    { name: 'Norway', code: '+47' },
+    { name: 'Portugal', code: '+351' },
+    { name: 'Russia', code: '+7' },
+    { name: 'Rwanda', code: '+250' },
+    { name: 'Sao Tome and Principe', code: '+239' },
+    { name: 'Saudi Arabia', code: '+966' },
+    { name: 'Senegal', code: '+221' },
+    { name: 'Sierra Leone', code: '+232' },
+    { name: 'Somalia', code: '+252' },
+    { name: 'South Africa', code: '+27' },
+    { name: 'South Korea', code: '+82' },
+    { name: 'Spain', code: '+34' },
+    { name: 'Sudan', code: '+249' },
+    { name: 'Sweden', code: '+46' },
+    { name: 'Switzerland', code: '+41' },
+    { name: 'Tanzania', code: '+255' },
+    { name: 'Togo', code: '+228' },
+    { name: 'Tunisia', code: '+216' },
+    { name: 'Turkey', code: '+90' },
+    { name: 'Uganda', code: '+256' },
+    { name: 'United Arab Emirates', code: '+971' },
+    { name: 'United Kingdom', code: '+44' },
+    { name: 'United States', code: '+1' },
+    { name: 'Zambia', code: '+260' },
+    { name: 'Zimbabwe', code: '+263' }
+  ].sort((a, b) => a.name.localeCompare(b.name));
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -259,9 +355,23 @@ const Waitlist = () => {
     return re.test(email);
   };
 
-  const validateSenegalesePhone = (phone) => {
-    const re = /^(\+221|00221)?[76|77|78|70|33]\d{7}$/;
-    return re.test(phone.replace(/\s/g, ''));
+  const validatePhone = (phone, countryCode) => {
+    // Remove spaces and any other formatting
+    const cleanPhone = phone.replace(/\s+/g, '').replace(/-/g, '');
+    
+    // If the phone number already includes the country code, remove it for validation
+    const phoneWithoutCode = cleanPhone.startsWith(countryCode) 
+      ? cleanPhone.slice(countryCode.length)
+      : cleanPhone;
+    
+    // Check if the remaining number contains only digits
+    if (!/^\d+$/.test(phoneWithoutCode)) {
+      return false;
+    }
+    
+    // Most international phone numbers are between 6 and 15 digits
+    // (not counting the country code)
+    return phoneWithoutCode.length >= 6 && phoneWithoutCode.length <= 15;
   };
 
   const validateWebsite = (url) => {
@@ -295,12 +405,12 @@ const Waitlist = () => {
         }
         break;
       case 2:
-        if (!formData.firstName || !formData.lastName || !formData.phone || !formData.location) {
+        if (!formData.firstName || !formData.lastName || !formData.phone || !formData.country) {
           setError('Tous les champs sont requis');
           return false;
         }
-        if (!validateSenegalesePhone(formData.phone)) {
-          setError('Veuillez entrer un numéro de téléphone sénégalais valide');
+        if (!validatePhone(formData.phone, formData.phoneCountry)) {
+          setError('Veuillez entrer un numéro de téléphone valide');
           return false;
         }
         break;
@@ -370,7 +480,7 @@ const Waitlist = () => {
             first_name: formData.firstName,
             last_name: formData.lastName,
             phone: formData.phone,
-            location: formData.location,
+            location: formData.country,
             role: formData.role,
             experience: formData.experience,
             status: 'pending',
@@ -386,6 +496,41 @@ const Waitlist = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handlePhoneCountryChange = (e) => {
+    const { value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      phoneCountry: value
+    }));
+  };
+
+  const formatPhoneNumber = (phone, countryCode) => {
+    // Remove any existing formatting
+    let cleaned = phone.replace(/\D/g, '');
+    
+    // Remove country code if it exists at the start
+    if (cleaned.startsWith(countryCode.replace('+', ''))) {
+      cleaned = cleaned.slice(countryCode.replace('+', '').length);
+    }
+    
+    // Format the number in groups of 2 or 3 digits
+    let formatted = '';
+    for (let i = 0; i < cleaned.length; i += 2) {
+      formatted += cleaned.slice(i, i + 2) + ' ';
+    }
+    
+    return formatted.trim();
+  };
+
+  const handlePhoneChange = (e) => {
+    const { value } = e.target;
+    const formattedValue = formatPhoneNumber(value, formData.phoneCountry);
+    setFormData(prev => ({
+      ...prev,
+      phone: formattedValue
+    }));
   };
 
   const renderStepContent = () => {
@@ -450,23 +595,44 @@ const Waitlist = () => {
             </InputGroup>
             <InputGroup>
               <Label>Téléphone</Label>
-              <Input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="+221 XX XXX XX XX"
-              />
+              <PhoneInput>
+                <Select
+                  name="phoneCountry"
+                  value={formData.phoneCountry}
+                  onChange={handlePhoneCountryChange}
+                >
+                  {countries.map(country => (
+                    <option key={country.code} value={country.code}>
+                      {`${country.code} (${country.name})`}
+                    </option>
+                  ))}
+                </Select>
+                <Input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handlePhoneChange}
+                  placeholder="XX XX XX XX"
+                />
+              </PhoneInput>
+              <small style={{ color: '#666', marginTop: '0.25rem' }}>
+                Format: {formData.phoneCountry} XX XX XX XX
+              </small>
             </InputGroup>
             <InputGroup>
-              <Label>Localisation</Label>
-              <Input
-                type="text"
-                name="location"
-                value={formData.location}
+              <Label>Pays</Label>
+              <Select
+                name="country"
+                value={formData.country}
                 onChange={handleInputChange}
-                placeholder="Ville, Pays"
-              />
+              >
+                <option value="">Sélectionnez votre pays</option>
+                {countries.map(country => (
+                  <option key={country.name} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </Select>
             </InputGroup>
           </>
         );
