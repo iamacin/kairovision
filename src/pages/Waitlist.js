@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../utils/supabase'
-import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiList, FiBriefcase, FiHome, FiUsers } from 'react-icons/fi'
+import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiList, FiBriefcase, FiHome, FiUsers, FiAlertCircle } from 'react-icons/fi'
 
 const WaitlistContainer = styled.div`
   min-height: 100vh;
@@ -315,7 +315,7 @@ const StepLabel = styled.span`
 `
 
 const Waitlist = () => {
-  const [userType, setUserType] = useState('client'); // 'client' or 'agent'
+  const [userType, setUserType] = useState('client');
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     email: '',
@@ -324,17 +324,32 @@ const Waitlist = () => {
     firstName: '',
     lastName: '',
     phone: '',
-    phoneCountry: '+221', // Default to Senegal
-    country: 'Senegal', // Default to Senegal
+    phoneCountry: '+221',
+    country: 'Senegal',
     role: '',
     agencyName: '',
     agencyWebsite: '',
-    experience: '',
-    interests: []
+    experience: ''
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSupabaseReady, setIsSupabaseReady] = useState(false);
+
+  // Check Supabase connection on mount
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const { data, error } = await supabase.from('waitlist').select('count');
+        if (error) throw error;
+        setIsSupabaseReady(true);
+      } catch (error) {
+        console.error('Database connection error:', error);
+        setError('La connexion à la base de données n\'est pas disponible. Veuillez réessayer plus tard.');
+      }
+    };
+    checkConnection();
+  }, []);
 
   // Liste complète des pays avec leurs codes téléphoniques
   const countries = [
@@ -537,18 +552,20 @@ const Waitlist = () => {
     setError('');
 
     try {
-      console.log('Starting signup process with data:', {
-        email: formData.email,
-        userType,
-        role: formData.role
-      });
-      
+      if (!isSupabaseReady) {
+        throw new Error('La connexion à la base de données n\'est pas disponible. Veuillez réessayer plus tard.');
+      }
+
       // First, check if the user already exists
-      const { data: existingUser } = await supabase
+      const { data: existingUser, error: checkError } = await supabase
         .from('waitlist')
         .select('id')
         .eq('email', formData.email)
         .single();
+
+      if (checkError && checkError.message !== 'No rows found') {
+        throw new Error('Erreur lors de la vérification de l\'email. Veuillez réessayer.');
+      }
 
       if (existingUser) {
         throw new Error('Un compte avec cet email existe déjà.');
@@ -580,11 +597,10 @@ const Waitlist = () => {
         throw new Error('Erreur lors de la création du compte.');
       }
 
-      console.log('Auth signup successful, creating waitlist entry...');
-
       // Prepare waitlist data
       const waitlistData = {
         user_id: data.user.id,
+        email: formData.email,
         first_name: formData.firstName,
         last_name: formData.lastName,
         phone: formData.phoneCountry + formData.phone.replace(/\s+/g, ''),
@@ -594,16 +610,12 @@ const Waitlist = () => {
         submission_date: new Date().toISOString()
       };
 
-      // Add agent-specific fields
       if (userType === 'agent') {
         waitlistData.agency_name = formData.agencyName;
         waitlistData.agency_website = formData.agencyWebsite;
         waitlistData.experience = formData.experience;
       }
 
-      console.log('Inserting waitlist data:', waitlistData);
-
-      // Insert into waitlist table
       const { error: waitlistError } = await supabase
         .from('waitlist')
         .insert([waitlistData]);
@@ -613,9 +625,6 @@ const Waitlist = () => {
         throw new Error('Erreur lors de l\'enregistrement des données. Veuillez réessayer.');
       }
 
-      console.log('Waitlist entry created successfully');
-
-      // Set success message
       setSuccess(
         userType === 'agent'
           ? `Votre demande d'inscription en tant qu'agent immobilier a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé.`
@@ -969,8 +978,17 @@ const Waitlist = () => {
               <ErrorMessage
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
+                style={{ width: '100%', maxWidth: '600px', marginBottom: '2rem' }}
               >
-                {error}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <FiAlertCircle size={20} />
+                  {error}
+                </div>
+                {!isSupabaseReady && (
+                  <div style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>
+                    Si le problème persiste, veuillez contacter notre support technique.
+                  </div>
+                )}
               </ErrorMessage>
             )}
 
