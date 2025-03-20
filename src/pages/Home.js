@@ -19,6 +19,10 @@ const HeroSection = styled.section`
   text-align: center;
   padding: 2rem;
   color: white;
+  background: linear-gradient(135deg, 
+    ${({ theme }) => theme.colors.primary} 0%,
+    ${({ theme }) => theme.colors.primaryDark} 100%
+  );
   overflow: hidden;
 
   &::before {
@@ -28,12 +32,11 @@ const HeroSection = styled.section`
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-      url('/assets/optimized/home-hero.webp') no-repeat center;
-    background-size: cover;
+    background: radial-gradient(circle at 70% 30%, 
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
     z-index: 1;
-    transition: opacity 0.3s ease;
-    opacity: ${({ isImageLoaded }) => isImageLoaded ? 1 : 0};
   }
 `
 
@@ -228,18 +231,9 @@ const CardDescription = styled.p`
 `
 
 const Home = () => {
-  const [isImageLoaded, setIsImageLoaded] = React.useState(false);
-
-  React.useEffect(() => {
-    const img = new Image();
-    img.src = '/assets/optimized/home-hero.webp';
-    img.onload = () => setIsImageLoaded(true);
-    img.onerror = () => console.error('Failed to load hero image');
-  }, []);
-
   return (
     <HomeContainer>
-      <HeroSection isImageLoaded={isImageLoaded}>
+      <HeroSection>
         <HeroContent>
           <MainTitle
             initial={{ opacity: 0, y: 30 }}
