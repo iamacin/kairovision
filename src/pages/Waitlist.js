@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../utils/supabase'
+import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiList, FiBriefcase } from 'react-icons/fi'
 
 const WaitlistContainer = styled.div`
   min-height: 100vh;
@@ -30,7 +31,7 @@ const ContentWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
-  align-items: center;
+  align-items: start;
 
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
@@ -48,12 +49,10 @@ const Title = styled(motion.h1)`
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
-  color: ${({ theme }) => theme.colors.text};
   background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
   line-height: 1.2;
 
   @media (max-width: 768px) {
@@ -73,103 +72,67 @@ const Description = styled(motion.p)`
   }
 `
 
-const FeaturesList = styled(motion.ul)`
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0;
+const StepsContainer = styled.div`
+  margin-bottom: 2rem;
 `
 
-const Feature = styled(motion.li)`
+const StepsList = styled.div`
   display: flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-  color: ${({ theme }) => theme.colors.textSecondary};
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  position: relative;
 
-  svg {
-    width: 24px;
-    height: 24px;
-    margin-right: 1rem;
-    color: ${({ theme }) => theme.colors.primary};
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: ${({ theme }) => theme.colors.border};
+    transform: translateY(-50%);
+    z-index: 0;
   }
-
-  @media (max-width: 968px) {
-    justify-content: center;
-  }
 `
 
-const FeatureTitle = styled.h3`
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: ${({ theme }) => theme.colors.text};
-`
-
-const FeatureDescription = styled.p`
-  font-size: 1rem;
-  line-height: 1.5;
-  color: ${({ theme }) => theme.colors.textSecondary};
-`
-
-const ProcessSection = styled(motion.div)`
-  margin-top: 2rem;
-`
-
-const ProcessTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: ${({ theme }) => theme.colors.text};
-`
-
-const ProcessSteps = styled.ol`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`
-
-const Step = styled.li`
+const Step = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  color: ${({ theme }) => theme.colors.textSecondary};
-
-  svg {
-    width: 24px;
-    height: 24px;
-    margin-right: 1rem;
-    color: ${({ theme }) => theme.colors.primary};
-  }
-
-  @media (max-width: 968px) {
+  position: relative;
+  z-index: 1;
+  
+  &::before {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: ${({ active, completed, theme }) => 
+      completed ? theme.colors.primary 
+      : active ? theme.colors.primaryLight
+      : theme.colors.background};
+    border: 2px solid ${({ completed, theme }) => 
+      completed ? theme.colors.primary : theme.colors.border};
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
   }
 `
 
-const StepNumber = styled.span`
-  font-weight: 600;
-  margin-right: 1rem;
-`
-
-const StepText = styled.span`
-  font-size: 1rem;
-  line-height: 1.5;
+const StepLabel = styled.span`
+  font-size: 0.9rem;
+  color: ${({ active, completed, theme }) => 
+    completed || active ? theme.colors.primary : theme.colors.textSecondary};
+  font-weight: ${({ active }) => active ? '600' : '400'};
 `
 
 const FormSection = styled(motion.div)`
   background: ${({ theme }) => theme.colors.background};
-  padding: 3rem;
-  border-radius: 20px;
+  padding: 2.5rem;
+  border-radius: ${({ theme }) => theme.layout.borderRadiusLg};
   box-shadow: ${({ theme }) => theme.shadows.medium};
-  border: 1px solid ${({ theme }) => theme.glass.border};
-`
-
-const FormTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: ${({ theme }) => theme.colors.text};
 `
 
 const Form = styled.form`
@@ -178,61 +141,61 @@ const Form = styled.form`
   gap: 1.5rem;
 `
 
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`
+
+const Label = styled.label`
+  font-size: 0.95rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-weight: 500;
+`
+
 const Input = styled.input`
-  width: 100%;
-  padding: 0.9rem 1rem;
-  border: 2px solid ${({ theme }) => theme.glass.border};
-  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
   font-size: 1rem;
-  transition: all 0.2s ease;
-  background: ${({ theme }) => theme.colors.backgroundAlt};
   color: ${({ theme }) => theme.colors.text};
-  
+  background: transparent;
+  transition: all 0.3s ease;
+
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.colors.background};
-    box-shadow: 0 0 0 3px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
   }
 `
 
 const Select = styled.select`
-  width: 100%;
-  padding: 0.9rem 1rem;
-  border: 2px solid ${({ theme }) => theme.glass.border};
-  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
   font-size: 1rem;
-  transition: all 0.2s ease;
-  background: ${({ theme }) => theme.colors.backgroundAlt};
   color: ${({ theme }) => theme.colors.text};
-  cursor: pointer;
-  
+  background: transparent;
+  transition: all 0.3s ease;
+
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.colors.background};
-    background: white;
-    box-shadow: 0 0 0 3px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
   }
 `
 
-const SubmitButton = styled(motion.button)`
-  width: 100%;
-  padding: 1rem;
-  background: ${({ theme }) => theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
+const Button = styled(motion.button)`
+  padding: 1rem 2rem;
+  background: ${({ theme, secondary }) => secondary ? 'transparent' : theme.colors.primary};
+  color: ${({ theme, secondary }) => secondary ? theme.colors.primary : 'white'};
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease;
-  margin-top: 1rem;
-  
+  transition: all 0.3s ease;
+
   &:hover {
-    background: ${({ theme }) => theme.colors.primaryDark};
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.2);
+    background: ${({ theme, secondary }) => secondary ? 'rgba(138, 43, 226, 0.1)' : theme.colors.primaryDark};
   }
 
   &:disabled {
@@ -241,206 +204,365 @@ const SubmitButton = styled(motion.button)`
   }
 `
 
-const SuccessMessage = styled(motion.div)`
-  text-align: center;
-  color: ${({ theme }) => theme.mode === 'light' ? '#059669' : '#10b981'};
-  background: ${({ theme }) => theme.mode === 'light' ? '#ecfdf5' : 'rgba(16, 185, 129, 0.1)'};
-  padding: 1rem;
-  border-radius: 8px;
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
   margin-top: 1rem;
-  font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.mode === 'light' ? '#a7f3d0' : 'rgba(16, 185, 129, 0.2)'};
 `
 
 const ErrorMessage = styled(motion.div)`
-  text-align: center;
-  color: ${({ theme }) => theme.mode === 'light' ? '#dc2626' : '#ef4444'};
-  background: ${({ theme }) => theme.mode === 'light' ? '#fef2f2' : 'rgba(239, 68, 68, 0.1)'};
-  padding: 1rem;
-  border-radius: 8px;
-  margin-top: 1rem;
-  font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.mode === 'light' ? '#fecaca' : 'rgba(239, 68, 68, 0.2)'};
+  color: ${({ theme }) => theme.colors.error};
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+`
+
+const SuccessMessage = styled(motion.div)`
+  color: ${({ theme }) => theme.colors.success};
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 `
 
 const Waitlist = () => {
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
     firstName: '',
     lastName: '',
-    email: '',
     phone: '',
-    company: '',
-    userType: ''
-  })
-  const [status, setStatus] = useState({ type: '', message: '' })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+    location: '',
+    role: '',
+    experience: '',
+    interests: []
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
-    }))
-  }
+      [name]: value
+    }));
+    setError('');
+  };
+
+  const validateStep = () => {
+    switch (currentStep) {
+      case 1:
+        if (!formData.email || !formData.password || !formData.confirmPassword) {
+          setError('Tous les champs sont requis');
+          return false;
+        }
+        if (formData.password !== formData.confirmPassword) {
+          setError('Les mots de passe ne correspondent pas');
+          return false;
+        }
+        if (formData.password.length < 8) {
+          setError('Le mot de passe doit contenir au moins 8 caractères');
+          return false;
+        }
+        break;
+      case 2:
+        if (!formData.firstName || !formData.lastName || !formData.phone || !formData.location) {
+          setError('Tous les champs sont requis');
+          return false;
+        }
+        break;
+      case 3:
+        if (!formData.role || !formData.experience) {
+          setError('Tous les champs sont requis');
+          return false;
+        }
+        break;
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (validateStep()) {
+      setCurrentStep(prev => prev + 1);
+      setError('');
+    }
+  };
+
+  const handleBack = () => {
+    setCurrentStep(prev => prev - 1);
+    setError('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateStep()) return;
+
     setIsSubmitting(true);
-    setStatus({ type: '', message: '' });
+    setError('');
 
     try {
-      const response = await fetch('/.netlify/functions/supabase-handler', {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'addToWaitlist',
-          data: formData
-        })
+      // Add your submission logic here
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password
       });
 
-      const result = await response.json();
+      if (signUpError) throw signUpError;
 
-      if (!response.ok) throw new Error(result.error);
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert([
+          {
+            user_id: data.user.id,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            phone: formData.phone,
+            location: formData.location,
+            role: formData.role,
+            experience: formData.experience,
+            waitlist_date: new Date()
+          }
+        ]);
 
-      setStatus({
-        type: 'success',
-        message: 'Merci de votre inscription ! Nous vous contacterons bientôt.'
-      });
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        company: '',
-        userType: ''
-      });
+      if (profileError) throw profileError;
+
+      setSuccess('Votre inscription a été enregistrée avec succès ! Nous vous contacterons bientôt.');
     } catch (error) {
-      setStatus({
-        type: 'error',
-        message: 'Une erreur est survenue. Veuillez réessayer.'
-      });
+      setError(error.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <>
+            <InputGroup>
+              <Label>Email</Label>
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="votre@email.com"
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Mot de passe</Label>
+              <Input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="********"
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Confirmer le mot de passe</Label>
+              <Input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                placeholder="********"
+              />
+            </InputGroup>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <InputGroup>
+              <Label>Prénom</Label>
+              <Input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                placeholder="Votre prénom"
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Nom</Label>
+              <Input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                placeholder="Votre nom"
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Téléphone</Label>
+              <Input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="+221 XX XXX XX XX"
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Localisation</Label>
+              <Input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
+                placeholder="Ville, Pays"
+              />
+            </InputGroup>
+          </>
+        );
+      case 3:
+        return (
+          <>
+            <InputGroup>
+              <Label>Rôle</Label>
+              <Select
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+              >
+                <option value="">Sélectionnez votre rôle</option>
+                <option value="agent">Agent immobilier</option>
+                <option value="buyer">Acheteur</option>
+                <option value="seller">Vendeur</option>
+                <option value="renter">Locataire</option>
+                <option value="landlord">Propriétaire</option>
+              </Select>
+            </InputGroup>
+            <InputGroup>
+              <Label>Expérience dans l'immobilier</Label>
+              <Select
+                name="experience"
+                value={formData.experience}
+                onChange={handleInputChange}
+              >
+                <option value="">Sélectionnez votre expérience</option>
+                <option value="0-1">0-1 an</option>
+                <option value="1-3">1-3 ans</option>
+                <option value="3-5">3-5 ans</option>
+                <option value="5+">5+ ans</option>
+              </Select>
+            </InputGroup>
+          </>
+        );
+      default:
+        return null;
     }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1.0]
-      }
-    }
-  }
+  };
 
   return (
     <WaitlistContainer>
       <ContentWrapper>
-        <InfoSection>
-          <Title>Publiez Votre Annonce</Title>
+        <InfoSection
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Title>Rejoignez la révolution immobilière au Sénégal</Title>
           <Description>
-            Kairo est une plateforme dédiée aux agents immobiliers et professionnels.
+            Inscrivez-vous dès maintenant pour faire partie des premiers utilisateurs de Kairo. 
+            Bénéficiez d'un accès prioritaire et d'avantages exclusifs.
           </Description>
-          <FeaturesList>
-            <Feature>
-              <FeatureTitle>Inscription requise</FeatureTitle>
-              <FeatureDescription>
-                L'accès à la plateforme est réservé aux agents enregistrés.
-              </FeatureDescription>
-            </Feature>
-            <Feature>
-              <FeatureTitle>Création de profil</FeatureTitle>
-              <FeatureDescription>
-                Chaque agent doit disposer d'un profil validé pour publier des annonces.
-              </FeatureDescription>
-            </Feature>
-            <Feature>
-              <FeatureTitle>Liste d'attente</FeatureTitle>
-              <FeatureDescription>
-                L'inscription des agents est en cours de déploiement. Inscrivez-vous dès maintenant pour être informé dès l'ouverture.
-              </FeatureDescription>
-            </Feature>
-          </FeaturesList>
           
-          <ProcessSection>
-            <ProcessTitle>Comment ça marche ?</ProcessTitle>
-            <ProcessSteps>
-              <Step>
-                <StepNumber>1</StepNumber>
-                <StepText>Inscrivez-vous sur la waitlist et créez votre profil d'agent.</StepText>
+          <StepsContainer>
+            <StepsList>
+              <Step active={currentStep === 1} completed={currentStep > 1}>
+                <StepLabel active={currentStep === 1} completed={currentStep > 1}>
+                  Inscription
+                </StepLabel>
               </Step>
-              <Step>
-                <StepNumber>2</StepNumber>
-                <StepText>Accédez à la plateforme après validation de votre inscription.</StepText>
+              <Step active={currentStep === 2} completed={currentStep > 2}>
+                <StepLabel active={currentStep === 2} completed={currentStep > 2}>
+                  Profil
+                </StepLabel>
               </Step>
-              <Step>
-                <StepNumber>3</StepNumber>
-                <StepText>Publiez vos annonces et connectez-vous avec des acheteurs et locataires sérieux.</StepText>
+              <Step active={currentStep === 3} completed={currentStep > 3}>
+                <StepLabel active={currentStep === 3} completed={currentStep > 3}>
+                  Préférences
+                </StepLabel>
               </Step>
-            </ProcessSteps>
-          </ProcessSection>
+            </StepsList>
+          </StepsContainer>
         </InfoSection>
 
-        <FormSection>
-          <FormTitle>S'inscrire sur la waitlist</FormTitle>
+        <FormSection
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <Form onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              name="fullName"
-              placeholder="Nom complet"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              type="email"
-              name="email"
-              placeholder="Email professionnel"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              type="tel"
-              name="phone"
-              placeholder="Numéro de téléphone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-            <Select
-              name="agencyType"
-              value={formData.agencyType}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Type d'agence</option>
-              <option value="independent">Agent indépendant</option>
-              <option value="agency">Agence immobilière</option>
-              <option value="developer">Promoteur immobilier</option>
-            </Select>
-            <SubmitButton
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Inscription en cours..." : "Rejoindre la liste d'attente"}
-            </SubmitButton>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderStepContent()}
+              </motion.div>
+            </AnimatePresence>
+
+            {error && (
+              <ErrorMessage
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                {error}
+              </ErrorMessage>
+            )}
+
+            {success && (
+              <SuccessMessage
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                {success}
+              </SuccessMessage>
+            )}
+
+            <ButtonGroup>
+              {currentStep > 1 && (
+                <Button
+                  type="button"
+                  onClick={handleBack}
+                  secondary
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Retour
+                </Button>
+              )}
+              {currentStep < 3 ? (
+                <Button
+                  type="button"
+                  onClick={handleNext}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Suivant
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isSubmitting ? 'Envoi en cours...' : 'Terminer l\'inscription'}
+                </Button>
+              )}
+            </ButtonGroup>
           </Form>
         </FormSection>
       </ContentWrapper>
     </WaitlistContainer>
-  )
-}
+  );
+};
 
-export default Waitlist 
+export default Waitlist; 
