@@ -16,12 +16,18 @@ import { GlobalStyles } from './styles/globalStyles';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import LoadingSpinner from './components/LoadingSpinner';
-import { lightTheme } from './styles/theme';
+import { lightTheme, darkTheme } from './styles/theme';
 
 // Wrap styled components that need theme with ThemeWrapper
 const ThemeWrapper = ({ children }) => {
   const { themeMode } = useTheme();
-  return children;
+  const theme = themeMode === 'dark' ? darkTheme : lightTheme;
+  
+  return (
+    <StyledThemeProvider theme={theme}>
+      {children}
+    </StyledThemeProvider>
+  );
 };
 
 const AppWrapper = styled.div`

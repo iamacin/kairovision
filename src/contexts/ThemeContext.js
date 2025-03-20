@@ -5,19 +5,17 @@ import { lightTheme, darkTheme } from '../styles/theme';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [themeMode, setThemeMode] = useState('light'); // Default to light theme
+  const [themeMode, setThemeMode] = useState('light');
   const [isThemeReady, setIsThemeReady] = useState(false);
 
   useEffect(() => {
     try {
-      // Move theme initialization to useEffect to avoid hydration mismatch
       const savedTheme = localStorage.getItem('theme');
       const prefersDark = window.matchMedia && 
         window.matchMedia('(prefers-color-scheme: dark)').matches;
       setThemeMode(savedTheme || (prefersDark ? 'dark' : 'light'));
     } catch (e) {
       console.warn('Error initializing theme:', e);
-      // Keep light theme as fallback
     } finally {
       setIsThemeReady(true);
     }
@@ -56,7 +54,7 @@ export const ThemeProvider = ({ children }) => {
   };
 
   const theme = themeMode === 'dark' ? darkTheme : lightTheme;
-  
+
   if (!isThemeReady) {
     return (
       <div style={{ 
@@ -71,22 +69,18 @@ export const ThemeProvider = ({ children }) => {
       </div>
     );
   }
-  
+
   return (
     <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
-      <StyledThemeProvider theme={{ ...theme, mode: themeMode }}>
-        {children}
-      </StyledThemeProvider>
+      {children}
     </ThemeContext.Provider>
   );
 };
 
-// Custom hook for using the theme context
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
-    console.warn('useTheme must be used within a ThemeProvider');
-    return { themeMode: 'light', toggleTheme: () => {} }; // Fallback values
+    throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
 }; 
