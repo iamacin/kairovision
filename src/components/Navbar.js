@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { FiHome } from 'react-icons/fi'
+import ThemeToggle from './ThemeToggle'
 
 const Nav = styled(motion.nav)`
   position: fixed;
@@ -24,81 +26,51 @@ const Nav = styled(motion.nav)`
 
 const Logo = styled(Link)`
   font-size: 1.5rem;
-  font-weight: 800;
-  color: ${props => props.scrolled 
-    ? props.theme.colors.text
-    : '#ffffff'};
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
 `
 
-const MenuItems = styled.div`
+const NavLinks = styled.div`
   display: flex;
-  gap: 2rem;
   align-items: center;
+  gap: 2rem;
 
   @media (max-width: 768px) {
-    display: none;
+    gap: 1rem;
   }
 `
 
-const MenuItem = styled(Link)`
-  color: ${props => props.scrolled 
-    ? props.theme.colors.text
-    : '#ffffff'};
+const NavLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   transition: color 0.2s ease;
 
   &:hover {
-    color: ${props => props.scrolled 
-      ? props.theme.colors.primary
-      : '#e0e0e0'};
+    color: ${({ theme }) => theme.colors.primary};
   }
 `
 
-const AuthButton = styled(motion.button)`
+const JoinButton = styled(Link)`
+  background: ${({ theme }) => theme.colors.primary};
+  color: white;
   padding: 0.5rem 1.5rem;
-  border-radius: 6px;
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
+  text-decoration: none;
   font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  
-  ${props => props.primary ? `
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
-    border: none;
-    
-    &:hover {
-      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
-    }
-  ` : `
-    background: transparent;
-    color: ${props.scrolled 
-      ? props.theme.colors.text
-      : '#ffffff'};
-    border: 2px solid ${props.scrolled 
-      ? props.theme.colors.border
-      : '#ffffff'};
-    
-    &:hover {
-      background: ${props.scrolled 
-        ? props.theme.mode === 'light'
-          ? 'rgba(0, 0, 0, 0.05)'
-          : 'rgba(255, 255, 255, 0.05)'
-        : 'rgba(255, 255, 255, 0.1)'};
-    }
-  `}
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.primaryDark};
+    transform: translateY(-2px);
+  }
 `
 
 const MobileMenuButton = styled.button`
@@ -165,34 +137,22 @@ const Navbar = () => {
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Logo to="/" scrolled={scrolled}>
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L1 12h3v9h6v-6h4v6h6v-9h3L12 2z" />
-          </svg>
-          Kairo
-        </Logo>
-
-        <MenuItems>
-          <MenuItem to="/search" scrolled={scrolled}>Rechercher</MenuItem>
-          <MenuItem to="/agents" scrolled={scrolled}>Agents</MenuItem>
-          <MenuItem to="/about" scrolled={scrolled}>À propos</MenuItem>
-          <MenuItem to="/contact" scrolled={scrolled}>Contact</MenuItem>
-          <AuthButton
-            scrolled={scrolled}
+        <Logo to="/">Kairo</Logo>
+        <NavLinks>
+          <NavLink to="/">
+            <FiHome />
+            Accueil
+          </NavLink>
+          <JoinButton
+            to="/waitlist"
+            as={motion.a}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Se connecter
-          </AuthButton>
-          <AuthButton
-            primary
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Publier une annonce
-          </AuthButton>
-        </MenuItems>
-
+            Rejoindre Kairo
+          </JoinButton>
+          <ThemeToggle />
+        </NavLinks>
         <MobileMenuButton
           scrolled={scrolled}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -221,8 +181,7 @@ const Navbar = () => {
             <MobileMenuItem to="/contact" onClick={() => setMobileMenuOpen(false)}>
               Contact
             </MobileMenuItem>
-            <AuthButton primary>Publier une annonce</AuthButton>
-            <AuthButton>Se connecter</AuthButton>
+            <ThemeToggle />
           </MobileMenu>
         )}
       </AnimatePresence>

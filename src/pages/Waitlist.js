@@ -218,8 +218,13 @@ const ErrorMessage = styled(motion.div)`
 
 const SuccessMessage = styled(motion.div)`
   color: ${({ theme }) => theme.colors.success};
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: ${({ theme }) => theme.colors.successLight || 'rgba(0, 200, 83, 0.1)'};
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
+  border: 1px solid ${({ theme }) => theme.colors.success};
 `
 
 const Waitlist = () => {
@@ -301,16 +306,22 @@ const Waitlist = () => {
     setError('');
 
     try {
-      // Add your submission logic here
+      // Create auth user with Supabase but set their access level to 'pending'
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        options: {
+          data: {
+            access_level: 'pending'
+          }
+        }
       });
 
       if (signUpError) throw signUpError;
 
-      const { error: profileError } = await supabase
-        .from('profiles')
+      // Store user details in waitlist table instead of profiles
+      const { error: waitlistError } = await supabase
+        .from('waitlist')
         .insert([
           {
             user_id: data.user.id,
@@ -320,13 +331,14 @@ const Waitlist = () => {
             location: formData.location,
             role: formData.role,
             experience: formData.experience,
-            waitlist_date: new Date()
+            status: 'pending',
+            submission_date: new Date()
           }
         ]);
 
-      if (profileError) throw profileError;
+      if (waitlistError) throw waitlistError;
 
-      setSuccess('Votre inscription a été enregistrée avec succès ! Nous vous contacterons bientôt.');
+      setSuccess('Votre demande d'inscription a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé. En attendant, vous pouvez toujours parcourir les propriétés disponibles sur Kairo.');
     } catch (error) {
       setError(error.message);
     } finally {
