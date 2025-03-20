@@ -12,6 +12,7 @@
   SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY"
   # REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY should be set in Netlify UI
 
+# This will still work alongside the _redirects file
 [[redirects]]
   from = "/*"
   to = "/index.html"

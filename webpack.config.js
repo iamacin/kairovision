@@ -113,11 +113,11 @@ module.exports = {
         },
         {
           from: 'public/_redirects',
-          to: './'
+          to: ''
         },
         {
           from: 'public/robots.txt',
-          to: './'
+          to: ''
         }
       ]
     }),
