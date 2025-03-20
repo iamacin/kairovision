@@ -72,7 +72,9 @@ export const ThemeProvider = ({ children }) => {
 
   return (
     <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
-      {children}
+      <StyledThemeProvider theme={theme}>
+        {children}
+      </StyledThemeProvider>
     </ThemeContext.Provider>
   );
 };
