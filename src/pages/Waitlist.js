@@ -511,15 +511,15 @@ const Waitlist = () => {
         phone: formData.phone,
         location: formData.country,
         role: formData.role,
-        experience: formData.experience,
         status: 'pending',
         submission_date: new Date()
       };
 
-      // Add agency information if role is agent
-      if (formData.role === 'agent') {
+      // Add agency information and experience if role is agent
+      if (userType === 'agent') {
         waitlistData.agency_name = formData.agencyName;
         waitlistData.agency_website = formData.agencyWebsite;
+        waitlistData.experience = formData.experience;
       }
 
       const { error: waitlistError } = await supabase
@@ -528,7 +528,11 @@ const Waitlist = () => {
 
       if (waitlistError) throw waitlistError;
 
-      setSuccess(`Votre demande d'inscription a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé. En attendant, vous pouvez toujours parcourir les propriétés disponibles sur Kairo.`);
+      setSuccess(
+        userType === 'agent'
+          ? `Votre demande d'inscription en tant qu'agent immobilier a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé.`
+          : `Votre inscription a été enregistrée avec succès ! Vous pouvez maintenant accéder à votre compte et commencer à explorer les propriétés disponibles sur Kairo.`
+      );
     } catch (error) {
       setError(error.message);
     } finally {
@@ -581,7 +585,7 @@ const Waitlist = () => {
       role: type === 'agent' ? 'agent' : '',
       agencyName: '',
       agencyWebsite: '',
-      experience: ''
+      experience: type === 'agent' ? '' : undefined // Remove experience for clients
     }));
   };
 
