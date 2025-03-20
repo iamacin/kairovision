@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { uploadImage } from '../utils/uploadImage'
 import styled from 'styled-components'
-import { supabase } from '../utils/supabase'
+import secureClient from '../utils/supabase'
 
 const HeroContainer = styled.div`
   display: flex;
@@ -16,10 +16,9 @@ const ImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 400px;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: #f5f5f5;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid ${({ theme }) => theme.glass.border};
 `
 
 const HeroImage = styled.img`
@@ -33,25 +32,21 @@ const UploadButton = styled.button`
   bottom: 1rem;
   right: 1rem;
   padding: 0.5rem 1rem;
-  background: ${({ theme }) => theme.colors.primary};
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s;
   z-index: 2;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.primaryDark};
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.2);
+    background-color: var(--primary-color-dark);
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors.textLight};
+    background-color: #ccc;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
   }
 `
 
@@ -61,10 +56,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: ${({ theme }) => theme.mode === 'light' 
-    ? 'rgba(0, 0, 0, 0.3)' 
-    : 'rgba(0, 0, 0, 0.5)'
-  };
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,9 +65,8 @@ const Overlay = styled.div`
 `
 
 const ErrorMessage = styled.p`
-  color: ${({ theme }) => theme.colors.error};
+  color: red;
   margin: 0.5rem 0;
-  font-size: 0.9rem;
 `
 
 const HeroImageUpload = () => {
@@ -90,7 +81,7 @@ const HeroImageUpload = () => {
 
   const fetchHeroImage = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await secureClient
         .from('settings')
         .select('hero_image')
         .single()
@@ -117,7 +108,7 @@ const HeroImageUpload = () => {
       if (uploadError) throw uploadError
 
       // Update the settings table with new image URL
-      const { error: updateError } = await supabase
+      const { error: updateError } = await secureClient
         .from('settings')
         .upsert({ id: 1, hero_image: path })
 

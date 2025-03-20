@@ -27,8 +27,8 @@ if (!process.env.REACT_APP_SUPABASE_URL || !process.env.REACT_APP_SUPABASE_ANON_
   
   // Add these to the environment with placeholder values during dev/build
   if (process.env.NODE_ENV === 'development') {
-    process.env.REACT_APP_SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL || 'https://tevwxsxbcgolewveffvn.supabase.co';
-    process.env.REACT_APP_SUPABASE_ANON_KEY = process.env.REACT_APP_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRldnd4c3hiY2dvbGV3dmVmZnZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNjQ5OTksImV4cCI6MjA1Nzg0MDk5OX0.K2lTYeSiAFVQJDctS7ZrteKl0PZaenn2yEJRrE1DD3o';
+    process.env.REACT_APP_SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL || 'https://your-supabase-url.supabase.co';
+    process.env.REACT_APP_SUPABASE_ANON_KEY = process.env.REACT_APP_SUPABASE_ANON_KEY || 'your-anon-key';
   }
 }
 

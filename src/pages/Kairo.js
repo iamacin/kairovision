@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiSearch, FiMapPin, FiHome, FiDollarSign } from 'react-icons/fi';
-import { supabase } from '../utils/supabase';
+import secureClient from '../utils/supabase';
 
 const KairoContainer = styled.div`
   min-height: 100vh;
@@ -204,7 +204,7 @@ const Kairo = () => {
   useEffect(() => {
     const fetchPremiumProperties = async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await secureClient
           .from('properties')
           .select('*')
           .eq('is_premium', true)
