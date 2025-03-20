@@ -4,7 +4,9 @@
   functions = "netlify/functions"
 
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY"
+  NODE_ENV = "production"
+  # Only include essential environment variables
+  # REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY should be set in Netlify UI
 
 [[redirects]]
   from = "/*"
