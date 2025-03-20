@@ -228,21 +228,6 @@ const CardDescription = styled.p`
   }
 `
 
-const ContactSection = styled(Section)`
-  background: ${({ theme }) => theme.colors.backgroundAlt};
-`
-
-const ContactInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  
-  svg {
-    color: ${({ theme }) => theme.colors.primary};
-  }
-`
-
 const Home = () => {
   // Add image validation
   const [heroImageError, setHeroImageError] = React.useState(false);
@@ -332,29 +317,6 @@ const Home = () => {
           </Card>
         </Grid>
       </Section>
-
-      <ContactSection>
-        <SectionTitle>Besoin d'aide ?</SectionTitle>
-        <SectionSubtitle>
-          Notre équipe est disponible pour répondre à toutes vos questions.
-        </SectionSubtitle>
-        <Grid>
-          <Card>
-            <ContactInfo>
-              <FiPhone />
-              <div>{process.env.REACT_APP_CONTACT_PHONE || '+221 77 777 77 77'}</div>
-            </ContactInfo>
-            <ContactInfo>
-              <FiMail />
-              <div>{process.env.REACT_APP_CONTACT_EMAIL || 'contact@kairovision.com'}</div>
-            </ContactInfo>
-            <ContactInfo>
-              <FiMapPin />
-              <div>Dakar, Sénégal</div>
-            </ContactInfo>
-          </Card>
-        </Grid>
-      </ContactSection>
     </HomeContainer>
   )
 }

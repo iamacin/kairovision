@@ -28,21 +28,15 @@ const ContentWrapper = styled.div`
   margin: 0 auto;
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: start;
-
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
 `
 
 const InfoSection = styled(motion.div)`
-  @media (max-width: 968px) {
-    text-align: center;
-  }
+  text-align: center;
+  max-width: 800px;
 `
 
 const Title = styled(motion.h1)`
@@ -72,67 +66,13 @@ const Description = styled(motion.p)`
   }
 `
 
-const StepsContainer = styled.div`
-  margin-bottom: 2rem;
-`
-
-const StepsList = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: ${({ theme }) => theme.colors.border};
-    transform: translateY(-50%);
-    z-index: 0;
-  }
-`
-
-const Step = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-  
-  &::before {
-    content: '';
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: ${({ active, completed, theme }) => 
-      completed ? theme.colors.primary 
-      : active ? theme.colors.primaryLight
-      : theme.colors.background};
-    border: 2px solid ${({ completed, theme }) => 
-      completed ? theme.colors.primary : theme.colors.border};
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-`
-
-const StepLabel = styled.span`
-  font-size: 0.9rem;
-  color: ${({ active, completed, theme }) => 
-    completed || active ? theme.colors.primary : theme.colors.textSecondary};
-  font-weight: ${({ active }) => active ? '600' : '400'};
-`
-
 const FormSection = styled(motion.div)`
   background: ${({ theme }) => theme.colors.background};
   padding: 2.5rem;
   border-radius: ${({ theme }) => theme.layout.borderRadiusLg};
   box-shadow: ${({ theme }) => theme.shadows.medium};
+  width: 100%;
+  max-width: 600px;
 `
 
 const Form = styled.form`
@@ -242,30 +182,118 @@ const PhoneInput = styled.div`
 const TabsContainer = styled.div`
   display: flex;
   gap: 1rem;
+  width: 100%;
+  max-width: 600px;
   margin-bottom: 2rem;
 `
 
 const Tab = styled(motion.button)`
-  padding: 1rem 2rem;
-  background: ${({ active, theme }) => active ? theme.colors.primary : 'transparent'};
+  flex: 1;
+  padding: 1.5rem;
+  background: ${({ active, theme }) => active ? theme.colors.primary : theme.colors.backgroundAlt};
   color: ${({ active, theme }) => active ? 'white' : theme.colors.text};
   border: 2px solid ${({ active, theme }) => active ? theme.colors.primary : theme.colors.border};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-
-  &:hover {
-    background: ${({ active, theme }) => active ? theme.colors.primary : 'rgba(138, 43, 226, 0.1)'};
-  }
+  justify-content: center;
+  gap: 0.75rem;
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover {
+    background: ${({ active, theme }) => active ? theme.colors.primary : theme.colors.primaryLight};
+    color: ${({ active }) => active ? 'white' : theme.colors.primary};
+    border-color: ${({ theme }) => theme.colors.primary};
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+    font-size: 1rem;
+    
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+`
+
+const StepsContainer = styled.div`
+  width: 100%;
+  margin-bottom: 2.5rem;
+`
+
+const StepsList = styled.div`
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 0 1rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: ${({ theme }) => theme.colors.border};
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+`
+
+const Step = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  
+  &::before {
+    content: '';
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: ${({ active, completed, theme }) => 
+      completed ? theme.colors.primary 
+      : active ? theme.colors.primaryLight
+      : theme.colors.background};
+    border: 3px solid ${({ completed, theme }) => 
+      completed ? theme.colors.primary : theme.colors.border};
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    &::before {
+      width: 40px;
+      height: 40px;
+    }
+  }
+`
+
+const StepLabel = styled.span`
+  font-size: 1rem;
+  color: ${({ active, completed, theme }) => 
+    completed || active ? theme.colors.primary : theme.colors.textSecondary};
+  font-weight: ${({ active }) => active ? '600' : '400'};
+  text-align: center;
+  max-width: 120px;
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    max-width: 100px;
   }
 `
 
@@ -791,8 +819,8 @@ const Waitlist = () => {
     <WaitlistContainer>
       <ContentWrapper>
         <InfoSection
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <Title>Rejoignez la révolution immobilière au Sénégal</Title>
@@ -801,28 +829,34 @@ const Waitlist = () => {
               ? "Inscrivez-vous pour accéder à notre plateforme et découvrir les meilleures opportunités immobilières."
               : "Vous êtes un professionnel de l'immobilier ? Rejoignez notre réseau d'agents et promoteurs certifiés."}
           </Description>
-          
-          <TabsContainer>
-            <Tab
-              active={userType === 'client'}
-              onClick={() => handleTabChange('client')}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FiUser />
-              Client
-            </Tab>
-            <Tab
-              active={userType === 'agent'}
-              onClick={() => handleTabChange('agent')}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FiBriefcase />
-              Agent / Promoteur
-            </Tab>
-          </TabsContainer>
+        </InfoSection>
 
+        <TabsContainer>
+          <Tab
+            active={userType === 'client'}
+            onClick={() => handleTabChange('client')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <FiUser />
+            Client
+          </Tab>
+          <Tab
+            active={userType === 'agent'}
+            onClick={() => handleTabChange('agent')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <FiBriefcase />
+            Agent / Promoteur
+          </Tab>
+        </TabsContainer>
+
+        <FormSection
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <StepsContainer>
             <StepsList>
               <Step active={currentStep === 1} completed={currentStep > 1}>
@@ -842,20 +876,14 @@ const Waitlist = () => {
               </Step>
             </StepsList>
           </StepsContainer>
-        </InfoSection>
 
-        <FormSection
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
           <Form onSubmit={handleSubmit}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${userType}-${currentStep}`}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
                 {renderStepContent()}
