@@ -198,6 +198,18 @@ const StatLabel = styled.div`
   font-weight: 500;
 `
 
+const CTAContainer = styled(motion.div)`
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+`
+
 const FeaturesSection = styled.section`
   padding: 100px 5%;
   background: ${({ theme }) => theme.colors.backgroundAlt};

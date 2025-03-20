@@ -7,6 +7,14 @@ const CopyPlugin = require('copy-webpack-plugin');
 // Load environment variables from .env file
 const env = dotenv.config().parsed || {};
 
+// Convert env variables to strings
+const stringifiedEnv = {
+  'process.env': Object.keys(process.env).reduce((env, key) => {
+    env[key] = JSON.stringify(process.env[key]);
+    return env;
+  }, {})
+};
+
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: './src/index.js',
@@ -24,8 +32,14 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-            plugins: ['@babel/plugin-transform-runtime']
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react'
+            ],
+            plugins: [
+              '@babel/plugin-transform-runtime',
+              'babel-plugin-styled-components'
+            ]
           }
         }
       },
@@ -58,7 +72,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       inject: true,
-      minify: {
+      minify: process.env.NODE_ENV === 'production' ? {
         removeComments: true,
         collapseWhitespace: true,
         removeRedundantAttributes: true,
@@ -69,11 +83,9 @@ module.exports = {
         minifyJS: true,
         minifyCSS: true,
         minifyURLs: true
-      }
+      } : false
     }),
-    new webpack.DefinePlugin({
-      'process.env': JSON.stringify(process.env)
-    }),
+    new webpack.DefinePlugin(stringifiedEnv),
     new CopyPlugin({
       patterns: [
         { 
@@ -92,7 +104,7 @@ module.exports = {
     port: 3000
   },
   optimization: {
-    minimize: true,
+    minimize: process.env.NODE_ENV === 'production',
     splitChunks: {
       chunks: 'all',
       minSize: 20000,
