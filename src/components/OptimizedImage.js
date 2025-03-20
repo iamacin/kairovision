@@ -36,7 +36,9 @@ const OptimizedImage = ({
   height,
   objectFit = 'cover',
   placeholderColor = '#f0f0f0',
-  className
+  className,
+  loading = 'lazy',
+  fetchpriority = 'auto'
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(null);
@@ -71,7 +73,8 @@ const OptimizedImage = ({
           alt={alt}
           isLoaded={isLoaded}
           objectFit={objectFit}
-          loading="lazy"
+          loading={loading}
+          fetchpriority={fetchpriority}
         />
       )}
     </ImageWrapper>

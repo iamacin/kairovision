@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe, FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
 import OptimizedImage from '../components/OptimizedImage'
+import CriticalImage from '../components/CriticalImage'
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -221,7 +222,7 @@ const CardDescription = styled.p`
   }
 `
 
-const HeroImage = styled(OptimizedImage)`
+const HeroImage = styled(CriticalImage)`
   position: absolute;
   top: 0;
   left: 0;
@@ -244,7 +245,7 @@ const Home = () => {
           src="/assets/optimized/home-hero.webp"
           alt="Kairo Hero Image"
           height="100%"
-          placeholderColor="#1a1a1a"
+          backgroundColor="#1a1a1a"
         />
         <HeroContent>
           <MainTitle

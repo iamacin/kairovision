@@ -39,19 +39,43 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: [
-              ['@babel/preset-env', { modules: false }],
+              ['@babel/preset-env', { 
+                modules: false,
+                useBuiltIns: 'usage',
+                corejs: 3,
+                targets: {
+                  browsers: [
+                    'last 2 Chrome versions',
+                    'last 2 Firefox versions',
+                    'last 2 Safari versions',
+                    'last 2 Edge versions'
+                  ]
+                }
+              }],
               '@babel/preset-react'
             ],
             plugins: [
               '@babel/plugin-transform-runtime',
-              'babel-plugin-styled-components'
+              ['babel-plugin-styled-components', { 
+                displayName: false,
+                pure: true
+              }]
             ]
           }
         }
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: [
+          'style-loader', 
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: false
+            }
+          }
+        ]
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
@@ -101,8 +125,23 @@ module.exports = {
     }),
     new PreloadWebpackPlugin({
       rel: 'preload',
-      include: 'initial',
-      fileBlacklist: [/\.map$/, /hot-update\.js$/]
+      include: 'allAssets',
+      fileBlacklist: [
+        /\.map$/,
+        /hot-update\.js$/,
+        /\.woff$/,
+        /vendor\.(.*?)\.js$/
+      ],
+      as(entry) {
+        if (/\.css$/.test(entry)) return 'style';
+        if (/\.woff2$/.test(entry)) return 'font';
+        if (/\.(jpg|jpeg|png|webp)$/.test(entry)) return 'image';
+        return 'script';
+      }
+    }),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/,
     }),
     new webpack.DefinePlugin(stringifiedEnv),
     new CopyPlugin({
@@ -123,7 +162,9 @@ module.exports = {
     }),
     new CompressionPlugin({
       test: /\.(js|css|html|svg)$/,
-      algorithm: 'gzip'
+      algorithm: 'gzip',
+      threshold: 10240,
+      minRatio: 0.8
     }),
     new ImageMinimizerPlugin({
       minimizer: {
@@ -148,47 +189,88 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     hot: true,
-    port: 3000
+    port: 3000,
+    compress: true
   },
   optimization: {
     minimize: true,
     minimizer: [
       new TerserPlugin({
         terserOptions: {
+          parse: {
+            ecma: 8,
+          },
           compress: {
             drop_console: true,
             drop_debugger: true,
-            pure_funcs: ['console.log']
+            pure_funcs: ['console.log'],
+            ecma: 5,
+            warnings: false,
+            comparisons: false,
+            inline: 2,
+          },
+          mangle: {
+            safari10: true,
           },
           output: {
-            comments: false
-          }
+            ecma: 5,
+            comments: false,
+            ascii_only: true,
+          },
         },
-        extractComments: false
+        extractComments: false,
+        parallel: true,
       }),
-      new CssMinimizerPlugin()
+      new CssMinimizerPlugin({
+        minimizerOptions: {
+          preset: [
+            'default',
+            {
+              discardComments: { removeAll: true },
+              minifyFontValues: { removeQuotes: false },
+            },
+          ],
+        },
+        parallel: true,
+      }),
     ],
     splitChunks: {
       chunks: 'all',
       maxInitialRequests: Infinity,
-      minSize: 20000,
+      minSize: 15000,
+      maxSize: 100000,
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name(module) {
+            // Get the package name
             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-            return `vendor.${packageName.replace('@', '')}`;
+            
+            // Specifically optimize large packages
+            if (
+              packageName === 'react' || 
+              packageName === 'react-dom' || 
+              packageName === 'framer-motion' ||
+              packageName === 'styled-components'
+            ) {
+              return `vendor.${packageName.replace('@', '')}`;
+            }
+            
+            // Group other smaller packages by first letter to reduce request count
+            return `vendor.${packageName.replace('@', '').split('.')[0][0]}`;
           },
           priority: -10
         },
         common: {
           name: 'common',
           minChunks: 2,
-          priority: -20
+          priority: -20,
+          reuseExistingChunk: true
         }
       },
     },
-    runtimeChunk: 'single'
+    runtimeChunk: 'single',
+    moduleIds: 'deterministic'
   },
   performance: {
     maxEntrypointSize: 512000,
