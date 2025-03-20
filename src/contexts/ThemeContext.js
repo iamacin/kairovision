@@ -5,12 +5,15 @@ import { lightTheme, darkTheme } from '../styles/theme';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [themeMode, setThemeMode] = useState(() => {
+  const [themeMode, setThemeMode] = useState('light'); // Default to light theme initially
+
+  useEffect(() => {
+    // Move theme initialization to useEffect to avoid hydration mismatch
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && 
       window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return savedTheme || (prefersDark ? 'dark' : 'light');
-  });
+    setThemeMode(savedTheme || (prefersDark ? 'dark' : 'light'));
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -26,8 +29,10 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('theme', themeMode);
-    document.documentElement.setAttribute('data-theme', themeMode);
+    if (themeMode) { // Only update if themeMode is set
+      localStorage.setItem('theme', themeMode);
+      document.documentElement.setAttribute('data-theme', themeMode);
+    }
   }, [themeMode]);
 
   const toggleTheme = () => {
@@ -48,7 +53,7 @@ export const ThemeProvider = ({ children }) => {
 // Custom hook for using the theme context
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;

@@ -25,37 +25,56 @@ const AppWrapper = styled.div`
 
 const Main = styled.main`
   flex: 1;
+  position: relative;
 `;
 
-// Loading fallback
+// Loading fallback with better visibility
 const LoadingFallback = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 1.2rem;
+  font-weight: 500;
+`;
+
+// Error fallback component
+const ErrorFallback = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 const App = () => {
   return (
     <ThemeProvider>
       <GlobalStyles />
-      <Suspense fallback={<LoadingFallback>Loading...</LoadingFallback>}>
-        <Router>
-          <AppWrapper>
-            <Header />
-            <Main>
+      <Router>
+        <AppWrapper>
+          <Header />
+          <Main>
+            <Suspense fallback={
+              <LoadingFallback>
+                Loading your experience...
+              </LoadingFallback>
+            }>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/waitlist" element={<Waitlist />} />
                 <Route path="/contact" element={<Contact />} />
               </Routes>
-            </Main>
-            <Footer />
-          </AppWrapper>
-        </Router>
-      </Suspense>
+            </Suspense>
+          </Main>
+          <Footer />
+        </AppWrapper>
+      </Router>
     </ThemeProvider>
   );
 };
