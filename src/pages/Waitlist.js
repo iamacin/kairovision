@@ -338,7 +338,7 @@ const Waitlist = () => {
 
       if (waitlistError) throw waitlistError;
 
-      setSuccess('Votre demande d'inscription a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé. En attendant, vous pouvez toujours parcourir les propriétés disponibles sur Kairo.');
+      setSuccess(`Votre demande d'inscription a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé. En attendant, vous pouvez toujours parcourir les propriétés disponibles sur Kairo.`);
     } catch (error) {
       setError(error.message);
     } finally {
