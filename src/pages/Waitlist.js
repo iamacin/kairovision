@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../utils/supabase'
@@ -314,6 +314,41 @@ const StepLabel = styled.span`
   }
 `
 
+const ConnectionErrorFallback = ({ error, onRetry }) => (
+  <div style={{
+    padding: '2rem',
+    maxWidth: '600px',
+    margin: '0 auto',
+    textAlign: 'center',
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+  }}>
+    <FiAlertCircle size={50} style={{ color: '#e74c3c', marginBottom: '1rem' }} />
+    <h2 style={{ marginBottom: '1rem' }}>Une erreur est survenue</h2>
+    <p style={{ marginBottom: '2rem', color: '#666' }}>
+      {error || "Nous rencontrons actuellement des difficultés pour accéder à notre service. Cela peut être dû à votre connexion internet ou à une maintenance de notre serveur."}
+    </p>
+    <p style={{ marginBottom: '1.5rem', color: '#666', fontSize: '0.9rem' }}>
+      Essayez de rafraîchir la page ou de revenir dans quelques instants.
+    </p>
+    <button
+      onClick={onRetry}
+      style={{
+        padding: '0.75rem 2rem',
+        backgroundColor: '#8a2be2',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        fontWeight: 'bold',
+        cursor: 'pointer'
+      }}
+    >
+      Réessayer
+    </button>
+  </div>
+);
+
 const Waitlist = () => {
   const [userType, setUserType] = useState('client');
   const [currentStep, setCurrentStep] = useState(1);
@@ -335,21 +370,60 @@ const Waitlist = () => {
   const [success, setSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSupabaseReady, setIsSupabaseReady] = useState(false);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
+
+  // Function to retry connection
+  const retryConnection = useCallback(() => {
+    setConnectionAttempts(prev => prev + 1);
+    setError('');
+    
+    const checkConnection = async () => {
+      try {
+        console.log('Retrying Supabase connection...');
+        const { data, error } = await supabase.from('waitlist').select('count');
+        if (error) {
+          console.error('Database retry connection error:', error);
+          setError(`Erreur de connexion: ${error.message}. Veuillez rafraîchir la page ou réessayer plus tard.`);
+          setIsSupabaseReady(false);
+          return;
+        }
+        console.log('Supabase connection retry successful');
+        setIsSupabaseReady(true);
+        setError(''); // Clear any existing errors
+      } catch (err) {
+        console.error('Caught database error on retry:', err);
+        setError('La connexion à la base de données a échoué. Veuillez rafraîchir la page ou réessayer plus tard.');
+        setIsSupabaseReady(false);
+      }
+    };
+    
+    checkConnection();
+  }, []);
 
   // Check Supabase connection on mount
   useEffect(() => {
     const checkConnection = async () => {
       try {
+        console.log('Checking Supabase connection...');
         const { data, error } = await supabase.from('waitlist').select('count');
-        if (error) throw error;
+        if (error) {
+          console.error('Database connection error:', error);
+          setError(`Erreur de connexion: ${error.message}. Veuillez rafraîchir la page ou réessayer plus tard.`);
+          setIsSupabaseReady(false);
+          return;
+        }
+        console.log('Supabase connection successful');
         setIsSupabaseReady(true);
-      } catch (error) {
-        console.error('Database connection error:', error);
-        setError('La connexion à la base de données n\'est pas disponible. Veuillez réessayer plus tard.');
+        setError(''); // Clear any existing errors
+      } catch (err) {
+        console.error('Caught database error:', err);
+        setError('La connexion à la base de données a échoué. Veuillez rafraîchir la page ou réessayer plus tard.');
+        setIsSupabaseReady(false);
       }
     };
+    
     checkConnection();
-  }, []);
+  }, [connectionAttempts]);
 
   // Liste complète des pays avec leurs codes téléphoniques
   const countries = [
@@ -553,18 +627,28 @@ const Waitlist = () => {
 
     try {
       if (!isSupabaseReady) {
-        throw new Error('La connexion à la base de données n\'est pas disponible. Veuillez réessayer plus tard.');
+        throw new Error('La connexion à la base de données n\'est pas disponible. Veuillez rafraîchir la page et réessayer.');
       }
 
+      // Add a timeout to prevent hanging requests
+      const timeout = setTimeout(() => {
+        setError('La requête prend plus de temps que prévu. Veuillez vérifier votre connexion et réessayer.');
+        setIsSubmitting(false);
+      }, 15000);
+
       // First, check if the user already exists
+      console.log('Checking if user exists...');
       const { data: existingUser, error: checkError } = await supabase
         .from('waitlist')
         .select('id')
         .eq('email', formData.email)
         .single();
 
+      clearTimeout(timeout);
+
       if (checkError && checkError.message !== 'No rows found') {
-        throw new Error('Erreur lors de la vérification de l\'email. Veuillez réessayer.');
+        console.error('Error checking existing user:', checkError);
+        throw new Error(`Erreur lors de la vérification de l'email: ${checkError.message}. Veuillez réessayer.`);
       }
 
       if (existingUser) {
@@ -650,7 +734,7 @@ const Waitlist = () => {
       
     } catch (error) {
       console.error('Form submission error:', error);
-      setError(error.message || 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.');
+      setError(error.message || 'Une erreur s\'est produite. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -902,6 +986,20 @@ const Waitlist = () => {
         return null;
     }
   };
+
+  // Check if there's a critical error that would prevent form submission
+  const hasCriticalError = !isSupabaseReady && connectionAttempts > 0;
+
+  if (hasCriticalError) {
+    return (
+      <WaitlistContainer>
+        <ConnectionErrorFallback 
+          error={error}
+          onRetry={retryConnection}
+        />
+      </WaitlistContainer>
+    );
+  }
 
   return (
     <WaitlistContainer>
