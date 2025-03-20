@@ -1,19 +1,21 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import '@fontsource/inter/800.css';
-import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
 import Waitlist from './pages/Waitlist';
 import Contact from './pages/Contact';
+import Kairo from './pages/Kairo';
 import { GlobalStyles } from './styles/globalStyles';
 import { ThemeProvider } from './contexts/ThemeContext';
+import Navbar from './components/Navbar';
+import LoadingSpinner from './components/LoadingSpinner';
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -58,17 +60,18 @@ const App = () => {
       <GlobalStyles />
       <Router>
         <AppWrapper>
-          <Header />
+          <Navbar />
           <Main>
             <Suspense fallback={
               <LoadingFallback>
-                Loading your experience...
+                <LoadingSpinner />
               </LoadingFallback>
             }>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/waitlist" element={<Waitlist />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/kairo" element={<Kairo />} />
               </Routes>
             </Suspense>
           </Main>

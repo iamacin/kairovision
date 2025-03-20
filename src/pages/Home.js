@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { FiSearch, FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe, FiMapPin, FiDollarSign, FiHome } from 'react-icons/fi'
+import { FiSearch, FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe, FiMapPin, FiDollarSign, FiHome, FiPhone, FiMail } from 'react-icons/fi'
 import SearchBox from '../components/Search/SearchBox'
 import { supabase } from '../utils/supabase'
 
@@ -124,105 +124,9 @@ const CTAContainer = styled(motion.div)`
   }
 `
 
-const BentoSection = styled.section`
+const Section = styled.section`
   padding: 100px 5%;
-  background: ${({ theme }) => theme.colors.backgroundAlt};
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 40px;
-`
-
-const BentoBox = styled.div`
-  width: 300px;
-  height: 200px;
-  background: ${({ theme }) => theme.colors.background};
-  border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.shadows.medium};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${({ theme }) => theme.shadows.large};
-  }
-`
-
-const BentoImage = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 10px;
-`
-
-const StatsSection = styled.section`
-  padding: 100px 5%;
-  background: ${({ theme }) => theme.colors.background};
-`
-
-const StatsGrid = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-
-  @media (max-width: 968px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 568px) {
-    grid-template-columns: 1fr;
-  }
-`
-
-const StatCard = styled(motion.div)`
-  padding: 2.5rem;
-  background: ${({ theme }) => theme.colors.background};
-  border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.shadows.medium};
-  text-align: center;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${({ theme }) => theme.shadows.large};
-  }
-`
-
-const StatIcon = styled.div`
-  font-size: 2rem;
-  color: ${({ theme }) => theme.colors.primary};
-  margin-bottom: 0.5rem;
-`
-
-const StatNumber = styled.div`
-  font-size: 3rem;
-  font-weight: 800;
-  color: ${({ theme }) => theme.colors.primary};
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-`
-
-const StatLabel = styled.div`
-  font-size: 1.1rem;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-weight: 500;
-`
-
-const FeaturesSection = styled.section`
-  padding: 100px 5%;
-  background: ${({ theme }) => theme.colors.backgroundAlt};
-  position: relative;
-  overflow: hidden;
+  background: ${({ theme, alt }) => alt ? theme.colors.backgroundAlt : theme.colors.background};
 `
 
 const SectionTitle = styled.h2`
@@ -242,31 +146,20 @@ const SectionSubtitle = styled.p`
   line-height: 1.6;
 `
 
-const FeaturesGrid = styled.div`
+const Grid = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 40px;
-
-  @media (max-width: 968px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 568px) {
-    grid-template-columns: 1fr;
-  }
 `
 
-const FeatureCard = styled(motion.div)`
+const Card = styled(motion.div)`
   padding: 2.5rem;
   background: ${({ theme }) => theme.colors.background};
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.shadows.medium};
   transition: transform 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 
   &:hover {
     transform: translateY(-5px);
@@ -281,285 +174,74 @@ const FeatureCard = styled(motion.div)`
   }
 `
 
-const FeatureTitle = styled.h3`
+const CardTitle = styled.h3`
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.text};
 `
 
-const FeatureDescription = styled.p`
+const CardDescription = styled.p`
   font-size: 0.95rem;
   line-height: 1.6;
   color: ${({ theme }) => theme.colors.textSecondary};
 `
 
-const TestimonialsSection = styled.section`
-  padding: 100px 5%;
+const PublishSection = styled(Section)`
   background: ${({ theme }) => theme.colors.background};
-`
-
-const TestimonialsGrid = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`
-
-const TestimonialCard = styled(motion.div)`
-  padding: 2.5rem;
-  background: ${({ theme }) => theme.colors.backgroundAlt};
-  border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.shadows.medium};
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${({ theme }) => theme.shadows.large};
-  }
-`
-
-const Quote = styled.blockquote`
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: 1.5rem;
-  position: relative;
-  padding-left: 2rem;
-  
-  &:before {
-    content: '"';
-    position: absolute;
-    left: 0;
-    top: -10px;
-    font-size: 3rem;
-    color: ${({ theme }) => theme.colors.primary};
-    opacity: 0.3;
-    font-family: serif;
-  }
-`
-
-const Author = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const AuthorImage = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: ${({ theme }) => theme.colors.primary};
-  margin-right: 1rem;
-  position: relative;
-  overflow: hidden;
-  
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom right, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
-    opacity: 0.8;
-  }
-`
-
-const AuthorInfo = styled.div`
-  h4 {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: ${({ theme }) => theme.colors.textPrimary};
-  }
-
-  p {
-    color: ${({ theme }) => theme.colors.textSecondary};
-    font-size: 0.9rem;
-  }
-`
-
-const SearchSection = styled.section`
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 120px 5% 60px;
-  background: linear-gradient(135deg, 
-    rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1) 0%,
-    rgba(${({ theme }) => theme.colors.primaryRgb}, 0.05) 100%
-  );
   text-align: center;
 `
 
-const Title = styled.h1`
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  color: ${({ theme }) => theme.colors.text};
-  line-height: 1.2;
-`
-
-const Subtitle = styled.p`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  margin-bottom: 3rem;
-  max-width: 600px;
-`
-
-const SearchContainer = styled.div`
-  width: 100%;
+const Steps = styled.div`
   max-width: 800px;
-  background: ${({ theme }) => theme.colors.background};
-  padding: 2rem;
-  border-radius: ${({ theme }) => theme.layout.borderRadiusLg};
-  box-shadow: ${({ theme }) => theme.shadows.medium};
+  margin: 3rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 `
 
-const SearchForm = styled.form`
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 1rem;
+const Step = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: left;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    text-align: center;
   }
 `
 
-const InputGroup = styled.div`
-  position: relative;
-  
-  svg {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: ${({ theme }) => theme.colors.textSecondary};
-  }
-`
-
-const Input = styled.input`
-  width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  border: 2px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.layout.borderRadius};
-  font-size: 1rem;
-  background: transparent;
-  color: ${({ theme }) => theme.colors.text};
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-`
-
-const Select = styled.select`
-  width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  border: 2px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.layout.borderRadius};
-  font-size: 1rem;
-  background: transparent;
-  color: ${({ theme }) => theme.colors.text};
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-`
-
-const SearchButton = styled(motion.button)`
-  padding: 1rem 2rem;
+const StepNumber = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: ${({ theme }) => theme.colors.primary};
   color: white;
-  border: none;
-  border-radius: ${({ theme }) => theme.layout.borderRadius};
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.primaryDark};
-  }
-`
-
-const PremiumSection = styled.section`
-  padding: 80px 5%;
-`
-
-const PropertiesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-`
-
-const PropertyCard = styled(motion.div)`
-  background: ${({ theme }) => theme.colors.background};
-  border-radius: ${({ theme }) => theme.layout.borderRadiusLg};
-  overflow: hidden;
-  box-shadow: ${({ theme }) => theme.shadows.medium};
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: ${({ theme }) => theme.shadows.large};
-  }
-`
-
-const PropertyImage = styled.img`
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-`
-
-const PropertyContent = styled.div`
-  padding: 1.5rem;
-`
-
-const PropertyTitle = styled.h3`
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: ${({ theme }) => theme.colors.text};
-`
-
-const PropertyLocation = styled.p`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  margin-bottom: 1rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
 `
 
-const PropertyPrice = styled.p`
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primary};
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+const StepContent = styled.div`
+  flex: 1;
 `
 
-const PropertyType = styled.span`
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const ContactSection = styled(Section)`
   background: ${({ theme }) => theme.colors.backgroundAlt};
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  margin-left: auto;
+`
+
+const ContactInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  
+  svg {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 const Home = () => {
@@ -630,7 +312,7 @@ const Home = () => {
           </SubTitle>
           <CTAContainer>
             <PrimaryButton
-              to="/search"
+              to="/kairo"
               variants={itemVariants}
               initial="hidden"
               animate="visible"
@@ -639,6 +321,16 @@ const Home = () => {
             >
               Commencez votre recherche
             </PrimaryButton>
+            <SecondaryButton
+              to="/waitlist"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Publiez votre annonce
+            </SecondaryButton>
             <SecondaryButton
               to="/agents"
               variants={itemVariants}
@@ -653,224 +345,254 @@ const Home = () => {
         </HeroContent>
       </HeroSection>
 
-      <SearchSection>
-        <Title>Trouvez votre bien immobilier idéal</Title>
-        <Subtitle>
-          Des milliers de propriétés à vendre et à louer au Sénégal
-        </Subtitle>
-        
-        <SearchContainer>
-          <SearchForm onSubmit={handleSearch}>
-            <InputGroup>
-              <FiMapPin size={20} />
-              <Input
-                type="text"
-                placeholder="Localisation"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </InputGroup>
-            
-            <InputGroup>
-              <FiHome size={20} />
-              <Select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-              >
-                <option value="all">Type de bien</option>
-                <option value="sale">À vendre</option>
-                <option value="rent">À louer</option>
-              </Select>
-            </InputGroup>
-
-            <SearchButton
-              type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FiSearch size={20} />
-            </SearchButton>
-          </SearchForm>
-        </SearchContainer>
-      </SearchSection>
-
-      <BentoSection>
-        <BentoBox>
-          <BentoImage src="/images/platform-mockup.jpg" alt="Platform Mockup" />
-        </BentoBox>
-        <BentoBox>
-          <BentoImage src="/images/agent-dashboard.jpg" alt="Agent Dashboard" />
-        </BentoBox>
-        <BentoBox>
-          <BentoImage src="/images/market-analysis.jpg" alt="Market Analysis" />
-        </BentoBox>
-      </BentoSection>
-
-      <StatsSection>
-        <StatsGrid>
-          <StatCard
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <StatIcon><FiUsers /></StatIcon>
-            <StatNumber>500+</StatNumber>
-            <StatLabel>Utilisateurs</StatLabel>
-          </StatCard>
-          <StatCard
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <StatIcon><FiTrendingUp /></StatIcon>
-            <StatNumber>98%</StatNumber>
-            <StatLabel>Taux de succès</StatLabel>
-          </StatCard>
-          <StatCard
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <StatIcon><FiClock /></StatIcon>
-            <StatNumber>24/7</StatNumber>
-            <StatLabel>Support expert</StatLabel>
-          </StatCard>
-        </StatsGrid>
-      </StatsSection>
-
-      <FeaturesSection>
+      <Section>
         <SectionTitle>Pourquoi Choisir Kairo ?</SectionTitle>
-        <SectionSubtitle>
-          Une plateforme conçue pour rendre l'achat, la vente et la location plus fluides et accessibles.
-        </SectionSubtitle>
-        <FeaturesGrid>
-          <FeatureCard
+        <Grid>
+          <Card
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
             <FiShield />
-            <FeatureTitle>Accès à des annonces vérifiées</FeatureTitle>
-            <FeatureDescription>
+            <CardTitle>Accès à des annonces vérifiées</CardTitle>
+            <CardDescription>
               Parcourez des biens publiés par des agents et vendeurs professionnels.
-            </FeatureDescription>
-          </FeatureCard>
-          <FeatureCard
+            </CardDescription>
+          </Card>
+          <Card
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
             <FiTrendingUp />
-            <FeatureTitle>Outils pratiques</FeatureTitle>
-            <FeatureDescription>
+            <CardTitle>Outils pratiques</CardTitle>
+            <CardDescription>
               Estimez les prix du marché et suivez les tendances immobilières au Sénégal.
-            </FeatureDescription>
-          </FeatureCard>
-          <FeatureCard
+            </CardDescription>
+          </Card>
+          <Card
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
             <FiUsers />
-            <FeatureTitle>Un réseau de partenaires</FeatureTitle>
-            <FeatureDescription>
+            <CardTitle>Un réseau de partenaires</CardTitle>
+            <CardDescription>
               Kairo connecte acheteurs, vendeurs et professionnels de l'immobilier.
-            </FeatureDescription>
-          </FeatureCard>
-          <FeatureCard
+            </CardDescription>
+          </Card>
+          <Card
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
             <FiGlobe />
-            <FeatureTitle>Des solutions adaptées</FeatureTitle>
-            <FeatureDescription>
+            <CardTitle>Des solutions adaptées</CardTitle>
+            <CardDescription>
               Trouvez des financements et des assurances grâce à nos partenaires bancaires.
-            </FeatureDescription>
-          </FeatureCard>
-        </FeaturesGrid>
-      </FeaturesSection>
+            </CardDescription>
+          </Card>
+        </Grid>
+      </Section>
 
-      <TestimonialsSection>
-        <SectionTitle>Ce qu'ils disent de nous</SectionTitle>
-        <TestimonialsGrid>
-          <TestimonialCard
+      <Section alt>
+        <SectionTitle>Services Offerts</SectionTitle>
+        <Grid>
+          <Card
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <Quote>
-              Kairo m'a permis de trouver rapidement le parfait appartement à Dakar. 
-              La plateforme m'a mise en relation avec un agent professionnel qui a 
-              parfaitement compris mes besoins.
-            </Quote>
-            <Author>
-              <AuthorImage />
-              <AuthorInfo>
-                <h4>Fatou Diallo</h4>
-                <p>Propriétaire à Dakar</p>
-              </AuthorInfo>
-            </Author>
-          </TestimonialCard>
-          <TestimonialCard
+            <FiHome />
+            <CardTitle>Location Long Terme</CardTitle>
+            <CardDescription>
+              Trouvez rapidement un appartement, une maison ou un local commercial.
+            </CardDescription>
+          </Card>
+          <Card
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <Quote>
-              En tant qu'agent immobilier indépendant, Kairo me donne accès à des 
-              outils puissants et à une clientèle qualifiée. C'est un véritable 
-              accélérateur pour mon activité.
-            </Quote>
-            <Author>
-              <AuthorImage />
-              <AuthorInfo>
-                <h4>Moussa Sow</h4>
-                <p>Agent immobilier</p>
-              </AuthorInfo>
-            </Author>
-          </TestimonialCard>
-        </TestimonialsGrid>
-      </TestimonialsSection>
+            <FiTrendingUp />
+            <CardTitle>Achat et Vente de Biens</CardTitle>
+            <CardDescription>
+              Consultez ou publiez des annonces en toute simplicité.
+            </CardDescription>
+          </Card>
+          <Card
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <FiTrendingUp />
+            <CardTitle>Évaluation Immobilière</CardTitle>
+            <CardDescription>
+              Estimez la valeur d'un bien grâce à des outils basés sur des données locales.
+            </CardDescription>
+          </Card>
+          <Card
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <FiTrendingUp />
+            <CardTitle>Visibilité Premium</CardTitle>
+            <CardDescription>
+              Augmentez la portée de votre annonce avec des options publicitaires ciblées.
+            </CardDescription>
+          </Card>
+          <Card
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <FiTrendingUp />
+            <CardTitle>Solutions Financières</CardTitle>
+            <CardDescription>
+              Profitez de collaborations avec les banques pour accéder à des financements adaptés.
+            </CardDescription>
+          </Card>
+        </Grid>
+      </Section>
 
-      <PremiumSection>
-        <SectionTitle>Propriétés Premium</SectionTitle>
-        <PropertiesGrid>
-          {premiumProperties.map((property) => (
-            <PropertyCard
-              key={property.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+      <PublishSection>
+        <SectionTitle>Publiez Votre Annonce</SectionTitle>
+        <SectionSubtitle>
+          Kairo est une plateforme dédiée aux agents immobiliers et professionnels.
+        </SectionSubtitle>
+        <Grid>
+          <Card>
+            <CardTitle>Inscription requise</CardTitle>
+            <CardDescription>
+              L'accès à la plateforme est réservé aux agents enregistrés.
+            </CardDescription>
+          </Card>
+          <Card>
+            <CardTitle>Création de profil</CardTitle>
+            <CardDescription>
+              Chaque agent doit disposer d'un profil validé pour publier des annonces.
+            </CardDescription>
+          </Card>
+          <Card>
+            <CardTitle>Liste d'attente</CardTitle>
+            <CardDescription>
+              L'inscription des agents est en cours de déploiement. Inscrivez-vous dès maintenant pour être informé dès l'ouverture.
+            </CardDescription>
+          </Card>
+        </Grid>
+
+        <Steps>
+          <Step>
+            <StepNumber>1</StepNumber>
+            <StepContent>
+              <CardTitle>Inscrivez-vous sur la waitlist et créez votre profil d'agent.</CardTitle>
+            </StepContent>
+          </Step>
+          <Step>
+            <StepNumber>2</StepNumber>
+            <StepContent>
+              <CardTitle>Accédez à la plateforme après validation de votre inscription.</CardTitle>
+            </StepContent>
+          </Step>
+          <Step>
+            <StepNumber>3</StepNumber>
+            <StepContent>
+              <CardTitle>Publiez vos annonces et connectez-vous avec des acheteurs et locataires sérieux.</CardTitle>
+            </StepContent>
+          </Step>
+        </Steps>
+
+        <CTAContainer>
+          <PrimaryButton
+            to="/waitlist"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            S'inscrire sur la waitlist
+          </PrimaryButton>
+          <SecondaryButton
+            to="/about"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            En savoir plus sur le fonctionnement
+          </SecondaryButton>
+        </CTAContainer>
+      </PublishSection>
+
+      <Section>
+        <SectionTitle>Sécurité et Transparence</SectionTitle>
+        <Grid>
+          <Card>
+            <CardTitle>Vérification stricte des annonces</CardTitle>
+            <CardDescription>
+              Nous collaborons avec des agents et vendeurs reconnus pour garantir des biens conformes aux attentes.
+            </CardDescription>
+          </Card>
+          <Card>
+            <CardTitle>Mise en relation intelligente</CardTitle>
+            <CardDescription>
+              Un système conçu pour connecter clients et agents en fonction de leurs besoins.
+            </CardDescription>
+          </Card>
+          <Card>
+            <CardTitle>Un marché digitalisé et accessible</CardTitle>
+            <CardDescription>
+              Accédez aux meilleures opportunités immobilières en quelques clics.
+            </CardDescription>
+          </Card>
+          <Card>
+            <CardTitle>Retours et évaluations des utilisateurs</CardTitle>
+            <CardDescription>
+              Consultez les avis des clients pour prendre des décisions éclairées.
+            </CardDescription>
+          </Card>
+        </Grid>
+      </Section>
+
+      <ContactSection>
+        <SectionTitle>Contactez-nous</SectionTitle>
+        <Grid>
+          <Card>
+            <ContactInfo>
+              <FiPhone />
+              <CardDescription>+221 XX XXX XX XX</CardDescription>
+            </ContactInfo>
+            <ContactInfo>
+              <FiMail />
+              <CardDescription>contact@kairo.sn</CardDescription>
+            </ContactInfo>
+            <ContactInfo>
+              <FiMapPin />
+              <CardDescription>Dakar, Sénégal</CardDescription>
+            </ContactInfo>
+          </Card>
+          <Card>
+            <CardTitle>Trouvez un agent partenaire</CardTitle>
+            <CardDescription>
+              Besoin d'aide pour votre projet immobilier ? Nos agents partenaires sont là pour vous accompagner.
+            </CardDescription>
+            <PrimaryButton
+              to="/agents"
+              style={{ marginTop: '1.5rem' }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <PropertyImage src={property.image_url} alt={property.title} />
-              <PropertyContent>
-                <PropertyTitle>{property.title}</PropertyTitle>
-                <PropertyLocation>
-                  <FiMapPin />
-                  {property.location}
-                </PropertyLocation>
-                <PropertyPrice>
-                  <FiDollarSign />
-                  {property.price.toLocaleString()} FCFA
-                  <PropertyType>
-                    {property.type === 'sale' ? 'À vendre' : 'À louer'}
-                  </PropertyType>
-                </PropertyPrice>
-              </PropertyContent>
-            </PropertyCard>
-          ))}
-        </PropertiesGrid>
-      </PremiumSection>
+              Trouver un agent partenaire
+            </PrimaryButton>
+          </Card>
+        </Grid>
+      </ContactSection>
     </HomeContainer>
   )
 }
