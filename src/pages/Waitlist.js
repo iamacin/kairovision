@@ -251,6 +251,8 @@ const Waitlist = () => {
     phoneCountry: '+221', // Default to Senegal
     country: 'Senegal', // Default to Senegal
     role: '',
+    agencyName: '',
+    agencyWebsite: '',
     experience: '',
     interests: []
   });
@@ -458,7 +460,6 @@ const Waitlist = () => {
     setError('');
 
     try {
-      // Create auth user with Supabase but set their access level to 'pending'
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -471,22 +472,27 @@ const Waitlist = () => {
 
       if (signUpError) throw signUpError;
 
-      // Store user details in waitlist table instead of profiles
+      const waitlistData = {
+        user_id: data.user.id,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phone,
+        location: formData.country,
+        role: formData.role,
+        experience: formData.experience,
+        status: 'pending',
+        submission_date: new Date()
+      };
+
+      // Add agency information if role is agent
+      if (formData.role === 'agent') {
+        waitlistData.agency_name = formData.agencyName;
+        waitlistData.agency_website = formData.agencyWebsite;
+      }
+
       const { error: waitlistError } = await supabase
         .from('waitlist')
-        .insert([
-          {
-            user_id: data.user.id,
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            phone: formData.phone,
-            location: formData.country,
-            role: formData.role,
-            experience: formData.experience,
-            status: 'pending',
-            submission_date: new Date()
-          }
-        ]);
+        .insert([waitlistData]);
 
       if (waitlistError) throw waitlistError;
 
@@ -654,20 +660,51 @@ const Waitlist = () => {
                 <option value="landlord">Propriétaire</option>
               </Select>
             </InputGroup>
-            <InputGroup>
-              <Label>Expérience dans l'immobilier</Label>
-              <Select
-                name="experience"
-                value={formData.experience}
-                onChange={handleInputChange}
-              >
-                <option value="">Sélectionnez votre expérience</option>
-                <option value="0-1">0-1 an</option>
-                <option value="1-3">1-3 ans</option>
-                <option value="3-5">3-5 ans</option>
-                <option value="5+">5+ ans</option>
-              </Select>
-            </InputGroup>
+
+            {formData.role === 'agent' && (
+              <>
+                <InputGroup>
+                  <Label>Nom de l'agence *</Label>
+                  <Input
+                    type="text"
+                    name="agencyName"
+                    value={formData.agencyName}
+                    onChange={handleInputChange}
+                    placeholder="Nom de votre agence immobilière"
+                  />
+                </InputGroup>
+                <InputGroup>
+                  <Label>Site web de l'agence (optionnel)</Label>
+                  <Input
+                    type="url"
+                    name="agencyWebsite"
+                    value={formData.agencyWebsite}
+                    onChange={handleInputChange}
+                    placeholder="https://www.votreagence.com"
+                  />
+                  <small style={{ color: '#666', marginTop: '0.25rem' }}>
+                    Format: https://www.example.com
+                  </small>
+                </InputGroup>
+              </>
+            )}
+
+            {formData.role && (
+              <InputGroup>
+                <Label>{formData.role === 'agent' ? "Expérience dans l'immobilier *" : "Expérience avec l'immobilier"}</Label>
+                <Select
+                  name="experience"
+                  value={formData.experience}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Sélectionnez votre expérience</option>
+                  <option value="0-1">0-1 an</option>
+                  <option value="1-3">1-3 ans</option>
+                  <option value="3-5">3-5 ans</option>
+                  <option value="5+">5+ ans</option>
+                </Select>
+              </InputGroup>
+            )}
           </>
         );
       default:
