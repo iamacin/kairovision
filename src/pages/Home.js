@@ -10,9 +10,7 @@ const HomeContainer = styled.div`
 `
 
 const HeroSection = styled.section`
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url('/assets/optimized/home-hero.webp') no-repeat center;
-  background-size: cover;
+  position: relative;
   min-height: 80vh;
   display: flex;
   flex-direction: column;
@@ -21,14 +19,29 @@ const HeroSection = styled.section`
   text-align: center;
   padding: 2rem;
   color: white;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      url('/assets/optimized/home-hero.webp') no-repeat center;
+    background-size: cover;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+    opacity: ${({ isImageLoaded }) => isImageLoaded ? 1 : 0};
+  }
 `
 
 const HeroContent = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
   position: relative;
   z-index: 2;
-  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 4rem;
   
   @media (max-width: 768px) {
@@ -215,18 +228,18 @@ const CardDescription = styled.p`
 `
 
 const Home = () => {
-  // Add image validation
-  const [heroImageError, setHeroImageError] = React.useState(false);
+  const [isImageLoaded, setIsImageLoaded] = React.useState(false);
 
   React.useEffect(() => {
     const img = new Image();
-    img.src = '/images/vKairo-AI.jpg';
-    img.onerror = () => setHeroImageError(true);
+    img.src = '/assets/optimized/home-hero.webp';
+    img.onload = () => setIsImageLoaded(true);
+    img.onerror = () => console.error('Failed to load hero image');
   }, []);
 
   return (
     <HomeContainer>
-      <HeroSection style={heroImageError ? { backgroundImage: 'none' } : undefined}>
+      <HeroSection isImageLoaded={isImageLoaded}>
         <HeroContent>
           <MainTitle
             initial={{ opacity: 0, y: 30 }}
@@ -248,12 +261,8 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
-            <PrimaryButton 
-              to="/waitlist"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Commencer maintenant
+            <PrimaryButton to="/waitlist">
+              Rejoindre Kairo
             </PrimaryButton>
           </CTAContainer>
         </HeroContent>

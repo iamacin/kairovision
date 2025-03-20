@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
@@ -13,9 +13,16 @@ import Waitlist from './pages/Waitlist';
 import Contact from './pages/Contact';
 import Kairo from './pages/Kairo';
 import { GlobalStyles } from './styles/globalStyles';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import LoadingSpinner from './components/LoadingSpinner';
+import { lightTheme } from './styles/theme';
+
+// Wrap styled components that need theme with ThemeWrapper
+const ThemeWrapper = ({ children }) => {
+  const { themeMode } = useTheme();
+  return children;
+};
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -57,27 +64,29 @@ const ErrorFallback = styled.div`
 const App = () => {
   return (
     <ThemeProvider>
-      <GlobalStyles />
-      <Router>
-        <AppWrapper>
-          <Navbar />
-          <Main>
-            <Suspense fallback={
-              <LoadingFallback>
-                <LoadingSpinner />
-              </LoadingFallback>
-            }>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/waitlist" element={<Waitlist />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/kairo" element={<Kairo />} />
-              </Routes>
-            </Suspense>
-          </Main>
-          <Footer />
-        </AppWrapper>
-      </Router>
+      <ThemeWrapper>
+        <GlobalStyles />
+        <Router>
+          <AppWrapper>
+            <Navbar />
+            <Main>
+              <Suspense fallback={
+                <LoadingFallback>
+                  <LoadingSpinner />
+                </LoadingFallback>
+              }>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/waitlist" element={<Waitlist />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/kairo" element={<Kairo />} />
+                </Routes>
+              </Suspense>
+            </Main>
+            <Footer />
+          </AppWrapper>
+        </Router>
+      </ThemeWrapper>
     </ThemeProvider>
   );
 };
