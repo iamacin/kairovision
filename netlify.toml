@@ -8,6 +8,8 @@
   CI = "false"
   # Ensure development dependencies are installed
   NODE_ENV = "development"
+  # Disable secrets scanning for the Supabase anon key (public API key)
+  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY"
   # REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY should be set in Netlify UI
 
 [[redirects]]

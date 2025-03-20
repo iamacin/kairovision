@@ -6,6 +6,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
 
 // Load environment variables from .env file
 const env = dotenv.config().parsed || {};
@@ -37,7 +39,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: [
-              '@babel/preset-env',
+              ['@babel/preset-env', { modules: false }],
               '@babel/preset-react'
             ],
             plugins: [
@@ -97,6 +99,11 @@ module.exports = {
         minifyURLs: true
       } : false
     }),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: 'initial',
+      fileBlacklist: [/\.map$/, /hot-update\.js$/]
+    }),
     new webpack.DefinePlugin(stringifiedEnv),
     new CopyPlugin({
       patterns: [
@@ -106,7 +113,11 @@ module.exports = {
         },
         {
           from: 'public/_redirects',
-          to: '_redirects'
+          to: './'
+        },
+        {
+          from: 'public/robots.txt',
+          to: './'
         }
       ]
     }),
@@ -146,14 +157,21 @@ module.exports = {
         terserOptions: {
           compress: {
             drop_console: true,
+            drop_debugger: true,
+            pure_funcs: ['console.log']
           },
+          output: {
+            comments: false
+          }
         },
-      })
+        extractComments: false
+      }),
+      new CssMinimizerPlugin()
     ],
     splitChunks: {
       chunks: 'all',
       maxInitialRequests: Infinity,
-      minSize: 0,
+      minSize: 20000,
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
@@ -161,14 +179,16 @@ module.exports = {
             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
             return `vendor.${packageName.replace('@', '')}`;
           },
+          priority: -10
         },
         common: {
           name: 'common',
           minChunks: 2,
-          priority: -10
+          priority: -20
         }
       },
     },
+    runtimeChunk: 'single'
   },
   performance: {
     maxEntrypointSize: 512000,
