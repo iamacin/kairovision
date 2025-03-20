@@ -1,67 +1,41 @@
-import { createClient } from '@supabase/supabase-js'
+// This is a secure wrapper for Supabase operations
+// Instead of connecting directly to Supabase with API keys in the browser,
+// we'll use our Netlify Function as a secure middleman
 
-// Get environment variables
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || ''
+// Simple function to call our Netlify Function
+const callSupabaseFunction = async (action, data) => {
+  try {
+    const response = await fetch('/.netlify/functions/supabase-handler', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action, data }),
+    });
 
-// Initialize client
-let supabase = null
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Something went wrong');
+    }
 
-try {
-  // Log information for debugging
-  console.log('Supabase init with URL:', supabaseUrl ? 'URL exists' : 'URL is empty');
+    return await response.json();
+  } catch (error) {
+    console.error('Error calling Supabase function:', error);
+    throw error;
+  }
+};
+
+// Create a secure client that doesn't expose API keys
+const secureClient = {
+  // Waitlist functionality
+  addToWaitlist: async (userData) => {
+    return await callSupabaseFunction('addToWaitlist', userData);
+  },
   
-  // Check for missing credentials
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Supabase credentials missing. URL exists:', !!supabaseUrl, 'Key exists:', !!supabaseAnonKey);
-    throw new Error('Supabase credentials are missing. Please check your environment configuration.');
+  // We can add more functions as needed, following the same pattern
+  checkWaitlistStatus: async (email) => {
+    return await callSupabaseFunction('checkWaitlistStatus', { email });
   }
+};
 
-  // Create supabase client
-  supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true
-    }
-  })
-
-  // Test connection and log any issues
-  const testConnection = async () => {
-    try {
-      const { data, error } = await supabase.from('waitlist').select('count')
-      if (error) {
-        console.error('Supabase select test failed:', error.message);
-        return false;
-      }
-      console.log('Supabase connection test successful');
-      return true
-    } catch (error) {
-      console.error('Supabase connection test exception:', error.message);
-      return false
-    }
-  }
-
-  // Run connection test
-  testConnection()
-
-} catch (error) {
-  console.error('Supabase initialization error:', error.message);
-  
-  // Create a mock client with detailed error messages
-  supabase = {
-    from: (table) => ({
-      select: () => Promise.reject(new Error(`Database connection failed: Could not connect to ${table}. Please check your network connection and reload the page.`)),
-      insert: () => Promise.reject(new Error(`Database connection failed: Could not insert into ${table}. Please check your network connection and reload the page.`)),
-      update: () => Promise.reject(new Error(`Database connection failed: Could not update ${table}. Please check your network connection and reload the page.`)),
-      delete: () => Promise.reject(new Error(`Database connection failed: Could not delete from ${table}. Please check your network connection and reload the page.`))
-    }),
-    auth: {
-      signUp: () => Promise.reject(new Error('Authentication failed: Could not register. Please check your network connection and reload the page.')),
-      signIn: () => Promise.reject(new Error('Authentication failed: Could not log in. Please check your network connection and reload the page.')),
-      signOut: () => Promise.reject(new Error('Authentication failed: Could not log out. Please check your network connection and reload the page.'))
-    }
-  }
-}
-
-export { supabase } 
+export default secureClient; 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
-import { supabase } from '../utils/supabase'
+import secureClient from '../utils/supabase'
 import { FiCheck, FiUser, FiMail, FiPhone, FiMapPin, FiLock, FiList, FiBriefcase, FiHome, FiUsers, FiAlertCircle } from 'react-icons/fi'
 
 const WaitlistContainer = styled.div`
@@ -371,33 +371,26 @@ const Waitlist = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSupabaseReady, setIsSupabaseReady] = useState(false);
   const [connectionAttempts, setConnectionAttempts] = useState(0);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [connectionError, setConnectionError] = useState(null);
+  const [isDatabaseReady, setIsDatabaseReady] = useState(false);
 
   // Function to retry connection
-  const retryConnection = useCallback(() => {
+  const retryConnection = useCallback(async () => {
+    setIsRetrying(true);
     setConnectionAttempts(prev => prev + 1);
-    setError('');
     
-    const checkConnection = async () => {
-      try {
-        console.log('Retrying Supabase connection...');
-        const { data, error } = await supabase.from('waitlist').select('count');
-        if (error) {
-          console.error('Database retry connection error:', error);
-          setError(`Erreur de connexion: ${error.message}. Veuillez rafraîchir la page ou réessayer plus tard.`);
-          setIsSupabaseReady(false);
-          return;
-        }
-        console.log('Supabase connection retry successful');
-        setIsSupabaseReady(true);
-        setError(''); // Clear any existing errors
-      } catch (err) {
-        console.error('Caught database error on retry:', err);
-        setError('La connexion à la base de données a échoué. Veuillez rafraîchir la page ou réessayer plus tard.');
-        setIsSupabaseReady(false);
-      }
-    };
-    
-    checkConnection();
+    try {
+      console.log('Retrying Supabase connection...');
+      await secureClient.checkWaitlistStatus('test@example.com');
+      setConnectionError(null);
+      setIsDatabaseReady(true);
+    } catch (error) {
+      console.error('Database retry connection error:', error);
+      setConnectionError(error.message || 'Failed to connect to database. Please try again.');
+    } finally {
+      setIsRetrying(false);
+    }
   }, []);
 
   // Check Supabase connection on mount
@@ -405,20 +398,12 @@ const Waitlist = () => {
     const checkConnection = async () => {
       try {
         console.log('Checking Supabase connection...');
-        const { data, error } = await supabase.from('waitlist').select('count');
-        if (error) {
-          console.error('Database connection error:', error);
-          setError(`Erreur de connexion: ${error.message}. Veuillez rafraîchir la page ou réessayer plus tard.`);
-          setIsSupabaseReady(false);
-          return;
-        }
-        console.log('Supabase connection successful');
-        setIsSupabaseReady(true);
-        setError(''); // Clear any existing errors
-      } catch (err) {
-        console.error('Caught database error:', err);
-        setError('La connexion à la base de données a échoué. Veuillez rafraîchir la page ou réessayer plus tard.');
-        setIsSupabaseReady(false);
+        await secureClient.checkWaitlistStatus('test@example.com');
+        setIsDatabaseReady(true);
+      } catch (error) {
+        console.error('Database connection error:', error);
+        setIsDatabaseReady(false);
+        setConnectionError('Database connection is unavailable. Please refresh the page or try again later.');
       }
     };
     
@@ -620,8 +605,6 @@ const Waitlist = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateStep()) return;
-
     setIsSubmitting(true);
     setError('');
 
@@ -630,92 +613,28 @@ const Waitlist = () => {
         throw new Error('La connexion à la base de données n\'est pas disponible. Veuillez rafraîchir la page et réessayer.');
       }
 
-      // Add a timeout to prevent hanging requests
-      const timeout = setTimeout(() => {
-        setError('La requête prend plus de temps que prévu. Veuillez vérifier votre connexion et réessayer.');
-        setIsSubmitting(false);
-      }, 15000);
-
       // First, check if the user already exists
       console.log('Checking if user exists...');
-      const { data: existingUser, error: checkError } = await supabase
-        .from('waitlist')
-        .select('id')
-        .eq('email', formData.email)
-        .single();
-
-      clearTimeout(timeout);
-
-      if (checkError && checkError.message !== 'No rows found') {
-        console.error('Error checking existing user:', checkError);
-        throw new Error(`Erreur lors de la vérification de l'email: ${checkError.message}. Veuillez réessayer.`);
+      const response = await secureClient.checkWaitlistStatus(formData.email);
+      
+      if (response.exists) {
+        setError('This email is already registered on our waitlist.');
+        setIsSubmitting(false);
+        return;
       }
-
-      if (existingUser) {
-        throw new Error('Un compte avec cet email existe déjà.');
-      }
-
-      // Create auth user
-      const { data, error: signUpError } = await supabase.auth.signUp({
+      
+      // Add user to waitlist
+      await secureClient.addToWaitlist({
         email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            access_level: 'pending'
-          }
-        }
-      });
-
-      if (signUpError) {
-        console.error('Signup error:', signUpError);
-        throw new Error(
-          signUpError.message === 'User already registered'
-            ? 'Un compte avec cet email existe déjà.'
-            : 'Erreur lors de l\'inscription. Veuillez réessayer.'
-        );
-      }
-
-      if (!data?.user?.id) {
-        throw new Error('Erreur lors de la création du compte.');
-      }
-
-      // Prepare waitlist data
-      const waitlistData = {
-        user_id: data.user.id,
-        email: formData.email,
-        first_name: formData.firstName,
-        last_name: formData.lastName,
+        name: formData.firstName + ' ' + formData.lastName,
         phone: formData.phoneCountry + formData.phone.replace(/\s+/g, ''),
         location: formData.country,
-        role: userType === 'agent' ? 'agent' : formData.role,
-        status: 'pending',
-        submission_date: new Date().toISOString()
-      };
-
-      if (userType === 'agent') {
-        waitlistData.agency_name = formData.agencyName;
-        waitlistData.agency_website = formData.agencyWebsite;
-        waitlistData.experience = formData.experience;
-      }
-
-      const { error: waitlistError } = await supabase
-        .from('waitlist')
-        .insert([waitlistData]);
-
-      if (waitlistError) {
-        console.error('Waitlist insertion error:', waitlistError);
-        throw new Error('Erreur lors de l\'enregistrement des données. Veuillez réessayer.');
-      }
-
-      setSuccess(
-        userType === 'agent'
-          ? `Votre demande d'inscription en tant qu'agent immobilier a été enregistrée avec succès ! Notre équipe examinera votre profil et vous contactera par email une fois votre compte approuvé.`
-          : `Votre inscription a été enregistrée avec succès ! Vous recevrez un email de confirmation pour activer votre compte.`
-      );
-
-      // Reset form
+        userType: userType,
+        details: formData.agencyName || formData.experience || '',
+        createdAt: new Date().toISOString()
+      });
+      
+      // Reset form and show success
       setFormData({
         email: '',
         password: '',
@@ -730,11 +649,11 @@ const Waitlist = () => {
         agencyWebsite: '',
         experience: ''
       });
-      setCurrentStep(1);
+      setCurrentStep(5);
       
     } catch (error) {
-      console.error('Form submission error:', error);
-      setError(error.message || 'Une erreur s\'est produite. Veuillez réessayer.');
+      console.error('Submit error:', error);
+      setError('Something went wrong. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
@@ -994,7 +913,7 @@ const Waitlist = () => {
     return (
       <WaitlistContainer>
         <ConnectionErrorFallback 
-          error={error}
+          error={connectionError}
           onRetry={retryConnection}
         />
       </WaitlistContainer>

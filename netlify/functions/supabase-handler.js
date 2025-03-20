@@ -18,15 +18,32 @@ exports.handler = async (event) => {
 
     switch (action) {
       case 'addToWaitlist':
-        const { error } = await supabase
+        const { error: insertError } = await supabase
           .from('waitlist')
           .insert([data]);
 
-        if (error) throw error;
+        if (insertError) throw insertError;
 
         return {
           statusCode: 200,
           body: JSON.stringify({ message: 'Successfully added to waitlist' })
+        };
+        
+      case 'checkWaitlistStatus':
+        const { data: waitlistData, error: selectError } = await supabase
+          .from('waitlist')
+          .select('*')
+          .eq('email', data.email)
+          .single();
+
+        if (selectError && selectError.code !== 'PGRST116') throw selectError;
+
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ 
+            exists: !!waitlistData,
+            data: waitlistData || null
+          })
         };
 
       default:
@@ -38,7 +55,10 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Internal server error' })
+      body: JSON.stringify({ 
+        error: 'Internal server error',
+        message: error.message
+      })
     };
   }
 }; 
