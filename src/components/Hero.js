@@ -77,17 +77,13 @@ const Hero = () => {
 
   const fetchHeroImage = async () => {
     try {
-      const { data, error } = await secureClient
-        .from('settings')
-        .select('hero_image')
-        .single()
-
-      if (error) throw error
-      if (data?.hero_image) {
-        setHeroImage(data.hero_image)
+      const response = await secureClient.fetchHeroImage();
+      
+      if (response.success && response.data) {
+        setHeroImage(response.data);
       }
     } catch (error) {
-      console.error('Error fetching hero image:', error.message)
+      console.error('Error fetching hero image:', error.message);
     }
   }
 
