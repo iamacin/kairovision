@@ -2,9 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { FiShield, FiTrendingUp, FiUsers, FiClock, FiGlobe, FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
+import { FiTrendingUp, FiUsers, FiGlobe } from 'react-icons/fi'
 import OptimizedImage from '../components/OptimizedImage'
-import CriticalImage from '../components/CriticalImage'
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -22,9 +21,16 @@ const HeroSection = styled.section`
   padding: 2rem;
   color: white;
   background: linear-gradient(135deg, 
-    rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.85) 0%,
-    rgba(${({ theme }) => theme?.colors?.primaryDark || '#6a1cb7'}, 0.95) 100%
+    rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.95) 0%,
+    rgba(${({ theme }) => theme?.colors?.primaryDark || '#6a1cb7'}, 0.98) 100%
   );
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.95) 0%,
+      rgba(${({ theme }) => theme?.colors?.primaryDark || '#6a1cb7'}, 0.98) 100%
+    ),
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
   overflow: hidden;
 
   &::before {
@@ -35,8 +41,8 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     background: radial-gradient(circle at 70% 30%, 
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(0, 0, 0, 0.6) 100%
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(0, 0, 0, 0.5) 100%
     );
     z-index: 1;
   }
@@ -222,15 +228,6 @@ const CardDescription = styled.p`
   }
 `
 
-const HeroImage = styled(CriticalImage)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-`
-
 const AgentImage = styled(OptimizedImage)`
   width: 100%;
   height: 100%;
@@ -241,12 +238,6 @@ const Home = () => {
   return (
     <HomeContainer>
       <HeroSection>
-        <HeroImage
-          src="/assets/optimized/home-hero.webp"
-          alt="Kairo Hero Image"
-          height="100%"
-          backgroundColor="#1a1a1a"
-        />
         <HeroContent>
           <MainTitle
             initial={{ opacity: 0, y: 30 }}

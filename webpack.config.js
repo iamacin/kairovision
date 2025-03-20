@@ -237,29 +237,35 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
       maxInitialRequests: Infinity,
-      minSize: 15000,
-      maxSize: 100000,
+      minSize: 10000,
+      maxSize: 80000,
       cacheGroups: {
-        vendor: {
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+          name: 'vendor.react',
+          chunks: 'all',
+          priority: 40
+        },
+        framerMotion: {
+          test: /[\\/]node_modules[\\/](framer-motion)[\\/]/,
+          name: 'vendor.framer-motion',
+          chunks: 'all',
+          priority: 30
+        },
+        styledComponents: {
+          test: /[\\/]node_modules[\\/](styled-components)[\\/]/,
+          name: 'vendor.styled-components',
+          chunks: 'all',
+          priority: 20
+        },
+        vendors: {
           test: /[\\/]node_modules[\\/]/,
           name(module) {
-            // Get the package name
             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-            
-            // Specifically optimize large packages
-            if (
-              packageName === 'react' || 
-              packageName === 'react-dom' || 
-              packageName === 'framer-motion' ||
-              packageName === 'styled-components'
-            ) {
-              return `vendor.${packageName.replace('@', '')}`;
-            }
-            
-            // Group other smaller packages by first letter to reduce request count
-            return `vendor.${packageName.replace('@', '').split('.')[0][0]}`;
+            return `vendor.${packageName.replace('@', '').charAt(0)}`;
           },
-          priority: -10
+          priority: 10,
+          reuseExistingChunk: true
         },
         common: {
           name: 'common',
@@ -273,8 +279,8 @@ module.exports = {
     moduleIds: 'deterministic'
   },
   performance: {
-    maxEntrypointSize: 512000,
-    maxAssetSize: 512000,
+    maxEntrypointSize: 550000,
+    maxAssetSize: 550000,
     hints: 'warning'
   }
 }; 
