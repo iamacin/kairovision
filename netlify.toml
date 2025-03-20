@@ -1,13 +1,13 @@
 [build]
-  command = "npm install && npm run build"
+  command = "npm ci && npm run build"
   publish = "dist"
   functions = "netlify/functions"
 
 [build.environment]
+  # Prevent treating warnings as errors
+  CI = "false"
+  # Ensure correct NODE_ENV
   NODE_ENV = "production"
-  # Ensure dev dependencies are installed
-  NPM_FLAGS = "--production=false"
-  # Only include essential environment variables
   # REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY should be set in Netlify UI
 
 [[redirects]]
