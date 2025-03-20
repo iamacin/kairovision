@@ -10,9 +10,11 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import { GlobalStyles } from './styles/globalStyles';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ErrorBoundary } from 'react-error-boundary';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Lazy load route components with loading priority
 const Home = lazy(() => import('./pages/Home'));
@@ -23,6 +25,9 @@ const Waitlist = lazy(() =>
 const Contact = lazy(() => import('./pages/Contact'));
 const Kairo = lazy(() => import('./pages/Kairo'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Login = lazy(() => import('./components/Login'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Unauthorized = lazy(() => import('./pages/Unauthorized'));
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -66,30 +71,57 @@ const ErrorFallback = styled.div`
 const App = () => {
   return (
     <ThemeProvider>
-      <GlobalStyles />
-      <AppWrapper>
-        <Router>
-          <Navbar />
-          <Main>
-            <ErrorBoundary fallback={<ErrorFallback>Something went wrong. Please try refreshing the page.</ErrorFallback>}>
-              <Suspense fallback={
-                <LoadingFallback>
-                  <LoadingSpinner />
-                </LoadingFallback>
-              }>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/waitlist" element={<Waitlist />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/kairo" element={<Kairo />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </ErrorBoundary>
-          </Main>
-          <Footer />
-        </Router>
-      </AppWrapper>
+      <AuthProvider>
+        <GlobalStyles />
+        <AppWrapper>
+          <Router>
+            <Navbar />
+            <Main>
+              <ErrorBoundary fallback={<ErrorFallback>Something went wrong. Please try refreshing the page.</ErrorFallback>}>
+                <Suspense fallback={
+                  <LoadingFallback>
+                    <LoadingSpinner />
+                  </LoadingFallback>
+                }>
+                  <Routes>
+                    {/* Public routes */}
+                    <Route path="/" element={<Home />} />
+                    <Route path="/waitlist" element={<Waitlist />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/kairo" element={<Kairo />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/unauthorized" element={<Unauthorized />} />
+                    
+                    {/* Protected routes */}
+                    <Route 
+                      path="/dashboard" 
+                      element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* Admin routes */}
+                    <Route 
+                      path="/admin/*" 
+                      element={
+                        <ProtectedRoute requiredRole="admin">
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    
+                    {/* 404 route */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </ErrorBoundary>
+            </Main>
+            <Footer />
+          </Router>
+        </AppWrapper>
+      </AuthProvider>
     </ThemeProvider>
   );
 };

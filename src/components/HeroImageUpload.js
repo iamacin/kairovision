@@ -6,10 +6,10 @@ import secureClient from '../utils/supabase'
 const HeroContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 1rem;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin: 2rem 0;
 `
 
 const ImageContainer = styled.div`
@@ -25,6 +25,19 @@ const HeroImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+`
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 1.2rem;
 `
 
 const UploadButton = styled.button`
@@ -50,18 +63,19 @@ const UploadButton = styled.button`
   }
 `
 
-const Overlay = styled.div`
+const LoadingOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 1.2rem;
+  z-index: 2;
 `
 
 const ErrorMessage = styled.p`
@@ -74,24 +88,19 @@ const HeroImageUpload = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Fetch current hero image on component mount
   useEffect(() => {
     fetchHeroImage()
   }, [])
 
   const fetchHeroImage = async () => {
     try {
-      const { data, error } = await secureClient
-        .from('settings')
-        .select('hero_image')
-        .single()
-
-      if (error) throw error
-      if (data?.hero_image) {
-        setCurrentImage(data.hero_image)
+      const response = await secureClient.fetchHeroImage();
+      
+      if (response.success && response.data) {
+        setCurrentImage(response.data);
       }
     } catch (error) {
-      console.error('Error fetching hero image:', error.message)
+      console.error('Error fetching hero image:', error.message);
     }
   }
 
@@ -108,11 +117,11 @@ const HeroImageUpload = () => {
       if (uploadError) throw uploadError
 
       // Update the settings table with new image URL
-      const { error: updateError } = await secureClient
-        .from('settings')
-        .upsert({ id: 1, hero_image: path })
-
-      if (updateError) throw updateError
+      const response = await secureClient.updateHeroImage(path);
+      
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to update hero image');
+      }
 
       setCurrentImage(path)
     } catch (error) {
@@ -147,14 +156,15 @@ const HeroImageUpload = () => {
         >
           {isUploading ? 'Uploading...' : 'Change Hero Image'}
         </UploadButton>
+        
+        {isUploading && (
+          <LoadingOverlay>Uploading...</LoadingOverlay>
+        )}
       </ImageContainer>
-
-      {error && <ErrorMessage>{error}</ErrorMessage>}
       
-      <p>
-        Recommended image size: 1920x1080px or larger. 
-        The image will be automatically cropped to fit the hero section.
-      </p>
+      {error && (
+        <ErrorMessage>{error}</ErrorMessage>
+      )}
     </HeroContainer>
   )
 }

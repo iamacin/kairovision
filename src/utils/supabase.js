@@ -4,258 +4,329 @@
  * accessing Supabase, which keeps our API keys secure.
  */
 
-// Base function to call our Netlify Function
-const callSupabaseFunction = async (action, data = {}) => {
+// JWT token storage key in localStorage
+const TOKEN_STORAGE_KEY = 'kairovision_auth_token';
+
+// Authentication state
+let currentToken = null;
+let currentUser = null;
+
+/**
+ * Load token from localStorage on initialization
+ */
+const loadTokenFromStorage = () => {
+  if (typeof window !== 'undefined') {
+    const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (storedToken) {
+      currentToken = storedToken;
+      return true;
+    }
+  }
+  return false;
+};
+
+// Try to load token on module initialization
+loadTokenFromStorage();
+
+/**
+ * Base URL for API requests
+ * This will be '/.netlify/functions/' in production and a localhost URL in development
+ */
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '/.netlify/functions/'
+  : 'http://localhost:8888/.netlify/functions/';
+
+/**
+ * Make a secure API request to our Netlify Functions
+ * @param {string} action - The action to perform
+ * @param {object} data - The data to send
+ * @param {boolean} requiresAuth - Whether this action requires authentication
+ * @returns {Promise<object>} The response data
+ */
+const secureRequest = async (action, data = {}, requiresAuth = false) => {
   try {
-    const response = await fetch('/.netlify/functions/supabase-handler', {
+    // Check if authentication is required but no token is available
+    if (requiresAuth && !currentToken && !loadTokenFromStorage()) {
+      throw new Error('Authentication required');
+    }
+
+    // Prepare request options
+    const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action, data }),
-    });
+      body: JSON.stringify({
+        action,
+        data,
+        // Include token if available
+        ...(currentToken && { token: currentToken })
+      })
+    };
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || errorData.message || 'Something went wrong');
+    // Make the request
+    const response = await fetch(`${API_BASE_URL}supabase-handler`, options);
+    const result = await response.json();
+
+    // Check if there was an error
+    if (!response.ok || result.error) {
+      throw new Error(result.error || result.message || 'Unknown error');
     }
 
-    return await response.json();
+    return result;
   } catch (error) {
-    console.error('API call error:', error);
+    console.error(`Error in secureRequest (${action}):`, error);
     throw error;
   }
 };
 
-// Create a secure client that mimics Supabase's API structure
-const secureClient = {
-  // -------------------- WAITLIST OPERATIONS --------------------
-  
-  // Add a user to the waitlist
-  addToWaitlist: async (userData) => {
-    return await callSupabaseFunction('addToWaitlist', userData);
-  },
-  
-  // Check if an email exists in the waitlist
-  checkWaitlistStatus: async (email) => {
-    return await callSupabaseFunction('checkWaitlistStatus', { email });
-  },
-
-  // -------------------- DATA ACCESS OPERATIONS --------------------
-  
-  // Mimics the Supabase 'from' method to provide a familiar API structure
-  from: (table) => ({
-    // Select data from the table
-    select: (columns = '*') => ({
-      // Get all rows
-      getAll: async () => {
-        return await callSupabaseFunction(`fetch${table.charAt(0).toUpperCase() + table.slice(1)}`, { columns });
-      },
+/**
+ * Authentication methods
+ */
+const authMethods = {
+  /**
+   * Sign in with email and password
+   * @param {string} email - User email
+   * @param {string} password - User password
+   * @returns {Promise<object>} The user data and token
+   */
+  signIn: async (email, password) => {
+    try {
+      // Make the sign in request
+      const result = await secureRequest('signIn', { email, password });
       
-      // Limit the number of rows
-      limit: (limit) => ({
-        getAll: async () => {
-          return await callSupabaseFunction(`fetch${table.charAt(0).toUpperCase() + table.slice(1)}`, { columns, limit });
-        },
+      // If successful, store the token
+      if (result.token) {
+        currentToken = result.token;
+        currentUser = result.user;
         
-        // Filter by equal
-        eq: (column, value) => ({
-          getAll: async () => {
-            return await callSupabaseFunction(`fetch${table.charAt(0).toUpperCase() + table.slice(1)}`, { 
-              columns, 
-              limit,
-              filter: { column, value, operator: 'eq' }
-            });
-          }
-        })
-      }),
-      
-      // Filter by equal
-      eq: (column, value) => ({
-        getAll: async () => {
-          return await callSupabaseFunction(`fetch${table.charAt(0).toUpperCase() + table.slice(1)}`, { 
-            columns,
-            filter: { column, value, operator: 'eq' }
-          });
-        },
-        
-        // Get a single row
-        single: async () => {
-          const response = await callSupabaseFunction(`fetch${table.charAt(0).toUpperCase() + table.slice(1)}ByFilter`, { 
-            columns,
-            filter: { column, value, operator: 'eq' },
-            single: true
-          });
-          
-          return {
-            data: response.data,
-            error: response.error ? { message: response.error } : null
-          };
+        // Save to localStorage for persistence
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(TOKEN_STORAGE_KEY, result.token);
         }
-      })
-    }),
-    
-    // Insert data into the table
-    insert: (rows) => ({
-      select: async () => {
-        const response = await callSupabaseFunction(`add${table.charAt(0).toUpperCase() + table.slice(1).slice(0, -1)}`, rows[0]);
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Sign in error:', error);
+      throw error;
+    }
+  },
+  
+  /**
+   * Sign up a new user
+   * @param {string} email - User email
+   * @param {string} password - User password
+   * @param {object} metadata - Additional user metadata
+   * @returns {Promise<object>} The user data and token
+   */
+  signUp: async (email, password, metadata = {}) => {
+    try {
+      // Make the sign up request
+      const result = await secureRequest('signUp', { email, password, metadata });
+      
+      // If successful, store the token
+      if (result.token) {
+        currentToken = result.token;
+        currentUser = result.user;
         
-        return {
-          data: response.data ? [response.data] : null,
-          error: response.error ? { message: response.error } : null
-        };
+        // Save to localStorage for persistence
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(TOKEN_STORAGE_KEY, result.token);
+        }
       }
-    }),
-    
-    // Upsert data in the table
-    upsert: async (row) => {
-      const response = await callSupabaseFunction(`update${table.charAt(0).toUpperCase() + table.slice(1).slice(0, -1)}`, row);
       
-      return {
-        data: response.data,
-        error: response.error ? { message: response.error } : null
-      };
+      return result;
+    } catch (error) {
+      console.error('Sign up error:', error);
+      throw error;
     }
-  }),
-
-  // -------------------- PROPERTIES OPERATIONS --------------------
+  },
   
-  // Fetch premium properties
+  /**
+   * Sign out the current user
+   * @returns {Promise<object>} Success message
+   */
+  signOut: async () => {
+    try {
+      // Only make the request if there is a current token
+      if (currentToken) {
+        await secureRequest('signOut', {}, true);
+      }
+      
+      // Clear local state regardless of API call
+      currentToken = null;
+      currentUser = null;
+      
+      // Remove from localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(TOKEN_STORAGE_KEY);
+      }
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Sign out error:', error);
+      throw error;
+    }
+  },
+  
+  /**
+   * Get the current authenticated user
+   * @returns {Promise<object>} The current user data
+   */
+  getCurrentUser: async () => {
+    try {
+      // Return from cache if available
+      if (currentUser) {
+        return { user: currentUser };
+      }
+      
+      // Otherwise fetch from API if we have a token
+      if (currentToken || loadTokenFromStorage()) {
+        const result = await secureRequest('getCurrentUser', {}, true);
+        currentUser = result.user;
+        return result;
+      }
+      
+      return { user: null };
+    } catch (error) {
+      console.error('Get current user error:', error);
+      // Clear state on auth errors
+      if (error.message?.includes('Invalid or expired token')) {
+        currentToken = null;
+        currentUser = null;
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem(TOKEN_STORAGE_KEY);
+        }
+      }
+      throw error;
+    }
+  },
+  
+  /**
+   * Check if the user is authenticated
+   * @returns {boolean} Whether the user is authenticated
+   */
+  isAuthenticated: () => {
+    return !!currentToken;
+  },
+  
+  /**
+   * Get the current authentication token
+   * @returns {string|null} The current token or null
+   */
+  getToken: () => currentToken,
+};
+
+/**
+ * Waitlist-related methods
+ */
+const waitlistMethods = {
+  /**
+   * Add a user to the waitlist
+   * @param {object} userData - User data including email, name, etc.
+   * @returns {Promise<object>} Success confirmation and waitlist entry
+   */
+  addToWaitlist: async (userData) => {
+    return await secureRequest('addToWaitlist', userData);
+  },
+
+  /**
+   * Check a user's waitlist status
+   * @param {string} email - Email to check
+   * @returns {Promise<object>} Waitlist status information
+   */
+  checkWaitlistStatus: async (email) => {
+    return await secureRequest('checkWaitlistStatus', { email });
+  },
+};
+
+/**
+ * Property-related methods
+ */
+const propertyMethods = {
+  /**
+   * Fetch premium properties
+   * @param {number} limit - Maximum number of properties to fetch (default: 5)
+   * @returns {Promise<object>} List of premium properties
+   */
   fetchPremiumProperties: async (limit = 5) => {
-    return await callSupabaseFunction('fetchPremiumProperties', { limit });
+    return await secureRequest('fetchPremiumProperties', { limit });
   },
-  
-  // Fetch a property by slug
+
+  /**
+   * Fetch a property by its slug
+   * @param {string} slug - Property slug
+   * @returns {Promise<object>} Property details
+   */
   fetchPropertyBySlug: async (slug) => {
-    return await callSupabaseFunction('fetchPropertyBySlug', { slug });
+    return await secureRequest('fetchPropertyBySlug', { slug });
   },
-  
-  // Search for properties
+
+  /**
+   * Search for properties based on criteria
+   * @param {object} criteria - Search criteria (location, type, price range, etc.)
+   * @returns {Promise<object>} List of matching properties
+   */
   searchProperties: async (criteria) => {
-    return await callSupabaseFunction('searchProperties', criteria);
+    return await secureRequest('searchProperties', criteria);
   },
-  
-  // Add a new property
+
+  /**
+   * Add a new property
+   * @param {object} propertyData - Property details
+   * @returns {Promise<object>} Created property
+   */
   addProperty: async (propertyData) => {
-    return await callSupabaseFunction('addProperty', propertyData);
+    return await secureRequest('addProperty', propertyData, true);
   },
+};
 
-  // -------------------- SETTINGS OPERATIONS --------------------
-  
-  // Fetch the hero image
+/**
+ * Settings-related methods
+ */
+const settingsMethods = {
+  /**
+   * Fetch the hero image URL
+   * @returns {Promise<object>} Hero image URL
+   */
   fetchHeroImage: async () => {
-    return await callSupabaseFunction('fetchHeroImage');
+    return await secureRequest('fetchHeroImage');
   },
-  
-  // Update the hero image
+
+  /**
+   * Update the hero image
+   * @param {string} path - Path to the new hero image
+   * @returns {Promise<object>} Updated settings
+   */
   updateHeroImage: async (path) => {
-    return await callSupabaseFunction('updateHeroImage', { path });
+    return await secureRequest('updateHeroImage', { path }, true);
   },
+};
 
-  // -------------------- STORAGE OPERATIONS --------------------
-  
-  // Storage operations
-  storage: {
-    // Access a bucket
-    from: (bucket) => ({
-      // Upload a file to the bucket
-      upload: async (filePath, file) => {
-        // Convert File object to base64 for transmission
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = async () => {
-            try {
-              const response = await callSupabaseFunction('uploadImage', {
-                base64Image: reader.result,
-                fileName: filePath,
-                bucket
-              });
-              
-              resolve({
-                data: { path: response.path },
-                error: null
-              });
-            } catch (error) {
-              reject({
-                data: null,
-                error: error
-              });
-            }
-          };
-          reader.onerror = (error) => {
-            reject({
-              data: null,
-              error: error
-            });
-          };
-        });
-      },
-      
-      // Get a public URL for a file
-      getPublicUrl: (filePath) => {
-        // This is a synchronous operation in Supabase
-        // We'll return a dummy structure that should be replaced by the actual URL from the upload response
-        return {
-          data: {
-            publicUrl: `https://your-supabase-url.supabase.co/storage/v1/object/public/${bucket}/${filePath}`
-          }
-        };
-      }
-    })
+/**
+ * Storage-related methods
+ */
+const storageMethods = {
+  /**
+   * Upload an image
+   * @param {string} base64Image - Base64-encoded image
+   * @param {string} bucket - Storage bucket name
+   * @param {string} fileName - Optional file name
+   * @returns {Promise<object>} Upload result including the public URL
+   */
+  uploadImage: async (base64Image, bucket, fileName) => {
+    return await secureRequest('uploadImage', { base64Image, bucket, fileName }, true);
   },
+};
 
-  // -------------------- AUTH OPERATIONS --------------------
-  
-  // Auth operations
-  auth: {
-    // Sign up a user
-    signUp: async (credentials) => {
-      const response = await callSupabaseFunction('signUp', credentials);
-      
-      return {
-        data: {
-          user: response.user,
-          session: null
-        },
-        error: response.error ? { message: response.error } : null
-      };
-    },
-    
-    // Sign in a user
-    signInWithPassword: async (credentials) => {
-      const response = await callSupabaseFunction('signIn', credentials);
-      
-      return {
-        data: {
-          user: response.user,
-          session: response.session
-        },
-        error: response.error ? { message: response.error } : null
-      };
-    },
-    
-    // Sign out a user
-    signOut: async () => {
-      const response = await callSupabaseFunction('signOut');
-      
-      return {
-        error: response.error ? { message: response.error } : null
-      };
-    },
-    
-    // Get the current user
-    getUser: async () => {
-      const response = await callSupabaseFunction('getCurrentUser');
-      
-      return {
-        data: {
-          user: response.user
-        },
-        error: response.error ? { message: response.error } : null
-      };
-    }
-  }
+// Combine all methods into a single secureClient object
+const secureClient = {
+  ...authMethods,
+  ...waitlistMethods,
+  ...propertyMethods,
+  ...settingsMethods,
+  ...storageMethods,
 };
 
 // Export the secure client

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { FiHome } from 'react-icons/fi'
+import { FiHome, FiUser, FiLogIn, FiLogOut } from 'react-icons/fi'
 import ThemeToggle from './ThemeToggle'
+import { useAuth } from '../contexts/AuthContext'
 
 const Nav = styled(motion.nav)`
   position: fixed;
@@ -55,6 +56,24 @@ const NavLink = styled(Link)`
 
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
+const AuthButton = styled(Link)`
+  background: ${props => props.logout ? '#f44336' : ({ theme }) => theme.colors.primary};
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background: ${props => props.logout ? '#d32f2f' : ({ theme }) => theme.colors.primaryDark};
+    transform: translateY(-2px);
   }
 `
 
@@ -116,9 +135,31 @@ const MobileMenuItem = styled(Link)`
   text-align: center;
 `
 
+const LogoutButton = styled.button`
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: ${({ theme }) => theme.layout.borderRadius};
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  font-size: 1.5rem;
+
+  &:hover {
+    background: #d32f2f;
+  }
+`
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { user, isAuthenticated, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -128,6 +169,15 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setMobileMenuOpen(false)
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
 
   return (
     <>
@@ -143,14 +193,35 @@ const Navbar = () => {
             <FiHome />
             Accueil
           </NavLink>
-          <JoinButton
-            as={Link}
-            to="/waitlist"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Rejoignez-nous
-          </JoinButton>
+          
+          {isAuthenticated ? (
+            <>
+              <NavLink to="/dashboard">
+                <FiUser />
+                Dashboard
+              </NavLink>
+              <AuthButton as="button" logout onClick={handleLogout}>
+                <FiLogOut />
+                Logout
+              </AuthButton>
+            </>
+          ) : (
+            <>
+              <AuthButton to="/login">
+                <FiLogIn />
+                Login
+              </AuthButton>
+              <JoinButton
+                as={Link}
+                to="/waitlist"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Rejoignez-nous
+              </JoinButton>
+            </>
+          )}
+          
           <ThemeToggle />
         </NavLinks>
         <MobileMenuButton
@@ -169,15 +240,31 @@ const Navbar = () => {
             exit={{ x: '100%' }}
             transition={{ type: 'tween' }}
           >
-            <MobileMenuItem to="/search" onClick={() => setMobileMenuOpen(false)}>
-              Rechercher
+            <MobileMenuItem to="/" onClick={() => setMobileMenuOpen(false)}>
+              Accueil
             </MobileMenuItem>
-            <MobileMenuItem to="/agents" onClick={() => setMobileMenuOpen(false)}>
-              Agents
-            </MobileMenuItem>
-            <MobileMenuItem to="/about" onClick={() => setMobileMenuOpen(false)}>
-              À propos
-            </MobileMenuItem>
+            
+            {isAuthenticated ? (
+              <>
+                <MobileMenuItem to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                  Dashboard
+                </MobileMenuItem>
+                <LogoutButton onClick={handleLogout}>
+                  <FiLogOut />
+                  Logout
+                </LogoutButton>
+              </>
+            ) : (
+              <>
+                <MobileMenuItem to="/login" onClick={() => setMobileMenuOpen(false)}>
+                  Login
+                </MobileMenuItem>
+                <MobileMenuItem to="/waitlist" onClick={() => setMobileMenuOpen(false)}>
+                  Rejoignez-nous
+                </MobileMenuItem>
+              </>
+            )}
+            
             <MobileMenuItem to="/contact" onClick={() => setMobileMenuOpen(false)}>
               Contact
             </MobileMenuItem>

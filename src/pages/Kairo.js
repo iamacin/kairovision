@@ -204,14 +204,13 @@ const Kairo = () => {
   useEffect(() => {
     const fetchPremiumProperties = async () => {
       try {
-        const { data, error } = await secureClient
-          .from('properties')
-          .select('*')
-          .eq('is_premium', true)
-          .limit(5);
-
-        if (error) throw error;
-        setPremiumProperties(data || []);
+        const response = await secureClient.fetchPremiumProperties(5);
+        
+        if (response.success) {
+          setPremiumProperties(response.data || []);
+        } else {
+          throw new Error(response.error || 'Failed to fetch premium properties');
+        }
       } catch (error) {
         console.error('Error fetching premium properties:', error);
       }

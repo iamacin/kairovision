@@ -1,11 +1,25 @@
 const { createClient } = require('@supabase/supabase-js');
 const { v4: uuidv4 } = require('uuid');
+const jwt = require('jsonwebtoken');
 
 // Initialize Supabase client (only on the server side)
 const supabase = createClient(
   process.env.REACT_APP_SUPABASE_URL,
   process.env.REACT_APP_SUPABASE_ANON_KEY
 );
+
+// Secret key for JWT - in production, this should be set as an environment variable
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-for-jwt-signatures';
+
+// List of actions that don't require authentication
+const PUBLIC_ACTIONS = [
+  'checkWaitlistStatus',
+  'addToWaitlist',
+  'fetchHeroImage',
+  'fetchPremiumProperties',
+  'fetchPropertyBySlug',
+  'searchProperties'
+];
 
 /**
  * Netlify Function handler for all Supabase operations
@@ -22,47 +36,88 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { action, data } = JSON.parse(event.body);
+    const { action, data, token } = JSON.parse(event.body);
+
+    // Validate required action
+    if (!action) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Action is required' })
+      };
+    }
+
+    // Check authentication for protected actions
+    if (!PUBLIC_ACTIONS.includes(action)) {
+      // Token is required for protected actions
+      if (!token) {
+        return {
+          statusCode: 401,
+          body: JSON.stringify({ error: 'Authentication required' })
+        };
+      }
+
+      try {
+        // Verify the token
+        const decoded = jwt.verify(token, JWT_SECRET);
+        
+        // You can add additional checks here (e.g., role-based access)
+        // For example, if only admins can perform certain actions
+        if (action === 'updateHeroImage' && decoded.role !== 'admin') {
+          return {
+            statusCode: 403,
+            body: JSON.stringify({ error: 'Insufficient permissions' })
+          };
+        }
+      } catch (error) {
+        return {
+          statusCode: 401,
+          body: JSON.stringify({ 
+            error: 'Invalid or expired token',
+            message: error.message
+          })
+        };
+      }
+    }
 
     // Route to the appropriate handler based on the action
     switch (action) {
       // -------------------- WAITLIST OPERATIONS --------------------
       case 'addToWaitlist':
-        return await addToWaitlist(data);
+        return await addToWaitlist(validateWaitlistData(data));
       
       case 'checkWaitlistStatus':
-        return await checkWaitlistStatus(data);
+        return await checkWaitlistStatus(validateEmail(data));
 
       // -------------------- PROPERTIES OPERATIONS --------------------
       case 'fetchPremiumProperties':
         return await fetchPremiumProperties(data);
 
       case 'fetchPropertyBySlug':
-        return await fetchPropertyBySlug(data);
+        return await fetchPropertyBySlug(validateSlug(data));
         
       case 'searchProperties':
-        return await searchProperties(data);
+        return await searchProperties(validateSearchCriteria(data));
         
       case 'addProperty':
-        return await addProperty(data);
+        return await addProperty(validatePropertyData(data));
 
       // -------------------- SETTINGS OPERATIONS --------------------
       case 'fetchHeroImage':
         return await fetchHeroImage();
         
       case 'updateHeroImage':
-        return await updateHeroImage(data);
+        return await updateHeroImage(validateImagePath(data));
 
       // -------------------- STORAGE OPERATIONS --------------------
       case 'uploadImage':
-        return await uploadImage(data);
+        return await uploadImage(validateUploadData(data));
         
       // -------------------- AUTH OPERATIONS --------------------
       case 'signUp':
-        return await signUp(data);
+        return await signUp(validateSignupData(data));
         
       case 'signIn':
-        return await signIn(data);
+        return await signIn(validateLoginData(data));
         
       case 'signOut':
         return await signOut();
@@ -87,6 +142,200 @@ exports.handler = async (event) => {
     };
   }
 };
+
+// ============================= VALIDATION FUNCTIONS =============================
+
+/**
+ * Validate waitlist data
+ */
+function validateWaitlistData(data) {
+  if (!data) {
+    throw new Error('Waitlist data is required');
+  }
+  
+  if (!data.email || !isValidEmail(data.email)) {
+    throw new Error('Valid email is required');
+  }
+  
+  // Clone data to avoid modifying the original
+  const validatedData = { ...data };
+  
+  // Sanitize/validate other fields
+  validatedData.name = data.name ? String(data.name).trim().substring(0, 100) : '';
+  validatedData.phone = data.phone ? String(data.phone).trim().substring(0, 20) : '';
+  validatedData.location = data.location ? String(data.location).trim().substring(0, 100) : '';
+  validatedData.userType = ['agent', 'buyer', 'seller', 'developer'].includes(data.userType) 
+    ? data.userType 
+    : 'buyer';
+  validatedData.details = data.details ? String(data.details).trim().substring(0, 500) : '';
+  validatedData.createdAt = data.createdAt || new Date().toISOString();
+  
+  return validatedData;
+}
+
+/**
+ * Validate email
+ */
+function validateEmail(data) {
+  if (!data || !data.email || !isValidEmail(data.email)) {
+    throw new Error('Valid email is required');
+  }
+  return { email: data.email };
+}
+
+/**
+ * Validate slug
+ */
+function validateSlug(data) {
+  if (!data || !data.slug) {
+    throw new Error('Slug is required');
+  }
+  return { slug: String(data.slug).trim() };
+}
+
+/**
+ * Validate search criteria
+ */
+function validateSearchCriteria(data) {
+  const validatedData = { ...data };
+  
+  // Apply sensible defaults and limits
+  if (validatedData.limit && (!Number.isInteger(validatedData.limit) || validatedData.limit > 100)) {
+    validatedData.limit = 20;
+  }
+  
+  if (validatedData.minPrice && !Number.isFinite(parseFloat(validatedData.minPrice))) {
+    delete validatedData.minPrice;
+  }
+  
+  if (validatedData.maxPrice && !Number.isFinite(parseFloat(validatedData.maxPrice))) {
+    delete validatedData.maxPrice;
+  }
+  
+  return validatedData;
+}
+
+/**
+ * Validate property data
+ */
+function validatePropertyData(data) {
+  if (!data) {
+    throw new Error('Property data is required');
+  }
+  
+  if (!data.title) {
+    throw new Error('Property title is required');
+  }
+  
+  if (!data.price || isNaN(parseFloat(data.price))) {
+    throw new Error('Valid property price is required');
+  }
+  
+  if (!data.location) {
+    throw new Error('Property location is required');
+  }
+  
+  // Clone data to avoid modifying the original
+  const validatedData = { ...data };
+  
+  // Sanitize fields
+  validatedData.title = String(data.title).trim().substring(0, 200);
+  validatedData.description = data.description ? String(data.description).trim().substring(0, 2000) : '';
+  validatedData.price = parseFloat(data.price);
+  validatedData.location = String(data.location).trim().substring(0, 200);
+  validatedData.property_type = ['house', 'apartment', 'land', 'commercial', 'other'].includes(data.property_type) 
+    ? data.property_type 
+    : 'other';
+  validatedData.is_premium = Boolean(data.is_premium);
+  
+  return validatedData;
+}
+
+/**
+ * Validate image path
+ */
+function validateImagePath(data) {
+  if (!data || !data.path) {
+    throw new Error('Image path is required');
+  }
+  return { path: String(data.path).trim() };
+}
+
+/**
+ * Validate upload data
+ */
+function validateUploadData(data) {
+  if (!data) {
+    throw new Error('Upload data is required');
+  }
+  
+  if (!data.base64Image) {
+    throw new Error('Base64 image data is required');
+  }
+  
+  if (!data.bucket) {
+    throw new Error('Storage bucket is required');
+  }
+  
+  return {
+    base64Image: data.base64Image,
+    fileName: data.fileName || `${uuidv4()}.jpg`,
+    bucket: String(data.bucket).trim()
+  };
+}
+
+/**
+ * Validate signup data
+ */
+function validateSignupData(data) {
+  if (!data) {
+    throw new Error('Signup data is required');
+  }
+  
+  if (!data.email || !isValidEmail(data.email)) {
+    throw new Error('Valid email is required');
+  }
+  
+  if (!data.password || data.password.length < 6) {
+    throw new Error('Password must be at least 6 characters');
+  }
+  
+  return {
+    email: data.email,
+    password: data.password,
+    metadata: data.metadata || {}
+  };
+}
+
+/**
+ * Validate login data
+ */
+function validateLoginData(data) {
+  if (!data) {
+    throw new Error('Login data is required');
+  }
+  
+  if (!data.email || !isValidEmail(data.email)) {
+    throw new Error('Valid email is required');
+  }
+  
+  if (!data.password) {
+    throw new Error('Password is required');
+  }
+  
+  return {
+    email: data.email,
+    password: data.password
+  };
+}
+
+/**
+ * Check if email is valid
+ */
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(String(email).toLowerCase());
+}
 
 // ============================= IMPLEMENTATION FUNCTIONS =============================
 
