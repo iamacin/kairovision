@@ -15,12 +15,12 @@ const HeroSection = styled.section`
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 60px 5%;
+  padding: 80px 5%;
   background-image: linear-gradient(
     to bottom right,
     ${({ theme }) => theme.mode === 'light' 
-      ? 'rgba(250, 250, 255, 0.9), rgba(240, 240, 255, 0.95)'
-      : 'rgba(22, 22, 37, 0.85), rgba(30, 30, 45, 0.9)'
+      ? 'rgba(250, 250, 255, 0.97), rgba(240, 240, 255, 0.99)'
+      : 'rgba(22, 22, 37, 0.94), rgba(30, 30, 45, 0.97)'
     }),
     url('/images/vKairo-AI.jpg');
   background-size: cover;
@@ -33,7 +33,7 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     left: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1), transparent 70%);
+    background: radial-gradient(circle at 70% 30%, rgba(${({ theme }) => theme.colors.primaryRgb}, 0.12), transparent 75%);
   }
 `
 
@@ -43,57 +43,76 @@ const HeroContent = styled.div`
   position: relative;
   z-index: 2;
   text-align: center;
-  padding: 3rem;
+  padding: 4rem;
+  
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
 `
 
 const MainTitle = styled(motion.h1)`
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
   font-weight: 800;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   line-height: 1.1;
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary}, ${({ theme }) => theme.colors.primaryDark});
+  background: linear-gradient(135deg, 
+    ${({ theme }) => theme.colors.primary}, 
+    ${({ theme }) => theme.colors.primaryDark}
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
   }
 `
 
 const SubTitle = styled(motion.p)`
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  line-height: 1.6;
-  margin-bottom: 2.5rem;
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+  line-height: 1.7;
+  margin-bottom: 3rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   color: ${({ theme }) => theme.colors.textSecondary};
+  font-weight: 400;
 
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
   }
 `
 
 const PrimaryButton = styled(motion(Link))`
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
+  padding: 1.25rem 3rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
   text-align: center;
-  transition: transform 0.2s ease;
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary} 0%, ${({ theme }) => theme.colors.primaryDark} 100%);
+  background: linear-gradient(135deg, 
+    ${({ theme }) => theme.colors.primary} 0%, 
+    ${({ theme }) => theme.colors.primaryDark} 100%
+  );
   color: white;
   border: none;
-  box-shadow: 0 4px 6px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.25);
+  box-shadow: 0 4px 15px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
+  transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 6px 8px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
   }
 `
 
@@ -110,66 +129,103 @@ const CTAContainer = styled(motion.div)`
 `
 
 const Section = styled.section`
-  padding: 100px 5%;
+  padding: 120px 5%;
   background: ${({ theme, alt }) => alt ? theme.colors.backgroundAlt : theme.colors.background};
+  
+  @media (max-width: 768px) {
+    padding: 80px 5%;
+  }
 `
 
 const SectionTitle = styled.h2`
-  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  font-size: clamp(2rem, 3vw, 3rem);
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   text-align: center;
   color: ${({ theme }) => theme.colors.text};
+  
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
 `
 
 const SectionSubtitle = styled.p`
-  font-size: 1.1rem;
+  font-size: clamp(1.1rem, 1.25vw, 1.3rem);
   color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
-  max-width: 600px;
-  margin: 0 auto 3rem;
-  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto 4rem;
+  line-height: 1.7;
+  
+  @media (max-width: 768px) {
+    margin: 0 auto 3rem;
+  }
 `
 
 const Grid = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 50px;
+  padding: 0 20px;
+  
+  @media (max-width: 768px) {
+    gap: 30px;
+    padding: 0;
+  }
 `
 
 const Card = styled(motion.div)`
-  padding: 2.5rem;
+  padding: 3rem;
   background: ${({ theme }) => theme.colors.background};
-  border-radius: 20px;
+  border-radius: 24px;
   box-shadow: ${({ theme }) => theme.shadows.medium};
-  transition: transform 0.3s ease;
+  transition: all 0.4s ease;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     box-shadow: ${({ theme }) => theme.shadows.large};
   }
 
   svg {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     color: ${({ theme }) => theme.colors.primary};
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 2rem;
+    
+    svg {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 1.5rem;
+    }
   }
 `
 
 const CardTitle = styled.h3`
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   color: ${({ theme }) => theme.colors.text};
+  
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
 `
 
 const CardDescription = styled.p`
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  line-height: 1.7;
   color: ${({ theme }) => theme.colors.textSecondary};
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `
 
 const ContactSection = styled(Section)`
@@ -202,26 +258,31 @@ const Home = () => {
       <HeroSection style={heroImageError ? { backgroundImage: 'none' } : undefined}>
         <HeroContent>
           <MainTitle
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            Bienvenue sur Kairo, votre plateforme immobilière digitale au Sénégal
+            L'Immobilier Intelligent au Sénégal
           </MainTitle>
           <SubTitle
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            Découvrez les meilleures opportunités immobilières au Sénégal. Notre plateforme connecte clients et professionnels qualifiés pour une expérience immobilière transparente et efficace.
+            Découvrez une nouvelle façon d'acheter, vendre ou louer votre bien immobilier. 
+            Kairo révolutionne l'expérience immobilière avec des outils innovants et une approche centrée sur vos besoins.
           </SubTitle>
           <CTAContainer
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
-            <PrimaryButton to="/waitlist">
-              Rejoindre Kairo
+            <PrimaryButton 
+              to="/waitlist"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Commencer maintenant
             </PrimaryButton>
           </CTAContainer>
         </HeroContent>
@@ -230,46 +291,52 @@ const Home = () => {
       <Section>
         <SectionTitle>Pourquoi choisir Kairo ?</SectionTitle>
         <SectionSubtitle>
-          Nous révolutionnons l'expérience immobilière au Sénégal avec des outils innovants et une approche centrée sur l'utilisateur.
+          Une plateforme conçue pour simplifier vos projets immobiliers et vous offrir une expérience unique.
         </SectionSubtitle>
         <Grid>
           <Card
-            whileHover={{ y: -5 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
             <FiTrendingUp />
-            <CardTitle>Outils pratiques</CardTitle>
+            <CardTitle>Simplicité & Efficacité</CardTitle>
             <CardDescription>
-              Profitez d'outils modernes pour une recherche immobilière efficace et personnalisée.
+              Une interface intuitive et des outils modernes pour trouver rapidement ce que vous cherchez.
             </CardDescription>
           </Card>
           <Card
-            whileHover={{ y: -5 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
             <FiUsers />
-            <CardTitle>Réseau de partenaires</CardTitle>
+            <CardTitle>Accompagnement Personnalisé</CardTitle>
             <CardDescription>
-              Accédez à un réseau d'agents immobiliers et de promoteurs qualifiés.
+              Une équipe d'experts à votre écoute pour vous guider dans votre projet immobilier.
             </CardDescription>
           </Card>
           <Card
-            whileHover={{ y: -5 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
           >
             <FiGlobe />
-            <CardTitle>Accès au marché digital</CardTitle>
+            <CardTitle>Accessibilité Totale</CardTitle>
             <CardDescription>
-              Explorez le marché immobilier sénégalais depuis n'importe où dans le monde.
+              Accédez à notre plateforme 24/7 et gérez vos projets immobiliers où que vous soyez.
             </CardDescription>
           </Card>
         </Grid>
       </Section>
 
       <ContactSection>
-        <SectionTitle>Contactez-nous</SectionTitle>
+        <SectionTitle>Besoin d'aide ?</SectionTitle>
         <SectionSubtitle>
-          Notre équipe est à votre disposition pour répondre à toutes vos questions.
+          Notre équipe est disponible pour répondre à toutes vos questions.
         </SectionSubtitle>
         <Grid>
           <Card>
