@@ -18,21 +18,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.24.0",
     "@babel/plugin-transform-runtime": "^7.26.10",
-    "@babel/preset-env": "^7.24.0",
-    "@babel/preset-react": "^7.23.3",
-    "babel-loader": "^9.1.3",
     "babel-plugin-styled-components": "^2.1.4",
-    "compression-webpack-plugin": "^11.1.0",
-    "copy-webpack-plugin": "^13.0.0",
-    "dotenv": "^16.4.7",
-    "html-webpack-plugin": "^5.6.0",
-    "image-minimizer-webpack-plugin": "^4.1.3",
-    "sharp": "^0.33.5",
-    "terser-webpack-plugin": "^5.3.14",
-    "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.2"
   },
   "browserslist": [
@@ -41,16 +28,32 @@
     "not dead"
   ],
   "dependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-react": "^7.23.3",
     "@fontsource/inter": "^5.2.5",
     "@supabase/supabase-js": "^2.49.1",
+    "@vue/preload-webpack-plugin": "^2.0.0",
+    "babel-loader": "^9.1.3",
+    "compression-webpack-plugin": "^11.1.0",
+    "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^7.0.2",
+    "dotenv": "^16.4.7",
     "framer-motion": "^12.5.0",
+    "html-webpack-plugin": "^5.6.0",
+    "image-minimizer-webpack-plugin": "^4.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^5.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.30.0",
+    "sharp": "^0.33.5",
     "style-loader": "^4.0.0",
     "styled-components": "^6.1.16",
-    "uuid": "^11.1.0"
+    "terser-webpack-plugin": "^5.3.14",
+    "uuid": "^11.1.0",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
   }
 }
