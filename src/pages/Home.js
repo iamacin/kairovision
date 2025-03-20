@@ -78,29 +78,48 @@ const SubTitle = styled(motion.p)`
   }
 `
 
-const CTAButton = styled(motion(Link))`
-  display: inline-block;
+const BaseButton = styled(Link)`
   padding: 1rem 2.5rem;
-  background: ${({ theme }) => theme.colors.primary};
-  color: white;
-  text-decoration: none;
-  border-radius: 50px;
-  font-weight: 600;
   font-size: 1.1rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.2);
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: transform 0.2s ease;
+`
+
+const PrimaryButton = styled(motion(BaseButton))`
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary} 0%, ${({ theme }) => theme.colors.primaryDark} 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 6px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.25);
 
   &:hover {
-    background: ${({ theme }) => theme.colors.primaryDark};
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
+    box-shadow: 0 6px 8px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
   }
 `
 
-const KairoButton = styled(CTAButton)`
-  background: ${({ theme }) => theme.colors.secondary};
+const SecondaryButton = styled(motion(BaseButton))`
+  background: transparent;
+  color: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+
   &:hover {
-    background: ${({ theme }) => theme.colors.secondaryDark};
+    background: rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
+  }
+`
+
+const CTAContainer = styled(motion.div)`
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
   }
 `
 
@@ -196,18 +215,6 @@ const StatLabel = styled.div`
   font-size: 1.1rem;
   color: ${({ theme }) => theme.colors.textSecondary};
   font-weight: 500;
-`
-
-const CTAContainer = styled(motion.div)`
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  justify-content: center;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-  }
 `
 
 const FeaturesSection = styled.section`

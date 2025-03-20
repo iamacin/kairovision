@@ -9,7 +9,7 @@
     <title>Kairo - Votre Plateforme Immobilière au Sénégal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Prevent flash of incorrect theme */
@@ -21,26 +21,47 @@
                 background: #161625;
             }
         }
+        /* Ensure content is visible */
+        #root {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
     </style>
     <script>
         // Theme initialization
-        (function() {
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-            
-            // Set theme attributes
-            document.documentElement.setAttribute('data-theme', initialTheme);
-            document.documentElement.style.background = initialTheme === 'dark' ? '#161625' : '#ffffff';
-            
-            // Listen for theme changes
-            window.matchMedia('(prefers-color-scheme: dark)').addListener(function(e) {
-                if (!localStorage.getItem('theme')) {
-                    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-                    document.documentElement.style.background = e.matches ? '#161625' : '#ffffff';
+        try {
+            (function() {
+                function setTheme(theme) {
+                    try {
+                        document.documentElement.setAttribute('data-theme', theme);
+                        document.documentElement.style.background = theme === 'dark' ? '#161625' : '#ffffff';
+                    } catch (e) {
+                        console.warn('Error setting theme:', e);
+                    }
                 }
-            });
-        })();
+
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia && 
+                    window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+                
+                setTheme(initialTheme);
+                
+                // Listen for theme changes
+                const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                mediaQuery.addListener(function(e) {
+                    if (!localStorage.getItem('theme')) {
+                        setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            })();
+        } catch (e) {
+            console.warn('Theme initialization error:', e);
+            // Fallback to light theme
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.background = '#ffffff';
+        }
     </script>
 </head>
 <body>

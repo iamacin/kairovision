@@ -19,8 +19,8 @@ const AppWrapper = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors?.background || '#ffffff'};
+  color: ${({ theme }) => theme.colors?.text || '#000000'};
 `;
 
 const Main = styled.main`
@@ -34,8 +34,8 @@ const LoadingFallback = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors?.background || '#ffffff'};
+  color: ${({ theme }) => theme.colors?.primary || '#8a2be2'};
   font-size: 1.2rem;
   font-weight: 500;
 `;
@@ -48,8 +48,8 @@ const ErrorFallback = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.error};
+  background-color: ${({ theme }) => theme.colors?.background || '#ffffff'};
+  color: ${({ theme }) => theme.colors?.error || '#f44336'};
 `;
 
 const App = () => {
