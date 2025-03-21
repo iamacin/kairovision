@@ -456,6 +456,7 @@ export const secureClient = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          ...(currentToken && { 'Authorization': `Bearer ${currentToken}` }),
           ...options.headers
         },
         ...options
@@ -480,6 +481,7 @@ export const secureClient = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(currentToken && { 'Authorization': `Bearer ${currentToken}` }),
           ...options.headers
         },
         body: JSON.stringify(body),

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import secureClient from '../utils/supabase';
+import { secureClient } from '../utils/supabase';
 
 // Create the authentication context
 const AuthContext = createContext(null);

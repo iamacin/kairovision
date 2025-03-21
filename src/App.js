@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter, Link } from 'react-router-dom';
 import styled from 'styled-components';
 // Load only essential font weights to improve performance
 import '@fontsource/inter/400.css';
@@ -21,6 +21,7 @@ const Placeholder = ({ title }) => (
   }}>
     <h1>{title} Page</h1>
     <p>This is a placeholder for the {title.toLowerCase()} page.</p>
+    <p><Link to="/">Back to Home</Link></p>
   </div>
 );
 
@@ -61,28 +62,48 @@ const ErrorFallback = styled.div`
   font-size: 1.2rem;
 `;
 
+// Create router configuration for React Router v7
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Placeholder title="Home" />,
+    errorElement: <Placeholder title="Error" />
+  },
+  {
+    path: "/waitlist",
+    element: <Placeholder title="Waitlist" />
+  },
+  {
+    path: "/contact",
+    element: <Placeholder title="Contact" />
+  },
+  {
+    path: "/login",
+    element: <Placeholder title="Login" />
+  },
+  {
+    path: "/dashboard",
+    element: <Placeholder title="Dashboard" />
+  },
+  {
+    path: "/unauthorized",
+    element: <Placeholder title="Unauthorized" />
+  },
+  {
+    path: "*",
+    element: <Placeholder title="Not Found" />
+  }
+]);
+
 const App = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
         <GlobalStyles />
         <AppWrapper>
-          <Router>
-            <Main>
-              <ErrorBoundary fallback={<ErrorFallback>Something went wrong. Please try refreshing the page.</ErrorFallback>}>
-                <Routes>
-                  {/* All routes now use the Placeholder component */}
-                  <Route path="/" element={<Placeholder title="Home" />} />
-                  <Route path="/waitlist" element={<Placeholder title="Waitlist" />} />
-                  <Route path="/contact" element={<Placeholder title="Contact" />} />
-                  <Route path="/login" element={<Placeholder title="Login" />} />
-                  <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
-                  <Route path="/unauthorized" element={<Placeholder title="Unauthorized" />} />
-                  <Route path="*" element={<Placeholder title="Not Found" />} />
-                </Routes>
-              </ErrorBoundary>
-            </Main>
-          </Router>
+          <ErrorBoundary fallback={<ErrorFallback>Something went wrong. Please try refreshing the page.</ErrorFallback>}>
+            <RouterProvider router={router} fallbackElement={<LoadingFallback><LoadingSpinner /></LoadingFallback>} />
+          </ErrorBoundary>
         </AppWrapper>
       </AuthProvider>
     </ThemeProvider>
