@@ -31,8 +31,8 @@ loadTokenFromStorage();
 // Set the base URL for the API requests
 const API_BASE_URL = 
   process.env.NODE_ENV === 'production' 
-    ? 'https://kairovision.netlify.app/.netlify/functions'
-    : process.env.REACT_APP_API_URL || '/api'; // Fallback to /api for local dev
+    ? 'https://kairovision.netlify.app/.netlify/functions/'
+    : process.env.REACT_APP_API_URL || '/api/'; // Fallback to /api for local dev
 
 /**
  * Make a secure API request to our Netlify Functions
@@ -451,7 +451,9 @@ export const secureClient = {
   // Basic HTTP methods
   async get(endpoint, options = {}) {
     try {
-      const url = `${API_BASE_URL}${endpoint}`;
+      // Ensure endpoint doesn't start with a slash since API_BASE_URL now ends with one
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+      const url = `${API_BASE_URL}${cleanEndpoint}`;
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -476,7 +478,9 @@ export const secureClient = {
   
   async post(endpoint, body, options = {}) {
     try {
-      const url = `${API_BASE_URL}${endpoint}`;
+      // Ensure endpoint doesn't start with a slash since API_BASE_URL now ends with one
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint.substring(1) : endpoint;
+      const url = `${API_BASE_URL}${cleanEndpoint}`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -509,7 +513,7 @@ export const secureClient = {
   waitlistMethods: {
     async addToWaitlist(userData) {
       try {
-        const response = await secureClient.post('/waitlist', userData);
+        const response = await secureClient.post('waitlist', userData);
         return response.data;
       } catch (error) {
         console.error('Error adding to waitlist:', error);
@@ -519,7 +523,7 @@ export const secureClient = {
     
     async checkWaitlistStatus(email) {
       try {
-        const response = await secureClient.get(`/waitlist/check?email=${encodeURIComponent(email)}`);
+        const response = await secureClient.get(`waitlist/check?email=${encodeURIComponent(email)}`);
         return response.data;
       } catch (error) {
         console.error('Error checking waitlist status:', error);

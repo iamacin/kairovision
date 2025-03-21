@@ -189,7 +189,11 @@ const Waitlist = () => {
     const checkApiAvailability = async () => {
       try {
         // This is a lightweight ping to check if the API is available
-        const ping = await secureClient.get('/ping', { timeout: 5000 });
+        const ping = await secureClient.get('ping', { 
+          timeout: 5000,
+          // Add a cache buster to prevent caching
+          headers: { 'Cache-Control': 'no-cache, no-store' }
+        });
         if (ping.status === 200) {
           setIsOfflineMode(false);
         } else {
@@ -261,25 +265,25 @@ const Waitlist = () => {
       
       // With a 10 second timeout to prevent hanging
       const response = await withTimeout(
-        secureClient.post('/waitlist', { 
+        secureClient.waitlistMethods.addToWaitlist({ 
           name, 
           email 
         }),
         10000
       );
       
-      if (response.status === 200 || response.status === 201) {
+      if (response && response.success) {
         setSubmissionSuccess(true);
         setName('');
         setEmail('');
       } else {
-        console.error('Unexpected response status:', response.status);
+        console.error('Unexpected response:', response);
         setApiError('There was an issue adding you to the waitlist. Please try again later.');
       }
     } catch (error) {
       console.error('Error submitting waitlist form:', error);
       
-      if (error.message.includes('timeout')) {
+      if (error.message && error.message.includes('timeout')) {
         setApiError('The request timed out. Our servers might be experiencing high load. Please try again later.');
       } else if (error.response) {
         // The request was made and the server responded with a status code
