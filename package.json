@@ -10,7 +10,8 @@
     "dev:simple": "react-scripts start",
     "test": "jest",
     "download-images": "node scripts/download-images.js",
-    "prepare": "node scripts/download-images.js || exit 0"
+    "prepare": "node scripts/download-images.js || exit 0",
+    "postinstall": "if [ \"$NODE_ENV\" = \"production\" ]; then npm install --no-save @babel/plugin-transform-runtime @babel/runtime; fi"
   },
   "keywords": [
     "real estate",
