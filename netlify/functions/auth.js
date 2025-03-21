@@ -40,6 +40,12 @@ exports.handler = async (event) => {
         return await validateToken(data);
       case 'refreshToken':
         return await refreshToken(data);
+      case 'forgotPassword':
+        return await forgotPassword(data);
+      case 'resetPassword':
+        return await resetPassword(data);
+      case 'verifyEmail':
+        return await verifyEmail(data);
       default:
         return {
           statusCode: 400,
@@ -235,6 +241,124 @@ async function refreshToken(data) {
       statusCode: 500,
       body: JSON.stringify({ 
         error: 'Token refresh failed',
+        message: error.message 
+      })
+    };
+  }
+}
+
+/**
+ * Send a password reset email
+ * @param {Object} data - User email
+ * @returns {Object} Response with success/error
+ */
+async function forgotPassword(data) {
+  try {
+    // Validate input
+    if (!data || !data.email) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Email is required' })
+      };
+    }
+
+    // Generate a password reset link with Supabase
+    const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
+      redirectTo: `${process.env.APP_URL || 'http://localhost:3000'}/reset-password`
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Password reset instructions sent to email' 
+      })
+    };
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    // Don't reveal if the email exists or not for security
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'If your email is registered, you will receive password reset instructions' 
+      })
+    };
+  }
+}
+
+/**
+ * Reset password with token
+ * @param {Object} data - New password and reset token
+ * @returns {Object} Response with success/error
+ */
+async function resetPassword(data) {
+  try {
+    // Validate input
+    if (!data || !data.password) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'New password is required' })
+      };
+    }
+
+    // The token should be passed in the auth header by the Supabase client
+    const { error } = await supabase.auth.updateUser({
+      password: data.password
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Password has been reset successfully' 
+      })
+    };
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to reset password',
+        message: error.message 
+      })
+    };
+  }
+}
+
+/**
+ * Verify email with token
+ * @param {Object} data - Email verification token
+ * @returns {Object} Response with success/error
+ */
+async function verifyEmail(data) {
+  try {
+    // The token should be passed in the auth header by the Supabase client
+    // This endpoint is mainly for confirmation of successful verification
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Email verified successfully' 
+      })
+    };
+  } catch (error) {
+    console.error('Email verification error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to verify email',
         message: error.message 
       })
     };

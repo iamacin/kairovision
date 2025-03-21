@@ -28,13 +28,11 @@ const loadTokenFromStorage = () => {
 // Try to load token on module initialization
 loadTokenFromStorage();
 
-/**
- * Base URL for API requests
- * This will be '/.netlify/functions/' in production and a localhost URL in development
- */
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/.netlify/functions/'
-  : 'http://localhost:8888/.netlify/functions/';
+// Set the base URL for the API requests
+const API_BASE_URL = 
+  process.env.NODE_ENV === 'production' 
+    ? 'https://kairovision.netlify.app/.netlify/functions'
+    : process.env.REACT_APP_API_URL || '/api'; // Fallback to /api for local dev
 
 /**
  * Make a secure API request to our Netlify Functions
@@ -64,16 +62,26 @@ const secureRequest = async (action, data = {}, requiresAuth = false) => {
       })
     };
 
-    // Make the request
-    const response = await fetch(`${API_BASE_URL}supabase-handler`, options);
-    const result = await response.json();
+    try {
+      // Make the request
+      const response = await fetch(`${API_BASE_URL}supabase-handler`, options);
+      const result = await response.json();
 
-    // Check if there was an error
-    if (!response.ok || result.error) {
-      throw new Error(result.error || result.message || 'Unknown error');
+      // Check if there was an error
+      if (!response.ok || result.error) {
+        throw new Error(result.error || result.message || 'Unknown error');
+      }
+
+      return result;
+    } catch (fetchError) {
+      // If in development and there was a network error (likely because the Netlify Functions
+      // dev server isn't running), throw a more helpful error
+      if (process.env.NODE_ENV === 'development') {
+        console.error('API request failed:', fetchError);
+        throw new Error('API request failed. If you\'re in development mode, make sure your Netlify Functions server is running.');
+      }
+      throw fetchError;
     }
-
-    return result;
   } catch (error) {
     console.error(`Error in secureRequest (${action}):`, error);
     throw error;
@@ -320,13 +328,213 @@ const storageMethods = {
   },
 };
 
-// Combine all methods into a single secureClient object
-const secureClient = {
-  ...authMethods,
-  ...waitlistMethods,
-  ...propertyMethods,
-  ...settingsMethods,
-  ...storageMethods,
+/**
+ * Password reset and verification methods
+ */
+const passwordMethods = {
+  /**
+   * Request a password reset email
+   * @param {string} email - User email
+   * @returns {Promise<object>} Response with message
+   */
+  forgotPassword: async (email) => {
+    return await secureRequest('forgotPassword', { email });
+  },
+  
+  /**
+   * Reset password with token
+   * @param {string} password - New password
+   * @returns {Promise<object>} Response with success message
+   */
+  resetPassword: async (password) => {
+    return await secureRequest('resetPassword', { password });
+  },
+  
+  /**
+   * Verify email
+   * @returns {Promise<object>} Response with success message
+   */
+  verifyEmail: async () => {
+    return await secureRequest('verifyEmail');
+  }
+};
+
+/**
+ * OAuth methods
+ */
+const oauthMethods = {
+  /**
+   * Sign in with Google
+   * @returns {Promise<object>} Response with redirect URL
+   */
+  signInWithGoogle: async () => {
+    return await secureRequest('signInWithGoogle');
+  },
+  
+  /**
+   * Sign in with Facebook
+   * @returns {Promise<object>} Response with redirect URL
+   */
+  signInWithFacebook: async () => {
+    return await secureRequest('signInWithFacebook');
+  },
+  
+  /**
+   * Process OAuth callback
+   * @param {string} access_token - OAuth access token
+   * @param {string} refresh_token - OAuth refresh token
+   * @returns {Promise<object>} Response with user data
+   */
+  handleOAuthCallback: async (access_token, refresh_token) => {
+    const result = await secureRequest('verifyOAuthCallback', { access_token, refresh_token });
+    
+    // Store the token if successful
+    if (result.success && result.session?.access_token) {
+      currentToken = result.session.access_token;
+      currentUser = result.user;
+      
+      // Save to localStorage for persistence
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(TOKEN_STORAGE_KEY, result.session.access_token);
+      }
+    }
+    
+    return result;
+  }
+};
+
+/**
+ * User profile methods
+ */
+const profileMethods = {
+  /**
+   * Update user profile
+   * @param {object} profileData - Profile data to update
+   * @returns {Promise<object>} Response with success message
+   */
+  updateProfile: async (profileData) => {
+    return await secureRequest('updateUserProfile', profileData, true);
+  },
+  
+  /**
+   * Upload avatar
+   * @param {File} file - Avatar image file
+   * @returns {Promise<object>} Response with avatar URL
+   */
+  uploadAvatar: async (file) => {
+    // Convert File to base64
+    const base64Image = await fileToBase64(file);
+    
+    return await secureRequest('uploadAvatar', {
+      base64Image,
+      fileName: file.name
+    }, true);
+  }
+};
+
+/**
+ * Convert File to base64
+ * @param {File} file - File to convert
+ * @returns {Promise<string>} Base64 string
+ */
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+// Create a secure client for API requests with proper error handling
+export const secureClient = {
+  // Basic HTTP methods
+  async get(endpoint, options = {}) {
+    try {
+      const url = `${API_BASE_URL}${endpoint}`;
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers
+        },
+        ...options
+      });
+      
+      if (options.rawResponse) {
+        return response;
+      }
+      
+      const data = await response.json();
+      return { status: response.status, data };
+    } catch (error) {
+      console.error(`GET request failed for ${endpoint}:`, error);
+      throw error;
+    }
+  },
+  
+  async post(endpoint, body, options = {}) {
+    try {
+      const url = `${API_BASE_URL}${endpoint}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers
+        },
+        body: JSON.stringify(body),
+        ...options
+      });
+      
+      if (options.rawResponse) {
+        return response;
+      }
+      
+      // For empty responses (204 No Content)
+      if (response.status === 204) {
+        return { status: response.status };
+      }
+      
+      const data = await response.json();
+      return { status: response.status, data };
+    } catch (error) {
+      console.error(`POST request failed for ${endpoint}:`, error);
+      throw error;
+    }
+  },
+  
+  // Specialized methods for waitlist
+  waitlistMethods: {
+    async addToWaitlist(userData) {
+      try {
+        const response = await secureClient.post('/waitlist', userData);
+        return response.data;
+      } catch (error) {
+        console.error('Error adding to waitlist:', error);
+        throw error;
+      }
+    },
+    
+    async checkWaitlistStatus(email) {
+      try {
+        const response = await secureClient.get(`/waitlist/check?email=${encodeURIComponent(email)}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error checking waitlist status:', error);
+        throw error;
+      }
+    }
+  },
+  
+  // Auth methods
+  authMethods: {
+    // ... existing auth methods ...
+  },
+  
+  // Profile methods
+  profileMethods: {
+    // ... existing profile methods ...
+  }
 };
 
 // Export the secure client

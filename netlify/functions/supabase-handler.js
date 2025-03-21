@@ -18,7 +18,11 @@ const PUBLIC_ACTIONS = [
   'fetchHeroImage',
   'fetchPremiumProperties',
   'fetchPropertyBySlug',
-  'searchProperties'
+  'searchProperties',
+  'forgotPassword',
+  'resetPassword',
+  'verifyEmail',
+  'verifyOAuthCallback'
 ];
 
 /**
@@ -124,6 +128,33 @@ exports.handler = async (event) => {
         
       case 'getCurrentUser':
         return await getCurrentUser();
+
+      // -------------------- PASSWORD/EMAIL OPERATIONS --------------------
+      case 'forgotPassword':
+        return await forgotPassword(validateEmail(data));
+        
+      case 'resetPassword':
+        return await resetPassword(validateResetPasswordData(data));
+      
+      case 'verifyEmail':
+        return await verifyEmail(data);
+      
+      // -------------------- OAUTH OPERATIONS --------------------
+      case 'signInWithGoogle':
+        return await signInWithGoogle();
+      
+      case 'signInWithFacebook':
+        return await signInWithFacebook();
+      
+      case 'verifyOAuthCallback':
+        return await verifyOAuthCallback(data);
+        
+      // -------------------- USER PROFILE OPERATIONS --------------------
+      case 'updateUserProfile':
+        return await updateUserProfile(validateProfileData(data));
+      
+      case 'uploadAvatar':
+        return await uploadAvatar(validateUploadData(data));
 
       default:
         return {
@@ -335,6 +366,55 @@ function validateLoginData(data) {
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(String(email).toLowerCase());
+}
+
+/**
+ * Validate reset password data
+ */
+function validateResetPasswordData(data) {
+  if (!data) {
+    throw new Error('Reset password data is required');
+  }
+  
+  if (!data.password || data.password.length < 6) {
+    throw new Error('New password must be at least 6 characters');
+  }
+  
+  return { password: data.password };
+}
+
+/**
+ * Validate profile data
+ */
+function validateProfileData(data) {
+  if (!data) {
+    throw new Error('Profile data is required');
+  }
+  
+  const validatedData = {};
+  
+  // Only include valid fields
+  if (data.fullName) {
+    validatedData.fullName = String(data.fullName).trim().substring(0, 100);
+  }
+  
+  if (data.phoneNumber) {
+    validatedData.phoneNumber = String(data.phoneNumber).trim().substring(0, 20);
+  }
+  
+  if (data.bio) {
+    validatedData.bio = String(data.bio).trim().substring(0, 500);
+  }
+  
+  if (data.preferences) {
+    validatedData.preferences = data.preferences;
+  }
+  
+  if (data.avatarUrl) {
+    validatedData.avatarUrl = String(data.avatarUrl).trim();
+  }
+  
+  return validatedData;
 }
 
 // ============================= IMPLEMENTATION FUNCTIONS =============================
@@ -803,6 +883,307 @@ async function getCurrentUser() {
       body: JSON.stringify({ 
         success: false,
         error: 'Failed to get current user',
+        message: error.message
+      })
+    };
+  }
+}
+
+// -------------------- PASSWORD/EMAIL OPERATIONS --------------------
+
+/**
+ * Send a password reset email
+ */
+async function forgotPassword(data) {
+  try {
+    const { email } = data;
+    
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.APP_URL || 'http://localhost:3000'}/reset-password`
+    });
+
+    if (error) throw error;
+
+    // For security reasons, always return success even if email doesn't exist
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'If your email is registered, you will receive password reset instructions' 
+      })
+    };
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    // Still return success for security
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'If your email is registered, you will receive password reset instructions' 
+      })
+    };
+  }
+}
+
+/**
+ * Reset password with token
+ */
+async function resetPassword(data) {
+  try {
+    const { password } = data;
+    
+    const { error } = await supabase.auth.updateUser({
+      password: password
+    });
+
+    if (error) throw error;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Password has been reset successfully' 
+      })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to reset password',
+        message: error.message
+      })
+    };
+  }
+}
+
+/**
+ * Verify email
+ */
+async function verifyEmail(data) {
+  try {
+    // The actual verification happens automatically via the link
+    // This endpoint is just for confirming success
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Email verified successfully' 
+      })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Email verification failed',
+        message: error.message
+      })
+    };
+  }
+}
+
+// -------------------- OAUTH OPERATIONS --------------------
+
+/**
+ * Sign in with Google
+ */
+async function signInWithGoogle() {
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${process.env.APP_URL || 'http://localhost:3000'}/auth/callback`
+      }
+    });
+
+    if (error) throw error;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        url: data.url 
+      })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to initialize Google sign-in',
+        message: error.message
+      })
+    };
+  }
+}
+
+/**
+ * Sign in with Facebook
+ */
+async function signInWithFacebook() {
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options: {
+        redirectTo: `${process.env.APP_URL || 'http://localhost:3000'}/auth/callback`
+      }
+    });
+
+    if (error) throw error;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        url: data.url 
+      })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to initialize Facebook sign-in',
+        message: error.message
+      })
+    };
+  }
+}
+
+/**
+ * Verify OAuth callback
+ */
+async function verifyOAuthCallback(data) {
+  try {
+    // Extract the auth tokens from the URL
+    const { access_token, refresh_token } = data;
+    
+    if (!access_token) {
+      throw new Error('Missing access token');
+    }
+    
+    // Exchange the token for user session
+    const { data: sessionData, error } = await supabase.auth.setSession({
+      access_token,
+      refresh_token
+    });
+
+    if (error) throw error;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        user: sessionData.user,
+        session: sessionData.session
+      })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to verify OAuth sign-in',
+        message: error.message
+      })
+    };
+  }
+}
+
+// -------------------- USER PROFILE OPERATIONS --------------------
+
+/**
+ * Update user profile
+ */
+async function updateUserProfile(data) {
+  try {
+    // Update user metadata
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        ...data
+      }
+    });
+
+    if (error) throw error;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        message: 'Profile updated successfully' 
+      })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to update profile',
+        message: error.message
+      })
+    };
+  }
+}
+
+/**
+ * Upload avatar
+ */
+async function uploadAvatar(data) {
+  try {
+    const { base64Image, fileName } = data;
+    
+    // Convert base64 to buffer for upload
+    const buffer = Buffer.from(
+      base64Image.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
+    );
+    
+    // Generate a unique file name if not provided
+    const fileExt = (fileName || '').split('.').pop() || 'jpg';
+    const uniqueFileName = fileName || `${uuidv4()}.${fileExt}`;
+    const filePath = `avatars/${uniqueFileName}`;
+
+    // Upload the file to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from('profiles')
+      .upload(filePath, buffer, {
+        contentType: `image/${fileExt}`,
+        cacheControl: '3600',
+        upsert: true
+      });
+
+    if (uploadError) throw uploadError;
+
+    // Get the public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('profiles')
+      .getPublicUrl(filePath);
+
+    // Update user metadata with avatar URL
+    const { error: updateError } = await supabase.auth.updateUser({
+      data: {
+        avatarUrl: publicUrl
+      }
+    });
+
+    if (updateError) throw updateError;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ 
+        success: true,
+        avatarUrl: publicUrl,
+        message: 'Avatar updated successfully'
+      })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ 
+        success: false,
+        error: 'Failed to upload avatar',
         message: error.message
       })
     };

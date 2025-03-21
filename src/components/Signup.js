@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../contexts/AuthContext';
 
-const LoginContainer = styled.div`
+const SignupContainer = styled.div`
   max-width: 400px;
   margin: 50px auto;
   padding: 30px;
@@ -87,7 +87,7 @@ const SuccessMessage = styled.div`
   text-align: center;
 `;
 
-const ForgotPassword = styled.p`
+const LoginLink = styled.p`
   text-align: center;
   margin-top: 15px;
 
@@ -166,50 +166,30 @@ const FacebookButton = styled(SocialButton)`
   }
 `;
 
-const SignupLink = styled.p`
-  text-align: center;
-  margin-top: 15px;
-
-  a {
-    color: #4a90e2;
-    text-decoration: none;
-    font-weight: 500;
-    
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+const PasswordRequirements = styled.ul`
+  margin: 5px 0 15px;
+  padding-left: 20px;
+  color: #666;
+  font-size: 14px;
 `;
 
-const Login = () => {
+const RequirementItem = styled.li`
+  margin-bottom: 3px;
+`;
+
+const Signup = () => {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login, signInWithGoogle, signInWithFacebook } = useAuth();
-
-  // Get redirect path from location state or default to dashboard
-  const redirectPath = location.state?.from?.pathname || '/dashboard';
-
-  // Check if user is already logged in
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // The AuthContext's currentUser state will handle this
-      } catch (error) {
-        console.error('Error checking authentication:', error);
-        // If token is invalid, we stay on login page
-      }
-    };
-    
-    checkAuth();
-  }, [navigate, redirectPath]);
-
+  const { signup, signInWithGoogle, signInWithFacebook } = useAuth();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -220,27 +200,36 @@ const Login = () => {
     
     try {
       // Validate inputs
+      if (!fullName.trim()) {
+        throw new Error('Full name is required');
+      }
+      
       if (!email.trim()) {
         throw new Error('Email is required');
       }
       
-      if (!password) {
-        throw new Error('Password is required');
+      if (password.length < 6) {
+        throw new Error('Password must be at least 6 characters');
       }
       
-      // Attempt login
-      await login(email, password);
+      if (password !== confirmPassword) {
+        throw new Error('Passwords do not match');
+      }
       
-      setSuccess('Login successful! Redirecting...');
+      // Attempt signup
+      await signup(email, password, { fullName });
       
-      // Redirect after successful login (with small delay for UX)
-      setTimeout(() => {
-        navigate(redirectPath, { replace: true });
-      }, 1500);
+      setSuccess('Account created successfully! Check your email for verification link.');
+      
+      // Clear inputs
+      setFullName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
       
     } catch (error) {
-      console.error('Login error:', error);
-      setError(error.message || 'Failed to login. Please check your credentials.');
+      console.error('Signup error:', error);
+      setError(error.message || 'Failed to create account.');
     } finally {
       setLoading(false);
     }
@@ -275,12 +264,24 @@ const Login = () => {
       setSocialLoading('');
     }
   };
-
+  
   return (
-    <LoginContainer>
-      <Title>Login to Kairo</Title>
+    <SignupContainer>
+      <Title>Create Account</Title>
       
       <Form onSubmit={handleSubmit}>
+        <InputGroup>
+          <Label htmlFor="fullName">Full Name</Label>
+          <Input
+            id="fullName"
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder="Enter your full name"
+            required
+          />
+        </InputGroup>
+        
         <InputGroup>
           <Label htmlFor="email">Email Address</Label>
           <Input
@@ -303,19 +304,31 @@ const Login = () => {
             placeholder="Enter your password"
             required
           />
+          <PasswordRequirements>
+            <RequirementItem>At least 6 characters long</RequirementItem>
+            <RequirementItem>Include a mix of letters, numbers, and special characters for better security</RequirementItem>
+          </PasswordRequirements>
+        </InputGroup>
+        
+        <InputGroup>
+          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Input
+            id="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm your password"
+            required
+          />
         </InputGroup>
         
         <Button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? 'Signing up...' : 'Sign Up'}
         </Button>
         
         {error && <ErrorMessage>{error}</ErrorMessage>}
         {success && <SuccessMessage>{success}</SuccessMessage>}
       </Form>
-      
-      <ForgotPassword>
-        <Link to="/forgot-password">Forgot password?</Link>
-      </ForgotPassword>
       
       <OrDivider>
         <span>Or</span>
@@ -325,11 +338,12 @@ const Login = () => {
         <GoogleButton 
           onClick={handleGoogleSignIn} 
           disabled={loading || Boolean(socialLoading)}
+          type="button"
         >
           {socialLoading === 'google' ? 'Connecting...' : (
             <>
               <img src="/images/google-icon.svg" alt="Google" />
-              Sign in with Google
+              Sign up with Google
             </>
           )}
         </GoogleButton>
@@ -337,21 +351,22 @@ const Login = () => {
         <FacebookButton 
           onClick={handleFacebookSignIn} 
           disabled={loading || Boolean(socialLoading)}
+          type="button"
         >
           {socialLoading === 'facebook' ? 'Connecting...' : (
             <>
               <img src="/images/facebook-icon.svg" alt="Facebook" />
-              Sign in with Facebook
+              Sign up with Facebook
             </>
           )}
         </FacebookButton>
       </SocialButtonsContainer>
       
-      <SignupLink>
-        Don't have an account? <Link to="/signup">Sign up</Link>
-      </SignupLink>
-    </LoginContainer>
+      <LoginLink>
+        Already have an account? <Link to="/login">Login</Link>
+      </LoginLink>
+    </SignupContainer>
   );
 };
 
-export default Login; 
+export default Signup; 

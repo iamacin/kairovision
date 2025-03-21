@@ -1,0 +1,269 @@
+/* Global CSS styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+a {
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+}
+
+input, button, textarea, select {
+  font-family: inherit;
+}
+
+/* Error message styling */
+.error-message {
+  padding: 20px;
+  margin: 20px 0;
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 8px;
+  color: #d32f2f;
+  text-align: center;
+}
+
+/* Loading indicator */
+.loading-spinner {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #4a90e2;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Center content vertically and horizontally */
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+/* Waitlist page specific styles */
+.waitlist-error {
+  max-width: 600px;
+  margin: 40px auto;
+  text-align: center;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.waitlist-error h2 {
+  color: #d32f2f;
+  margin-bottom: 16px;
+}
+
+.waitlist-error p {
+  margin-bottom: 20px;
+}
+
+.waitlist-error button {
+  padding: 12px 24px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.waitlist-error button:hover {
+  background-color: #3a7bc8;
+}
+
+/* Form styles */
+.form-control {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.form-control label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-control input,
+.form-control textarea,
+.form-control select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 16px;
+}
+
+.form-control input:focus,
+.form-control textarea:focus,
+.form-control select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+/* Message containers */
+.message {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.success-message {
+  color: #27ae60;
+  background-color: rgba(39, 174, 96, 0.1);
+  border: 1px solid #27ae60;
+}
+
+.error-message {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+  border: 1px solid #e74c3c;
+}
+
+.info-message {
+  color: #3498db;
+  background-color: rgba(52, 152, 219, 0.1);
+  border: 1px solid #3498db;
+}
+
+/* Waitlist container fallbacks */
+.waitlist-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 20px 80px;
+}
+
+.waitlist-title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.waitlist-subtitle {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  color: #666;
+  max-width: 600px;
+}
+
+.form-container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 600px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.input-error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.waitlist-button {
+  padding: 14px 24px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background-color 0.2s;
+}
+
+.waitlist-button:hover {
+  background-color: #3a7bc8;
+}
+
+.waitlist-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Support for dark mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #161625;
+    color: #f8f9fa;
+  }
+  
+  .form-container,
+  .waitlist-error,
+  .error-container {
+    background-color: #1e1e30;
+  }
+  
+  .input-group input,
+  .form-control input,
+  .form-control textarea,
+  .form-control select {
+    background-color: #2a2a3c;
+    color: #f8f9fa;
+    border-color: #3a3a4c;
+  }
+  
+  .waitlist-subtitle,
+  .error-text {
+    color: #aaa;
+  }
+} 

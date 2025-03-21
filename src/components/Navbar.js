@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FiHome, FiUser, FiLogIn, FiLogOut } from 'react-icons/fi'
 import ThemeToggle from './ThemeToggle'
 import { useAuth } from '../contexts/AuthContext'
@@ -156,10 +156,45 @@ const LogoutButton = styled.button`
   }
 `
 
+const ProfileButton = styled(Link)`
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.text};
+  text-decoration: none;
+  margin-left: 20px;
+  transition: color 0.3s;
+  
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
+const Avatar = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+  object-fit: cover;
+`
+
+const DefaultAvatar = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #999;
+  margin-right: 8px;
+`
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, logout, userProfile } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -173,10 +208,22 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout()
-      setMobileMenuOpen(false)
+      navigate('/login')
     } catch (error) {
-      console.error('Logout failed:', error)
+      console.error('Logout error:', error)
     }
+  }
+
+  const renderAvatar = () => {
+    if (userProfile?.avatarUrl) {
+      return <Avatar src={userProfile.avatarUrl} alt="User Avatar" />
+    }
+    
+    return (
+      <DefaultAvatar>
+        {userProfile?.fullName ? userProfile.fullName.charAt(0).toUpperCase() : '?'}
+      </DefaultAvatar>
+    )
   }
 
   return (
@@ -200,6 +247,10 @@ const Navbar = () => {
                 <FiUser />
                 Dashboard
               </NavLink>
+              <ProfileButton to="/profile">
+                {renderAvatar()}
+                Profile
+              </ProfileButton>
               <AuthButton as="button" logout onClick={handleLogout}>
                 <FiLogOut />
                 Logout
@@ -248,6 +299,10 @@ const Navbar = () => {
               <>
                 <MobileMenuItem to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
                   Dashboard
+                </MobileMenuItem>
+                <MobileMenuItem to="/profile" onClick={() => setMobileMenuOpen(false)}>
+                  {renderAvatar()}
+                  Profile
                 </MobileMenuItem>
                 <LogoutButton onClick={handleLogout}>
                   <FiLogOut />

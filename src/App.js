@@ -1,33 +1,28 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 // Load only essential font weights to improve performance
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
-// Remove other font weights
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
 import { GlobalStyles } from './styles/globalStyles';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
-import Navbar from './components/Navbar';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ErrorBoundary } from 'react-error-boundary';
-import ProtectedRoute from './components/ProtectedRoute';
 
-// Lazy load route components with loading priority
-const Home = lazy(() => import('./pages/Home'));
-// Add prefetch for common routes
-const Waitlist = lazy(() => 
-  import(/* webpackPrefetch: true */ './pages/Waitlist')
+// Define a simple placeholder component 
+const Placeholder = ({ title }) => (
+  <div style={{ 
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '40px 20px',
+    textAlign: 'center'
+  }}>
+    <h1>{title} Page</h1>
+    <p>This is a placeholder for the {title.toLowerCase()} page.</p>
+  </div>
 );
-const Contact = lazy(() => import('./pages/Contact'));
-const Kairo = lazy(() => import('./pages/Kairo'));
-const NotFound = lazy(() => import('./pages/NotFound'));
-const Login = lazy(() => import('./components/Login'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Unauthorized = lazy(() => import('./pages/Unauthorized'));
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -42,7 +37,6 @@ const Main = styled.main`
   position: relative;
 `;
 
-// Loading fallback with better visibility
 const LoadingFallback = styled.div`
   min-height: 100vh;
   display: flex;
@@ -54,7 +48,6 @@ const LoadingFallback = styled.div`
   font-weight: 500;
 `;
 
-// Error fallback component
 const ErrorFallback = styled.div`
   min-height: 100vh;
   display: flex;
@@ -75,50 +68,20 @@ const App = () => {
         <GlobalStyles />
         <AppWrapper>
           <Router>
-            <Navbar />
             <Main>
               <ErrorBoundary fallback={<ErrorFallback>Something went wrong. Please try refreshing the page.</ErrorFallback>}>
-                <Suspense fallback={
-                  <LoadingFallback>
-                    <LoadingSpinner />
-                  </LoadingFallback>
-                }>
-                  <Routes>
-                    {/* Public routes */}
-                    <Route path="/" element={<Home />} />
-                    <Route path="/waitlist" element={<Waitlist />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/kairo" element={<Kairo />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/unauthorized" element={<Unauthorized />} />
-                    
-                    {/* Protected routes */}
-                    <Route 
-                      path="/dashboard" 
-                      element={
-                        <ProtectedRoute>
-                          <Dashboard />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    
-                    {/* Admin routes */}
-                    <Route 
-                      path="/admin/*" 
-                      element={
-                        <ProtectedRoute requiredRole="admin">
-                          <Dashboard />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    
-                    {/* 404 route */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
+                <Routes>
+                  {/* All routes now use the Placeholder component */}
+                  <Route path="/" element={<Placeholder title="Home" />} />
+                  <Route path="/waitlist" element={<Placeholder title="Waitlist" />} />
+                  <Route path="/contact" element={<Placeholder title="Contact" />} />
+                  <Route path="/login" element={<Placeholder title="Login" />} />
+                  <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
+                  <Route path="/unauthorized" element={<Placeholder title="Unauthorized" />} />
+                  <Route path="*" element={<Placeholder title="Not Found" />} />
+                </Routes>
               </ErrorBoundary>
             </Main>
-            <Footer />
           </Router>
         </AppWrapper>
       </AuthProvider>
