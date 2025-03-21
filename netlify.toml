@@ -9,12 +9,18 @@
   # Set correct NODE_ENV for production builds
   NODE_ENV = "production"
   # Tell Netlify to ignore the Supabase key during secrets scanning
-  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY"
-  # Note: Actual Supabase credentials should be set in Netlify UI, not here
+  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY,SUPABASE_SERVICE_KEY"
+  # Note: The following variables MUST be set in Netlify UI:
+  # - REACT_APP_SUPABASE_URL
+  # - REACT_APP_SUPABASE_ANON_KEY
+  # - SUPABASE_URL (same as REACT_APP_SUPABASE_URL but for serverless functions)
+  # - SUPABASE_SERVICE_KEY (for serverless functions)
+  # - JWT_SECRET (optional - for custom JWT handling)
+  # - APP_URL (set to your production URL, e.g. https://kairovision.netlify.app)
 
-# Cache node_modules for faster builds
+# Use proper full reference for Netlify plugin
 [[plugins]]
-  package = "netlify-plugin-cache"
+  package = "@netlify/netlify-plugin-cache"
   [plugins.inputs]
     paths = ["node_modules", ".cache", "dist"]
 
