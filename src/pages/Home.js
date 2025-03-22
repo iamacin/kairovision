@@ -1,5 +1,5 @@
 // Home page with enhanced UI for Kairo Vision - Trigger new Netlify build
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -13,7 +13,7 @@ const HomeContainer = styled.div`
 
 const HeroSection = styled.section`
   position: relative;
-  min-height: 90vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -43,6 +43,7 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     background-image: 
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,.05)' fill-rule='evenodd'/%3E%3C/svg%3E"),
       repeating-linear-gradient(
         rgba(255, 255, 255, 0.03) 0px,
         rgba(255, 255, 255, 0.03) 1px,
@@ -58,6 +59,16 @@ const HeroSection = styled.section`
       );
     pointer-events: none;
     z-index: 1;
+    animation: patternMove 60s linear infinite;
+  }
+
+  @keyframes patternMove {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100px 100px;
+    }
   }
 
   &::before {
@@ -92,12 +103,39 @@ const GlassCard = styled(motion.div)`
     top: 15%;
     left: 10%;
     transform: rotate(-10deg);
+    width: 180px;
+    height: 180px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 70%);
+      border-radius: inherit;
+    }
   }
   
   &.card2 {
     bottom: 20%;
     right: 10%;
     transform: rotate(15deg);
+    width: 220px;
+    height: 140px;
+    background: rgba(255, 255, 255, 0.07);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent 60%);
+      border-radius: inherit;
+    }
   }
   
   &.card3 {
@@ -106,181 +144,297 @@ const GlassCard = styled(motion.div)`
     transform: rotate(10deg);
     width: 100px;
     height: 100px;
+    background: rgba(255, 255, 255, 0.03);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 70%);
+      border-radius: inherit;
+    }
+  }
+
+  &.card4 {
+    top: 25%;
+    right: 20%;
+    transform: rotate(-15deg);
+    width: 130px;
+    height: 90px;
+    opacity: 0.5;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 70%);
+      border-radius: inherit;
+    }
+  }
+
+  &.card5 {
+    bottom: 35%;
+    left: 25%;
+    transform: rotate(25deg);
+    width: 80px;
+    height: 120px;
+    opacity: 0.4;
+    background: rgba(255, 255, 255, 0.04);
   }
 `
 
-const HeroContent = styled.div`
+const FloatingElement = styled(motion.div)`
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  pointer-events: none;
+
+  &.dot1 {
+    width: 15px;
+    height: 15px;
+    top: 20%;
+    left: 30%;
+  }
+
+  &.dot2 {
+    width: 20px;
+    height: 20px;
+    bottom: 15%;
+    right: 25%;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  &.dot3 {
+    width: 10px;
+    height: 10px;
+    top: 40%;
+    right: 15%;
+  }
+
+  &.dot4 {
+    width: 25px;
+    height: 25px;
+    bottom: 30%;
+    left: 10%;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &.line1 {
+    width: 60px;
+    height: 3px;
+    top: 35%;
+    left: 40%;
+    border-radius: 3px;
+    transform: rotate(45deg);
+  }
+
+  &.line2 {
+    width: 40px;
+    height: 2px;
+    bottom: 40%;
+    right: 30%;
+    border-radius: 2px;
+    transform: rotate(-30deg);
+    background: rgba(255, 255, 255, 0.05);
+  }
+`
+
+const HeroContent = styled(motion.div)`
   position: relative;
-  z-index: 2;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  
-  @media (max-width: 768px) {
-    padding: 2rem;
+  z-index: 5;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: pulse 6s ease-in-out infinite;
+
+  @keyframes pulse {
+    0%, 100% {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.1);
+    }
   }
-`
 
-const MainTitle = styled(motion.h1)`
-  font-size: clamp(2rem, 4.5vw, 3.5rem);
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  line-height: 1.1;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  
-  span {
-    background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.8));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-`
-
-const SubTitle = styled(motion.p)`
-  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
-  line-height: 1.7;
-  margin-bottom: 2.5rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 400;
-
-  @media (max-width: 768px) {
-    font-size: 0.85rem;
-    margin-bottom: 2rem;
-  }
-`
-
-const GlossyButton = styled(motion(Link))`
-  position: relative;
-  padding: 1rem 2.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-  background: linear-gradient(135deg, 
-    ${({ theme }) => theme.colors.primary} 0%, 
-    ${({ theme }) => theme.colors.primaryDark} 100%
-  );
-  color: white;
-  border: none;
-  box-shadow: 0 4px 15px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
-  transition: all 0.3s ease;
-  overflow: hidden;
-  
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0) 50%,
-      rgba(0, 0, 0, 0.1) 100%
-    );
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
+    border-radius: inherit;
     pointer-events: none;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.08) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    transform: rotate(30deg);
-    animation: shineEffect 8s infinite linear;
-  }
-  
-  @keyframes shineEffect {
-    0% {
-      transform: translateX(-100%) rotate(30deg);
-    }
-    100% {
-      transform: translateX(100%) rotate(30deg);
-    }
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.4);
   }
 
   @media (max-width: 768px) {
-    padding: 0.9rem 1.8rem;
-    font-size: 0.9rem;
+    padding: 1.5rem;
+    max-width: 90%;
   }
 `
 
-const SecondaryButton = styled(motion(Link))`
-  padding: 1rem 2.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.15);
+const MainTitle = styled(motion.h1)`
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.03em;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.1) 20%,
-      rgba(255, 255, 255, 0) 40%
-    );
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
+  span {
+    background: linear-gradient(to right, #ffffff, #e0e0ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    position: relative;
     
     &::after {
-      opacity: 1;
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+      border-radius: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: lineReveal 1.5s 1s forwards;
+    }
+    
+    @keyframes lineReveal {
+      to {
+        transform: scaleX(1);
+      }
     }
   }
 
   @media (max-width: 768px) {
-    padding: 0.9rem 1.8rem;
-    font-size: 0.9rem;
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+  }
+`
+
+const SubTitle = styled(motion.p)`
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  max-width: 700px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
   }
 `
 
 const CTAContainer = styled(motion.div)`
   display: flex;
-  gap: 1.5rem;
-  margin-top: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
   justify-content: center;
+  margin-top: 1rem;
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
+  }
+`
+
+const buttonBase = `
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  outline: none;
+  border: none;
+  letter-spacing: 0.02em;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.8rem 1.6rem;
+    font-size: 0.9rem;
+  }
+`
+
+const GlossyButton = styled(motion(Link))`
+  ${buttonBase}
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  
+  &:hover {
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.4) 0%, 
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.25), 0 0 10px rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  }
+`
+
+const SecondaryButton = styled(motion(Link))`
+  ${buttonBase}
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(5px);
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 1);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   }
 `
 
@@ -293,29 +447,33 @@ const Section = styled.section`
   }
 `
 
-const SectionTitle = styled.h2`
-  font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+const SectionTitle = styled(motion.h2)`
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
   font-weight: 700;
-  margin-bottom: 1.25rem;
-  text-align: center;
+  margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.text};
+  position: relative;
+  display: inline-block;
+  letter-spacing: -0.02em;
   
-  @media (max-width: 768px) {
-    margin-bottom: 1rem;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: 2px;
   }
 `
 
-const SectionSubtitle = styled.p`
-  font-size: clamp(0.9rem, 1.15vw, 1rem);
+const SectionSubtitle = styled(motion.p)`
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
   color: ${({ theme }) => theme.colors.textSecondary};
-  text-align: center;
+  margin-bottom: 2.5rem;
   max-width: 700px;
-  margin: 0 auto 3.5rem;
-  line-height: 1.7;
-  
-  @media (max-width: 768px) {
-    margin: 0 auto 2.5rem;
-  }
+  line-height: 1.6;
 `
 
 const Grid = styled.div`
@@ -439,122 +597,187 @@ const CardDescription = styled.p`
 `
 
 // Property Card Components
-const PropertyGrid = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
+const PropertyGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
-  padding: 0 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
   
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
-    padding: 0;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
   }
 `
 
 const PropertyCard = styled(motion.div)`
+  background: ${({ theme }) => theme.colors.cardBg};
   border-radius: 16px;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.background};
-  box-shadow: ${({ theme }) => theme.shadows?.medium || '0 4px 12px rgba(0, 0, 0, 0.05)'};
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   
-  /* Glass morphism effect */
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0.05);
-  
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: ${({ theme }) => theme.shadows?.large || '0 8px 30px rgba(0, 0, 0, 0.12)'};
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, 
+      rgba(255, 255, 255, 0.05), 
+      transparent
+    );
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 16px 16px 0 0;
   }
 `
 
 const PropertyImage = styled.div`
-  height: 180px;
+  height: 220px;
+  background-size: cover;
+  background-position: center;
   position: relative;
-  overflow: hidden;
   
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  ${PropertyCard}:hover & img {
-    transform: scale(1.1);
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, 
+      rgba(0, 0, 0, 0.1), 
+      rgba(0, 0, 0, 0.3)
+    );
+    z-index: 1;
   }
 `
 
-const PropertyTag = styled.span`
+const PropertyTag = styled(motion.span)`
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: ${({ theme }) => theme.colors.primary};
+  top: 1rem;
+  right: 1rem;
+  background: ${({ type, theme }) => 
+    type === 'vente' 
+      ? 'rgba(52, 152, 219, 0.9)' 
+      : 'rgba(155, 89, 182, 0.9)'
+  };
   color: white;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  z-index: 2;
-  box-shadow: 0 2px 10px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.3);
-`
-
-const PropertyPrice = styled.span`
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
   font-weight: 600;
   z-index: 2;
   backdrop-filter: blur(5px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+`
+
+const PropertyPrice = styled(motion.div)`
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  z-index: 2;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, 
+      rgba(255, 255, 255, 0.2), 
+      transparent
+    );
+    border-radius: 8px 8px 0 0;
+    pointer-events: none;
+  }
 `
 
 const PropertyContent = styled.div`
-  padding: 16px;
+  padding: 1.5rem;
+  position: relative;
 `
 
-const PropertyTitle = styled.h3`
-  font-size: 1rem;
-  margin-bottom: 6px;
+const PropertyName = styled.h3`
+  font-size: 1.2rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
   color: ${({ theme }) => theme.colors.text};
 `
 
 const PropertyLocation = styled.div`
   display: flex;
   align-items: center;
-  gap: 6px;
+  font-size: 0.9rem;
   color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 0.8rem;
-  margin-bottom: 10px;
+  margin-bottom: 0.8rem;
   
   svg {
-    font-size: 0.9rem;
+    margin-right: 0.4rem;
+    color: ${({ theme }) => theme.colors.primary};
   }
 `
 
-const PropertyDetails = styled.div`
+const PropertyFeatures = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
-  padding-top: 10px;
-  margin-top: 10px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 0.8rem;
 `
 
-const PropertyDetail = styled.span`
+const Feature = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  
+  svg {
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: 1rem;
+  }
+`
+
+const ViewMoreButton = styled(motion(Link))`
+  ${buttonBase}
+  margin-top: 2.5rem;
+  align-self: center;
+  background: ${({ theme }) => theme.colors.primary};
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  box-shadow: 0 5px 15px rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.3);
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.primaryDark};
+    box-shadow: 0 7px 20px rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+`
+
+const PropertiesSection = styled(motion.section)`
+  padding: 5rem 2rem;
+  background: ${({ theme }) => theme.colors.background};
+  
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
 `
 
 // CTA Section Components
@@ -663,54 +886,309 @@ const CTAButton = styled(motion(Link))`
   }
 `
 
+// Section "Pourquoi Nous Choisir"
+const FeaturesSection = styled(motion.section)`
+  padding: 5rem 2rem;
+  background: ${({ theme }) => theme.colors.bgSecondary || '#f8f9fa'};
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.4;
+    z-index: 0;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
+`
+
+const FeaturesGrid = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  position: relative;
+  z-index: 1;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+`
+
+const FeatureCard = styled(motion.div)`
+  background: ${({ theme }) => theme.colors.cardBg};
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, 
+      ${({ theme }) => theme.colors.primary}, 
+      ${({ theme }) => theme.colors.primaryLight || '#b388ff'}
+    );
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, 
+      rgba(255, 255, 255, 0.1), 
+      transparent
+    );
+    pointer-events: none;
+  }
+`
+
+const FeatureIcon = styled(motion.div)`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: ${({ theme }) => `rgba(${theme?.colors?.primaryRgb || '138, 43, 226'}, 0.1)`};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 1.8rem;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    border: 1px solid ${({ theme }) => `rgba(${theme?.colors?.primaryRgb || '138, 43, 226'}, 0.3)`};
+    opacity: 0.7;
+    animation: pulse-border 2s infinite;
+  }
+  
+  @keyframes pulse-border {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    70% {
+      transform: scale(1.2);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.2);
+      opacity: 0;
+    }
+  }
+`
+
+const FeatureTitle = styled.h3`
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: ${({ theme }) => theme.colors.text};
+`
+
+const FeatureDescription = styled.p`
+  font-size: 0.95rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.6;
+`
+
+// Section Témoignages
+const TestimonialsSection = styled(motion.section)`
+  padding: 5rem 2rem;
+  background: ${({ theme }) => theme.colors.background};
+  position: relative;
+  overflow: hidden;
+  
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
+`
+
+const TestimonialsGrid = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+`
+
+const TestimonialCard = styled(motion.div)`
+  background: ${({ theme }) => theme.colors.cardBg};
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  position: relative;
+  
+  &::before {
+    content: '"';
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    font-size: 4rem;
+    line-height: 1;
+    font-family: serif;
+    color: ${({ theme }) => `rgba(${theme?.colors?.primaryRgb || '138, 43, 226'}, 0.1)`};
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, 
+      rgba(255, 255, 255, 0.05), 
+      transparent
+    );
+    border-radius: inherit;
+    pointer-events: none;
+  }
+`
+
+const TestimonialContent = styled.p`
+  font-size: 1rem;
+  line-height: 1.6;
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+`
+
+const TestimonialAuthor = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`
+
+const AuthorAvatar = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid ${({ theme }) => theme.colors.primary};
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`
+
+const AuthorInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const AuthorName = styled.h4`
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: ${({ theme }) => theme.colors.text};
+`
+
+const AuthorTitle = styled.p`
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  margin: 0;
+`
+
 const Home = () => {
-  // Sample property data
-  const properties = [
+  // État pour les propriétés en vedette
+  const [properties, setProperties] = useState([
     {
       id: 1,
-      title: 'Appartement Moderne',
-      location: 'Dakar, Almadies',
-      price: '120 000 000 FCFA',
-      tag: 'À Vendre',
-      image: 'https://placehold.co/600x400/7030a0/FFFFFF/png?text=Appartement+Moderne',
-      beds: 3,
-      baths: 2,
-      area: '120m²'
+      name: "Villa de luxe avec vue sur mer",
+      location: "Ngor, Dakar",
+      price: "250,000,000",
+      type: "vente",
+      bedrooms: 4,
+      bathrooms: 3,
+      area: 320,
+      image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 2,
-      title: 'Villa avec Vue',
-      location: 'Saly, Mbour',
-      price: '75 000 FCFA/mois',
-      tag: 'À Louer',
-      image: 'https://placehold.co/600x400/7030a0/FFFFFF/png?text=Villa+avec+Vue',
-      beds: 4,
-      baths: 3,
-      area: '200m²'
+      name: "Appartement moderne au centre-ville",
+      location: "Plateau, Dakar",
+      price: "95,000,000",
+      type: "vente",
+      bedrooms: 3,
+      bathrooms: 2,
+      area: 150,
+      image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 3,
-      title: 'Bureau Commercial',
-      location: 'Dakar, Plateau',
-      price: '250 000 FCFA/mois',
-      tag: 'À Louer',
-      image: 'https://placehold.co/600x400/7030a0/FFFFFF/png?text=Bureau+Commercial',
-      beds: 0,
-      baths: 1,
-      area: '80m²'
-    },
-    {
-      id: 4,
-      title: 'Terrain à Bâtir',
-      location: 'Diamniadio',
-      price: '45 000 000 FCFA',
-      tag: 'À Vendre',
-      image: 'https://placehold.co/600x400/7030a0/FFFFFF/png?text=Terrain+à+Bâtir',
-      beds: 0,
-      baths: 0,
-      area: '500m²'
+      name: "Maison familiale avec jardin",
+      location: "Almadies, Dakar",
+      price: "650,000 / mois",
+      type: "location",
+      bedrooms: 5,
+      bathrooms: 3,
+      area: 280,
+      image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80"
     }
-  ];
+  ]);
+
+  // État pour le thème (à intégrer si vous utilisez le thème)
+  const [isOffline, setIsOffline] = useState(false);
+
+  // Vérification de la connexion internet
+  useEffect(() => {
+    const handleOnlineStatus = () => {
+      setIsOffline(!navigator.onLine);
+    };
+
+    window.addEventListener('online', handleOnlineStatus);
+    window.addEventListener('offline', handleOnlineStatus);
+    
+    return () => {
+      window.removeEventListener('online', handleOnlineStatus);
+      window.removeEventListener('offline', handleOnlineStatus);
+    };
+  }, []);
+
+  // Afficher un message si l'utilisateur est hors ligne
+  if (isOffline) {
+    return (
+      <div className="offline-message">
+        <h2>Vous êtes actuellement hors ligne</h2>
+        <p>Veuillez vérifier votre connexion internet pour accéder à toutes les fonctionnalités de Kairo Vision.</p>
+      </div>
+    );
+  }
 
   return (
     <HomeContainer>
@@ -718,12 +1196,13 @@ const Home = () => {
         <GlassCard 
           className="card1"
           animate={{ 
-            y: [0, -15, 0],
-            rotate: [-10, -5, -10]
+            y: [0, -20, 0],
+            rotate: [-10, -5, -10],
+            scale: [1, 1.05, 1]
           }}
           transition={{ 
             repeat: Infinity, 
-            duration: 5,
+            duration: 8,
             ease: "easeInOut"
           }}
         />
@@ -731,11 +1210,12 @@ const Home = () => {
           className="card2"
           animate={{ 
             y: [0, 15, 0],
-            rotate: [15, 10, 15]
+            rotate: [15, 10, 15],
+            x: [0, 10, 0]
           }}
           transition={{ 
             repeat: Infinity, 
-            duration: 6,
+            duration: 10,
             ease: "easeInOut",
             delay: 1
           }}
@@ -744,11 +1224,121 @@ const Home = () => {
           className="card3"
           animate={{ 
             y: [0, 10, 0],
-            rotate: [10, 15, 10]
+            rotate: [10, 15, 10],
+            scale: [1, 0.95, 1]
           }}
           transition={{ 
             repeat: Infinity, 
             duration: 7,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+        <GlassCard 
+          className="card4"
+          animate={{ 
+            y: [0, -15, 0],
+            rotate: [-15, -20, -15],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 9,
+            ease: "easeInOut",
+            delay: 1.5
+          }}
+        />
+        <GlassCard 
+          className="card5"
+          animate={{ 
+            y: [0, 12, 0],
+            rotate: [25, 20, 25],
+            x: [0, -10, 0]
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 11,
+            ease: "easeInOut",
+            delay: 2.5
+          }}
+        />
+        <FloatingElement
+          className="dot1"
+          animate={{
+            y: [0, -30, 0],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 5,
+            ease: "easeInOut"
+          }}
+        />
+        <FloatingElement
+          className="dot2"
+          animate={{
+            y: [0, 20, 0],
+            x: [0, 15, 0],
+            opacity: [0.3, 0.7, 0.3]
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 7,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+        <FloatingElement
+          className="dot3"
+          animate={{
+            y: [0, -15, 0],
+            x: [0, -10, 0],
+            opacity: [0.5, 1, 0.5]
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 6,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+        <FloatingElement
+          className="dot4"
+          animate={{
+            y: [0, 25, 0],
+            opacity: [0.2, 0.6, 0.2]
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 8,
+            ease: "easeInOut",
+            delay: 1.5
+          }}
+        />
+        <FloatingElement
+          className="line1"
+          animate={{
+            y: [0, -20, 0],
+            rotate: [45, 55, 45],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 9,
+            ease: "easeInOut",
+            delay: 0.5
+          }}
+        />
+        <FloatingElement
+          className="line2"
+          animate={{
+            y: [0, 15, 0],
+            rotate: [-30, -40, -30],
+            opacity: [0.2, 0.5, 0.2]
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 10,
             ease: "easeInOut",
             delay: 2
           }}
@@ -792,87 +1382,323 @@ const Home = () => {
         </HeroContent>
       </HeroSection>
 
-      {/* Property Listings Section - Moved directly under the hero */}
-      <Section alt>
-        <SectionTitle>Découvrez nos Biens Immobiliers</SectionTitle>
-        <SectionSubtitle>
-          Une sélection de propriétés exclusives à travers le Sénégal pour tous vos projets.
-        </SectionSubtitle>
-        <PropertyGrid>
-          {properties.map((property) => (
-            <PropertyCard
-              key={property.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <PropertyImage>
-                <img src={property.image} alt={property.title} />
-                <PropertyTag>{property.tag}</PropertyTag>
-                <PropertyPrice>{property.price}</PropertyPrice>
-              </PropertyImage>
-              <PropertyContent>
-                <PropertyTitle>{property.title}</PropertyTitle>
-                <PropertyLocation>
-                  <FiMapPin />
-                  {property.location}
-                </PropertyLocation>
-                <PropertyDetails>
-                  <PropertyDetail>{property.beds} Chambres</PropertyDetail>
-                  <PropertyDetail>{property.baths} SDB</PropertyDetail>
-                  <PropertyDetail>{property.area}</PropertyDetail>
-                </PropertyDetails>
-              </PropertyContent>
-            </PropertyCard>
-          ))}
-        </PropertyGrid>
-      </Section>
-
-      <Section>
-        <SectionTitle>Pourquoi choisir Kairo ?</SectionTitle>
-        <SectionSubtitle>
-          Une plateforme conçue pour simplifier vos projets immobiliers et vous offrir une expérience unique.
-        </SectionSubtitle>
-        <Grid>
-          <Card
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+      <PropertiesSection
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="container">
+          <SectionTitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <FiTrendingUp />
-            <CardTitle>Simplicité & Efficacité</CardTitle>
-            <CardDescription>
-              Une interface intuitive et des outils modernes pour trouver rapidement ce que vous cherchez.
-            </CardDescription>
-          </Card>
-          <Card
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            Propriétés à Découvrir
+          </SectionTitle>
+          <SectionSubtitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <FiUsers />
-            <CardTitle>Accompagnement Personnalisé</CardTitle>
-            <CardDescription>
-              Une équipe d'experts à votre écoute pour vous guider dans votre projet immobilier.
-            </CardDescription>
-          </Card>
-          <Card
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            Explorez notre sélection de propriétés exclusives à travers le Sénégal. Des appartements aux villas, trouvez le bien immobilier qui correspond à vos attentes.
+          </SectionSubtitle>
+          
+          <PropertyGrid
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+            initial="hidden"
+            animate="show"
           >
-            <FiGlobe />
-            <CardTitle>Accessibilité Totale</CardTitle>
-            <CardDescription>
-              Accédez à notre plateforme 24/7 et gérez vos projets immobiliers où que vous soyez.
-            </CardDescription>
-          </Card>
-        </Grid>
-      </Section>
+            {properties.map((property, index) => (
+              <PropertyCard
+                key={index}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                }}
+                whileHover={{ 
+                  y: -10,
+                  boxShadow: '0 15px 30px rgba(0, 0, 0, 0.15)'
+                }}
+              >
+                <PropertyImage style={{ backgroundImage: `url(${property.image})` }}>
+                  <PropertyTag
+                    type={property.type.toLowerCase()}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {property.type}
+                  </PropertyTag>
+                  <PropertyPrice
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    {property.price} CFA
+                  </PropertyPrice>
+                </PropertyImage>
+                <PropertyContent>
+                  <PropertyName>{property.name}</PropertyName>
+                  <PropertyLocation>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
+                    </svg>
+                    {property.location}
+                  </PropertyLocation>
+                  <PropertyFeatures>
+                    <Feature>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 7V3H7V7H3V21H21V7H17ZM9 5H15V7H9V5ZM19 19H5V9H19V19Z" fill="currentColor"/>
+                        <path d="M12 10H10V18H12V10Z" fill="currentColor"/>
+                        <path d="M15 13H13V18H15V13Z" fill="currentColor"/>
+                        <path d="M9 15H7V18H9V15Z" fill="currentColor"/>
+                      </svg>
+                      {property.bedrooms} Ch.
+                    </Feature>
+                    <Feature>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 10.78V8C21 6.9 20.1 6 19 6H15V4C15 2.9 14.1 2 13 2H11C9.9 2 9 2.9 9 4V6H5C3.9 6 3 6.9 3 8V10.78C2.39 11.33 2 12.12 2 13V19C2 19.55 2.45 20 3 20H4C4.55 20 5 19.55 5 19V18H19V19C19 19.55 19.45 20 20 20H21C21.55 20 22 19.55 22 19V13C22 12.12 21.61 11.33 21 10.78ZM11 4H13V6H11V4ZM19 8V10H5V8H19ZM5 16V13H19V16H5Z" fill="currentColor"/>
+                      </svg>
+                      {property.bathrooms} SdB
+                    </Feature>
+                    <Feature>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                        <path d="M12.5 7H11V13L16.2 16.2L17 14.9L12.5 12.2V7Z" fill="currentColor"/>
+                      </svg>
+                      {property.area} m²
+                    </Feature>
+                  </PropertyFeatures>
+                </PropertyContent>
+              </PropertyCard>
+            ))}
+          </PropertyGrid>
+          
+          <ViewMoreButton 
+            to="/properties"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            Voir Plus de Propriétés
+          </ViewMoreButton>
+        </div>
+      </PropertiesSection>
+
+      <FeaturesSection
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="container">
+          <SectionTitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Pourquoi Nous Choisir
+          </SectionTitle>
+          <SectionSubtitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Kairo Vision se distingue par son approche innovante et sa détermination à révolutionner le marché immobilier sénégalais.
+          </SectionSubtitle>
+          
+          <FeaturesGrid
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.15
+                }
+              }
+            }}
+            initial="hidden"
+            animate="show"
+          >
+            <FeatureCard
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.12)' }}
+            >
+              <FeatureIcon
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10, delay: 0.3 }}
+              >
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 10.25V20H21V10.25L12 3L3 10.25Z" fill="currentColor"/>
+                  <path d="M9 14H15V20H9V14Z" fill="white"/>
+                </svg>
+              </FeatureIcon>
+              <FeatureTitle>Propriétés Exclusives</FeatureTitle>
+              <FeatureDescription>
+                Accédez à un catalogue de biens immobiliers exclusifs et soigneusement sélectionnés, introuvables ailleurs sur le marché.
+              </FeatureDescription>
+            </FeatureCard>
+            
+            <FeatureCard
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.12)' }}
+            >
+              <FeatureIcon
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10, delay: 0.4 }}
+              >
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                  <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" fill="currentColor"/>
+                </svg>
+              </FeatureIcon>
+              <FeatureTitle>Technologie Avancée</FeatureTitle>
+              <FeatureDescription>
+                Notre plateforme utilise les dernières technologies pour vous offrir une expérience utilisateur fluide et intuitive, facilitant votre recherche immobilière.
+              </FeatureDescription>
+            </FeatureCard>
+            
+            <FeatureCard
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.12)' }}
+            >
+              <FeatureIcon
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10, delay: 0.5 }}
+              >
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM16 18H8V16H16V18ZM16 14H8V12H16V14ZM13 9V3.5L18.5 9H13Z" fill="currentColor"/>
+                </svg>
+              </FeatureIcon>
+              <FeatureTitle>Conseils Personnalisés</FeatureTitle>
+              <FeatureDescription>
+                Bénéficiez de l'expertise de nos conseillers immobiliers qui vous accompagnent à chaque étape de votre projet, de la recherche à la conclusion de la transaction.
+              </FeatureDescription>
+            </FeatureCard>
+          </FeaturesGrid>
+        </div>
+      </FeaturesSection>
+      
+      <TestimonialsSection
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="container">
+          <SectionTitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Ce Que Disent Nos Clients
+          </SectionTitle>
+          <SectionSubtitle
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Découvrez les témoignages de ceux qui ont fait confiance à Kairo Vision pour concrétiser leur projet immobilier.
+          </SectionSubtitle>
+          
+          <TestimonialsGrid
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.15
+                }
+              }
+            }}
+            initial="hidden"
+            animate="show"
+          >
+            <TestimonialCard
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              whileHover={{ y: -5, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+            >
+              <TestimonialContent>
+                Grâce à Kairo Vision, j'ai trouvé l'appartement de mes rêves en moins de deux semaines. L'interface est intuitive et les conseillers sont très réactifs !
+              </TestimonialContent>
+              <TestimonialAuthor>
+                <AuthorAvatar>
+                  <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sophie M." />
+                </AuthorAvatar>
+                <AuthorInfo>
+                  <AuthorName>Sophie M.</AuthorName>
+                  <AuthorTitle>Propriétaire à Dakar</AuthorTitle>
+                </AuthorInfo>
+              </TestimonialAuthor>
+            </TestimonialCard>
+            
+            <TestimonialCard
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              whileHover={{ y: -5, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+            >
+              <TestimonialContent>
+                La qualité des biens proposés est exceptionnelle. J'ai investi dans une villa à Saly et le processus a été d'une simplicité remarquable. Je recommande vivement !
+              </TestimonialContent>
+              <TestimonialAuthor>
+                <AuthorAvatar>
+                  <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Amadou D." />
+                </AuthorAvatar>
+                <AuthorInfo>
+                  <AuthorName>Amadou D.</AuthorName>
+                  <AuthorTitle>Investisseur immobilier</AuthorTitle>
+                </AuthorInfo>
+              </TestimonialAuthor>
+            </TestimonialCard>
+            
+            <TestimonialCard
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              whileHover={{ y: -5, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+            >
+              <TestimonialContent>
+                Un service client exceptionnel ! Les conseillers de Kairo Vision m'ont aidé à trouver le parfait local commercial pour mon entreprise. Professionnalisme et efficacité.
+              </TestimonialContent>
+              <TestimonialAuthor>
+                <AuthorAvatar>
+                  <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Fatou N." />
+                </AuthorAvatar>
+                <AuthorInfo>
+                  <AuthorName>Fatou N.</AuthorName>
+                  <AuthorTitle>Entrepreneure</AuthorTitle>
+                </AuthorInfo>
+              </TestimonialAuthor>
+            </TestimonialCard>
+          </TestimonialsGrid>
+        </div>
+      </TestimonialsSection>
 
       {/* Call-to-Action Section */}
       <CTASection>
