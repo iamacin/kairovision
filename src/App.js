@@ -10,6 +10,8 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ErrorBoundary } from 'react-error-boundary';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer/Footer';
 
 // Import real components
 import Home from './pages/Home';
@@ -43,6 +45,7 @@ const AppWrapper = styled.div`
 const Main = styled.main`
   flex: 1;
   position: relative;
+  padding-top: 60px; /* Add space for the fixed navbar */
 `;
 
 const LoadingFallback = styled.div`
@@ -69,36 +72,45 @@ const ErrorFallback = styled.div`
   font-size: 1.2rem;
 `;
 
+// Create a wrapper component for route content that includes the Navbar and Footer
+const AppLayout = ({ children }) => (
+  <>
+    <Navbar />
+    <Main>{children}</Main>
+    <Footer />
+  </>
+);
+
 // Create router configuration for React Router v7
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-    errorElement: <Placeholder title="Error" />
+    element: <AppLayout><Home /></AppLayout>,
+    errorElement: <AppLayout><Placeholder title="Error" /></AppLayout>
   },
   {
     path: "/waitlist",
-    element: <Waitlist />
+    element: <AppLayout><Waitlist /></AppLayout>
   },
   {
     path: "/contact",
-    element: <Contact />
+    element: <AppLayout><Contact /></AppLayout>
   },
   {
     path: "/login",
-    element: <Placeholder title="Login" />
+    element: <AppLayout><Placeholder title="Login" /></AppLayout>
   },
   {
     path: "/dashboard",
-    element: <Placeholder title="Dashboard" />
+    element: <AppLayout><Placeholder title="Dashboard" /></AppLayout>
   },
   {
     path: "/unauthorized",
-    element: <Unauthorized />
+    element: <AppLayout><Unauthorized /></AppLayout>
   },
   {
     path: "*",
-    element: <NotFound />
+    element: <AppLayout><NotFound /></AppLayout>
   }
 ]);
 
