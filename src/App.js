@@ -11,7 +11,14 @@ import { AuthProvider } from './contexts/AuthContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ErrorBoundary } from 'react-error-boundary';
 
-// Define a simple placeholder component 
+// Import real components
+import Home from './pages/Home';
+import Waitlist from './pages/Waitlist';
+import Contact from './pages/Contact';
+import NotFound from './pages/NotFound';
+import Unauthorized from './pages/Unauthorized';
+
+// Define a simple placeholder component for pages still under development
 const Placeholder = ({ title }) => (
   <div style={{ 
     maxWidth: '1200px',
@@ -66,16 +73,16 @@ const ErrorFallback = styled.div`
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Placeholder title="Home" />,
+    element: <Home />,
     errorElement: <Placeholder title="Error" />
   },
   {
     path: "/waitlist",
-    element: <Placeholder title="Waitlist" />
+    element: <Waitlist />
   },
   {
     path: "/contact",
-    element: <Placeholder title="Contact" />
+    element: <Contact />
   },
   {
     path: "/login",
@@ -87,11 +94,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/unauthorized",
-    element: <Placeholder title="Unauthorized" />
+    element: <Unauthorized />
   },
   {
     path: "*",
-    element: <Placeholder title="Not Found" />
+    element: <NotFound />
   }
 ]);
 
