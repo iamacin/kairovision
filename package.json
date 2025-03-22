@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "npx webpack --mode production",
+    "build:netlify": "NODE_ENV=production npx webpack --mode production --progress",
     "dev": "cross-env NODE_ENV=development webpack serve --mode development",
     "dev:simple": "react-scripts start",
     "test": "jest",
