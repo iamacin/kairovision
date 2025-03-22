@@ -1,5 +1,5 @@
 [build]
-  command = "npm install -D netlify-plugin-cache && npm install && npm run build"
+  command = "npm install && npm run build"
   publish = "dist"
   functions = "netlify/functions"
 
@@ -11,16 +11,6 @@
   # Tell Netlify to ignore the Supabase key during secrets scanning
   SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY"
   # Note: Actual Supabase credentials should be set in Netlify UI, not here
-
-# Add a pre-build hook for diagnostics
-[build.lifecycle]
-  onPreBuild = "ls -la node_modules && npm list netlify-plugin-cache || echo 'netlify-plugin-cache not found'"
-
-# Cache node_modules for faster builds
-[[plugins]]
-  package = "netlify-plugin-cache"
-  [plugins.inputs]
-    paths = ["node_modules", ".cache", "dist"]
 
 # This will still work alongside the _redirects file
 [[redirects]]
