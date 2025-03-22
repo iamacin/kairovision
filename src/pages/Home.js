@@ -1,3 +1,4 @@
+// Home page with enhanced UI for Kairo Vision - Trigger new Netlify build
 import React from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
