@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && echo 'DEBUG: Node version:' && node --version && echo 'DEBUG: NPM version:' && npm --version && echo 'DEBUG: webpack:' && npx webpack --version && npm run build:netlify"
+  command = "npm install --include=dev && npm run build:netlify"
   publish = "dist"
   functions = "netlify/functions"
 
