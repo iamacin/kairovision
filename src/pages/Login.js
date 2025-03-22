@@ -285,9 +285,30 @@ const WaitlistLink = styled(motion(Link))`
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0) 0%,
+      rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0.05) 20%,
+      rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0) 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
   
   &:hover {
     background-color: rgba(${({ theme }) => theme.colors.primaryRgb}, 0.05);
+    transform: translateY(-2px);
+    
+    &::after {
+      opacity: 1;
+    }
   }
 `;
 

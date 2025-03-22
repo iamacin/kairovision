@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { secureClient } from '../utils/supabase';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { motion } from 'framer-motion';
 
 // Styled components for better UI management
 const WaitlistContainer = styled.div`
@@ -23,23 +23,27 @@ const CenteredContent = styled.div`
 `;
 
 const Title = styled(motion.h1)`
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   margin-bottom: 20px;
   color: ${props => props.theme.colors.text};
   text-align: center;
   
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 `;
 
 const Subtitle = styled(motion.p)`
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 40px;
   color: ${props => props.theme.colors.textSecondary};
   max-width: 600px;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const FormContainer = styled(motion.div)`
@@ -54,9 +58,9 @@ const FormContainer = styled(motion.div)`
   
   /* Glass morphism effect */
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
+  border: 1px solid rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0.05);
   
-  /* Glossy effect */
+  /* Subtle gradient background */
   &::before {
     content: '';
     position: absolute;
@@ -66,10 +70,49 @@ const FormContainer = styled(motion.div)`
     bottom: 0;
     background: linear-gradient(
       135deg,
-      rgba(${props => props.theme.colors.primaryRgb}, 0.03) 0%,
-      transparent 50%
+      rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0.03) 0%,
+      transparent 50%,
+      rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0.01) 100%
     );
     z-index: 0;
+  }
+  
+  /* Glossy shine effect */
+  &::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+    animation: shineEffect 8s infinite linear;
+  }
+  
+  @keyframes shineEffect {
+    0% {
+      transform: translateX(-100%) rotate(30deg);
+    }
+    100% {
+      transform: translateX(100%) rotate(30deg);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 30px 20px;
   }
 `;
 
@@ -89,17 +132,18 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid ${props => props.hasError ? props.theme.colors.error : props.theme.colors.border};
   font-size: 1rem;
   background-color: ${props => props.theme.colors.inputBackground || 'rgba(255, 255, 255, 0.8)'};
   color: ${props => props.theme.colors.text};
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
   
   &:focus {
     outline: none;
     border-color: ${props => props.hasError ? props.theme.colors.error : props.theme.colors.primary};
-    box-shadow: 0 0 0 3px rgba(${props => props.theme.colors.primaryRgb}, 0.1);
+    box-shadow: 0 0 0 3px rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0.1);
   }
 `;
 
@@ -113,31 +157,45 @@ const Button = styled(motion.button)`
   padding: 14px 24px;
   background: linear-gradient(135deg, 
     ${props => props.theme.colors.primary} 0%, 
-    ${props => props.theme.colors.primaryDark} 100%
+    ${props => props.theme.colors.primaryDark || props.theme.colors.primary} 100%
   );
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   margin-top: 16px;
-  transition: all 0.3s ease;
   width: 100%;
   position: relative;
-  z-index: 1;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+    pointer-events: none;
+  }
   
   &:hover {
-    filter: brightness(1.05);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(${props => props.theme.colors.primaryRgb}, 0.4);
+    box-shadow: 0 6px 20px rgba(${({ theme }) => theme.colors.primaryRgb}, 0.4);
   }
   
   &:disabled {
-    background: ${props => props.theme.colors.disabled || '#cccccc'};
+    background: ${props => props.theme.colors.disabled};
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+    &::before {
+      opacity: 0.5;
+    }
   }
 `;
 
@@ -152,21 +210,21 @@ const Message = styled(motion.div)`
 `;
 
 const SuccessMessage = styled(Message)`
-  color: ${props => props.theme.colors.success || '#2e7d32'};
-  background-color: ${props => props.theme.colors.successLight || 'rgba(46, 125, 50, 0.1)'};
-  border: 1px solid ${props => props.theme.colors.success || '#2e7d32'};
+  color: ${props => props.theme.colors.success};
+  background-color: ${props => props.theme.colors.successLight};
+  border: 1px solid ${props => props.theme.colors.success};
 `;
 
 const ErrorMessage = styled(Message)`
-  color: ${props => props.theme.colors.error || '#d32f2f'};
-  background-color: ${props => props.theme.colors.errorLight || 'rgba(211, 47, 47, 0.1)'};
-  border: 1px solid ${props => props.theme.colors.error || '#d32f2f'};
+  color: ${props => props.theme.colors.error};
+  background-color: ${props => props.theme.colors.errorLight};
+  border: 1px solid ${props => props.theme.colors.error};
 `;
 
 const InfoMessage = styled(Message)`
-  color: ${props => props.theme.colors.info || '#0288d1'};
-  background-color: ${props => props.theme.colors.infoLight || 'rgba(2, 136, 209, 0.1)'};
-  border: 1px solid ${props => props.theme.colors.info || '#0288d1'};
+  color: ${props => props.theme.colors.info};
+  background-color: ${props => props.theme.colors.infoLight};
+  border: 1px solid ${props => props.theme.colors.info};
 `;
 
 const ErrorContainer = styled(motion.div)`
@@ -177,10 +235,15 @@ const ErrorContainer = styled(motion.div)`
   border-radius: 12px;
   background-color: ${props => props.theme.colors.cardBackground || props.theme.colors.background};
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  
+  /* Glass morphism effect */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(${({ theme }) => theme.colors.primaryRgb || '138, 43, 226'}, 0.05);
 `;
 
 const ErrorTitle = styled.h2`
-  color: ${props => props.theme.colors.error || '#d32f2f'};
+  color: ${props => props.theme.colors.error};
   margin-bottom: 16px;
 `;
 
@@ -201,7 +264,7 @@ const RefreshButton = styled(motion.button)`
   transition: all 0.3s ease;
   
   &:hover {
-    background-color: ${props => props.theme.colors.primaryDark};
+    background-color: ${props => props.theme.colors.primaryDark || props.theme.colors.primary};
     transform: translateY(-2px);
   }
 `;
@@ -269,11 +332,11 @@ const Waitlist = () => {
     const errors = {};
     
     if (!name.trim()) {
-      errors.name = 'Veuillez entrer votre nom';
+      errors.name = 'Le nom est requis';
     }
     
     if (!email.trim()) {
-      errors.email = 'Veuillez entrer votre adresse email';
+      errors.email = 'L\'email est requis';
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       errors.email = 'Veuillez entrer une adresse email valide';
     }
@@ -324,16 +387,16 @@ const Waitlist = () => {
       console.error('Error submitting waitlist form:', error);
       
       if (error.message && error.message.includes('timeout')) {
-        setApiError('La requête a expiré. Nos serveurs peuvent être en surcharge. Veuillez réessayer plus tard.');
+        setApiError('La requête a expiré. Nos serveurs sont peut-être surchargés. Veuillez réessayer plus tard.');
       } else if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         if (error.response.status === 409) {
-          setApiError('Cette adresse email est déjà sur notre liste d\'attente. Merci pour votre intérêt !');
+          setApiError('Cet email est déjà sur notre liste d\'attente. Merci pour votre intérêt !');
         } else if (error.response.status === 400) {
           setApiError('Veuillez vérifier vos informations et réessayer.');
         } else {
-          setApiError(`Une erreur est survenue (${error.response.status}). Veuillez réessayer plus tard.`);
+          setApiError(`Une erreur s'est produite (${error.response.status}). Veuillez réessayer plus tard.`);
         }
       } else if (error.request) {
         // The request was made but no response was received
@@ -341,7 +404,7 @@ const Waitlist = () => {
         setApiError('Impossible de se connecter à nos serveurs. Veuillez vérifier votre connexion internet et réessayer.');
       } else {
         // Something happened in setting up the request that triggered an Error
-        setApiError('Une erreur inattendue est survenue. Veuillez réessayer plus tard.');
+        setApiError('Une erreur inattendue s\'est produite. Veuillez réessayer plus tard.');
       }
     } finally {
       setIsLoading(false);
@@ -363,14 +426,14 @@ const Waitlist = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <ErrorTitle>Un problème est survenu</ErrorTitle>
-            <ErrorText>Nous rencontrons des difficultés pour charger la page de liste d'attente. Veuillez rafraîchir.</ErrorText>
+            <ErrorTitle>Une erreur s'est produite</ErrorTitle>
+            <ErrorText>Nous rencontrons des difficultés pour charger la page de liste d'attente. Veuillez essayer d'actualiser.</ErrorText>
             <RefreshButton 
               onClick={handleRefresh}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Rafraîchir la page
+              Actualiser la page
             </RefreshButton>
           </ErrorContainer>
         </CenteredContent>
@@ -398,18 +461,18 @@ const Waitlist = () => {
         
         {isOfflineMode && (
           <InfoMessage
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Note : Vous consultez cette page en mode hors ligne. Les soumissions de formulaire seront simulées.
+            Remarque : Vous consultez cette page en mode hors ligne. Les soumissions de formulaire seront simulées.
           </InfoMessage>
         )}
         
         <FormContainer
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
           {submissionSuccess ? (
             <SuccessMessage
@@ -417,7 +480,7 @@ const Waitlist = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              Merci de vous être inscrit à notre liste d'attente ! Nous vous informerons lors de notre lancement.
+              Merci de rejoindre notre liste d'attente ! Nous vous informerons lors de notre lancement.
             </SuccessMessage>
           ) : (
             <form onSubmit={handleSubmit}>
