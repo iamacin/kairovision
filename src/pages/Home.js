@@ -8,7 +8,10 @@ import OptimizedImage from '../components/OptimizedImage'
 
 const HomeContainer = styled.div`
   min-height: 100vh;
-  background-color: ${({ theme }) => theme?.colors?.backgroundAlt || '#f9f9ff'};
+  background-color: ${({ theme }) => theme.mode === 'dark' 
+    ? theme?.colors?.backgroundDark || '#121212' 
+    : theme?.colors?.backgroundAlt || '#f9f9ff'};
+  color: ${({ theme }) => theme.mode === 'dark' ? '#f9f9ff' : 'inherit'};
 `
 
 const HeroSection = styled.section`
@@ -22,16 +25,15 @@ const HeroSection = styled.section`
   padding: 2rem;
   color: white;
   background: linear-gradient(135deg, 
-    rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.95) 0%,
-    rgba(${({ theme }) => theme?.colors?.primaryDark || '#6a1cb7'}, 0.98) 100%
+    rgba(30, 40, 107, 0.95) 0%,
+    rgba(48, 20, 94, 0.98) 100%
   );
   background-image: 
     linear-gradient(135deg, 
-      rgba(${({ theme }) => theme?.colors?.primaryRgb || '138, 43, 226'}, 0.95) 0%,
-      rgba(${({ theme }) => theme?.colors?.primaryDark || '#6a1cb7'}, 0.98) 100%
+      rgba(30, 40, 107, 0.95) 0%,
+      rgba(48, 20, 94, 0.98) 100%
     ),
-    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   overflow: hidden;
 
   /* Tech pattern background */
@@ -440,7 +442,13 @@ const SecondaryButton = styled(motion(Link))`
 
 const Section = styled.section`
   padding: 100px 5%;
-  background: ${({ theme, alt }) => alt ? theme.colors.backgroundAlt : theme.colors.background};
+  background: ${({ theme, alt }) => {
+    if (theme.mode === 'dark') {
+      return alt ? theme.colors.backgroundDarker || '#0a0a0a' : theme.colors.backgroundDark || '#121212';
+    }
+    return alt ? theme.colors.backgroundAlt || '#f5f5f7' : theme.colors.background || '#ffffff';
+  }};
+  color: ${({ theme }) => theme.mode === 'dark' ? '#f9f9ff' : 'inherit'};
   
   @media (max-width: 768px) {
     padding: 70px 5%;
@@ -610,10 +618,12 @@ const PropertyGrid = styled(motion.div)`
 `
 
 const PropertyCard = styled(motion.div)`
-  background: ${({ theme }) => theme.colors.cardBg};
+  background: ${({ theme }) => theme.mode === 'dark' 
+    ? 'rgba(30, 30, 40, 0.6)' 
+    : theme.colors.cardBg || '#ffffff'};
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, ${({ theme }) => theme.mode === 'dark' ? 0.3 : 0.1});
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   
@@ -773,7 +783,10 @@ const ViewMoreButton = styled(motion(Link))`
 
 const PropertiesSection = styled(motion.section)`
   padding: 5rem 2rem;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.mode === 'dark' 
+    ? theme.colors.backgroundDark || '#121212' 
+    : theme.colors.background || '#ffffff'};
+  color: ${({ theme }) => theme.mode === 'dark' ? '#f9f9ff' : 'inherit'};
   
   @media (max-width: 768px) {
     padding: 3rem 1.5rem;
@@ -784,9 +797,15 @@ const PropertiesSection = styled(motion.section)`
 const CTASection = styled.section`
   padding: 70px 5%;
   background: linear-gradient(135deg, 
-    ${({ theme }) => theme.colors.primary} 0%, 
-    ${({ theme }) => theme.colors.primaryDark} 100%
+    #1e284e 0%, 
+    #4a0e47 100%
   );
+  background-image: 
+    linear-gradient(135deg, 
+      #1e284e 0%, 
+      #4a0e47 100%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='152' height='152' viewBox='0 0 152 152'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='temple' fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M152 150v2H0v-2h28v-8H8v-20H0v-2h8V80h42v20h20v42H30v8h90v-8H80v-42h20V80h42v40h8V30h-8v40h-42V50H80V8h40V0h2v8h20v20h8V0h2v150zm-2 0v-28h-8v20h-20v8h28zM82 30v18h18V30H82zm20 18h20v20h18V30h-20V10H82v18h20v20zm0 2v18h18V50h-18zm20-22h18V10h-18v18zm-54 92v-18H50v18h18zm-20-18H28V82H10v38h20v20h38v-18H48v-20zm0-2V82H30v18h18zm-20 22H10v18h18v-18zm54 0v18h38v-20h20V82h-18v20h-20v20H82zm18-20H82v18h18v-18zm2-2h18V82h-18v18zm20 40v-18h18v18h-18zM30 0h-2v8H8v20H0v2h8v40h42V50h20V8H30V0zm20 48h18V30H50v18zm18-20H48v20H28v20H10V30h20V10h38v18zM30 50h18v18H30V50zm-2-40H10v18h18V10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   text-align: center;
   color: white;
   position: relative;
@@ -889,7 +908,10 @@ const CTAButton = styled(motion(Link))`
 // Section "Pourquoi Nous Choisir"
 const FeaturesSection = styled(motion.section)`
   padding: 5rem 2rem;
-  background: ${({ theme }) => theme.colors.bgSecondary || '#f8f9fa'};
+  background: ${({ theme }) => theme.mode === 'dark' 
+    ? theme.colors.backgroundDarker || '#0a0a0a' 
+    : theme.colors.bgSecondary || '#f8f9fa'};
+  color: ${({ theme }) => theme.mode === 'dark' ? '#f9f9ff' : 'inherit'};
   position: relative;
   overflow: hidden;
   
@@ -901,7 +923,7 @@ const FeaturesSection = styled(motion.section)`
     right: 0;
     height: 100%;
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.4;
+    opacity: ${({ theme }) => theme.mode === 'dark' ? 0.2 : 0.4};
     z-index: 0;
   }
   
@@ -925,10 +947,12 @@ const FeaturesGrid = styled(motion.div)`
 `
 
 const FeatureCard = styled(motion.div)`
-  background: ${({ theme }) => theme.colors.cardBg};
+  background: ${({ theme }) => theme.mode === 'dark' 
+    ? 'rgba(30, 30, 40, 0.6)' 
+    : theme.colors.cardBg || '#ffffff'};
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, ${({ theme }) => theme.mode === 'dark' ? 0.3 : 0.08});
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1021,7 +1045,10 @@ const FeatureDescription = styled.p`
 // Section Témoignages
 const TestimonialsSection = styled(motion.section)`
   padding: 5rem 2rem;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.mode === 'dark' 
+    ? theme.colors.backgroundDark || '#121212' 
+    : theme.colors.background || '#ffffff'};
+  color: ${({ theme }) => theme.mode === 'dark' ? '#f9f9ff' : 'inherit'};
   position: relative;
   overflow: hidden;
   
@@ -1043,10 +1070,12 @@ const TestimonialsGrid = styled(motion.div)`
 `
 
 const TestimonialCard = styled(motion.div)`
-  background: ${({ theme }) => theme.colors.cardBg};
+  background: ${({ theme }) => theme.mode === 'dark' 
+    ? 'rgba(30, 30, 40, 0.6)' 
+    : theme.colors.cardBg || '#ffffff'};
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, ${({ theme }) => theme.mode === 'dark' ? 0.3 : 0.08});
   position: relative;
   
   &::before {

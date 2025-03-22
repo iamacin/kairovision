@@ -519,9 +519,6 @@ const Navbar = () => {
               damping: 30 
             }}
             variants={menuVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
           >
             <MobileMenuItem 
               to="/" 
