@@ -24,16 +24,18 @@ const HeroSection = styled.section`
   text-align: center;
   padding: 2rem;
   color: white;
-  background: linear-gradient(135deg, 
-    rgba(30, 40, 107, 0.95) 0%,
-    rgba(48, 20, 94, 0.98) 100%
+  background: linear-gradient(125deg, 
+    #2a2d64 0%,
+    #4a115f 50%,
+    #203060 100%
   );
   background-image: 
-    linear-gradient(135deg, 
-      rgba(30, 40, 107, 0.95) 0%,
-      rgba(48, 20, 94, 0.98) 100%
+    linear-gradient(125deg, 
+      #2a2d64 0%,
+      #4a115f 50%,
+      #203060 100%
     ),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%239C92AC' fill-opacity='0.06'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z'/%3E%3C/g%3E%3C/svg%3E");
   overflow: hidden;
 
   /* Tech pattern background */
@@ -45,23 +47,41 @@ const HeroSection = styled.section`
     right: 0;
     bottom: 0;
     background-image: 
-      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,.05)' fill-rule='evenodd'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='rgba(255,255,255,.05)' fill-rule='evenodd'/%3E%3C/svg%3E"),
+      radial-gradient(circle at 20% 20%, rgba(41, 75, 196, 0.2) 0%, transparent 25%),
+      radial-gradient(circle at 80% 80%, rgba(141, 41, 196, 0.2) 0%, transparent 25%),
       repeating-linear-gradient(
-        rgba(255, 255, 255, 0.03) 0px,
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px,
-        transparent 20px
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        rgba(255, 255, 255, 0.02) 2px,
+        rgba(255, 255, 255, 0.02) 4px
       ),
       repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.03) 0px,
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px,
-        transparent 20px
+        to right,
+        transparent 0px,
+        transparent 2px,
+        rgba(255, 255, 255, 0.02) 2px,
+        rgba(255, 255, 255, 0.02) 4px
       );
     pointer-events: none;
     z-index: 1;
     animation: patternMove 60s linear infinite;
+  }
+
+  /* Building silhouettes at the bottom */
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 0v46.29c47.79 22.2 103.59 32.17 158 28 70.36-5.37 136.33-33.31 206.8-37.5 73.84-4.36 147.54 16.88 218.2 35.26 69.27 18 138.3 24.88 209.4 13.08 36.15-6 69.85-17.84 104.45-29.34C989.49 25 1113-14.29 1200 52.47V0z' opacity='.15' fill='%23FFFFFF'/%3E%3Cpath d='M0 0v15.81c13 21.11 27.64 41.05 47.69 56.24C99.41 111.27 165 111 224.58 91.58c31.15-10.15 60.09-26.07 89.67-39.8 40.92-19 84.73-46 130.83-49.67 36.26-2.85 70.9 9.42 98.6 31.56 31.77 25.39 62.32 62 103.63 73 40.44 10.79 81.35-6.69 119.13-24.28s75.16-39 116.92-43.05c59.73-5.85 113.28 22.88 168.9 38.84 30.2 8.66 59 6.17 87.09-7.5 22.43-10.89 48-26.93 60.65-49.24V0z' opacity='.1' fill='%23FFFFFF'/%3E%3Cpath d='M0 0v5.63C149.93 59 314.09 71.32 475.83 42.57c43-7.64 84.23-20.12 127.61-26.46 59-8.63 112.48 12.24 165.56 35.4C827.93 77.22 886 95.24 951.2 90c86.53-7 172.46-45.71 248.8-84.81V0z' opacity='.05' fill='%23FFFFFF'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+    z-index: 2;
+    opacity: 0.8;
   }
 
   @keyframes patternMove {
@@ -795,23 +815,36 @@ const PropertiesSection = styled(motion.section)`
 
 // CTA Section Components
 const CTASection = styled.section`
-  padding: 70px 5%;
-  background: linear-gradient(135deg, 
-    #1e284e 0%, 
-    #4a0e47 100%
-  );
-  background-image: 
-    linear-gradient(135deg, 
-      #1e284e 0%, 
-      #4a0e47 100%
-    ),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='152' height='152' viewBox='0 0 152 152'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='temple' fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M152 150v2H0v-2h28v-8H8v-20H0v-2h8V80h42v20h20v42H30v8h90v-8H80v-42h20V80h42v40h8V30h-8v40h-42V50H80V8h40V0h2v8h20v20h8V0h2v150zm-2 0v-28h-8v20h-20v8h28zM82 30v18h18V30H82zm20 18h20v20h18V30h-20V10H82v18h20v20zm0 2v18h18V50h-18zm20-22h18V10h-18v18zm-54 92v-18H50v18h18zm-20-18H28V82H10v38h20v20h38v-18H48v-20zm0-2V82H30v18h18zm-20 22H10v18h18v-18zm54 0v18h38v-20h20V82h-18v20h-20v20H82zm18-20H82v18h18v-18zm2-2h18V82h-18v18zm20 40v-18h18v18h-18zM30 0h-2v8H8v20H0v2h8v40h42V50h20V8H30V0zm20 48h18V30H50v18zm18-20H48v20H28v20H10V30h20V10h38v18zM30 50h18v18H30V50zm-2-40H10v18h18V10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  text-align: center;
-  color: white;
+  padding: 90px 5%;
   position: relative;
+  color: white;
+  text-align: center;
   overflow: hidden;
+  isolation: isolate;
   
-  /* Tech pattern background */
+  /* Main Gradient Background */
+  background: linear-gradient(135deg,
+    #252e66 0%,
+    #422863 50%,
+    #292b77 100%
+  );
+  
+  /* Create illuminated skyline effect */
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'%3E%3Cpath d='M0,250 L0,300 L1200,300 L1200,250 L1150,250 L1140,230 L1130,250 L1120,200 L1100,230 L1090,250 L1080,220 L1070,250 L1060,230 L1040,250 L1030,200 L1010,220 L1000,250 L990,230 L980,250 L970,200 L950,250 L940,230 L930,250 L900,200 L880,250 L870,230 L840,250 L830,200 L810,250 L800,230 L780,250 L770,200 L760,250 L750,230 L720,250 L700,200 L690,250 L680,230 L650,250 L640,200 L630,250 L610,230 L590,250 L570,200 L550,250 L540,230 L530,250 L520,200 L500,230 L480,250 L460,200 L450,250 L440,230 L430,250 L410,200 L390,250 L370,230 L350,250 L330,200 L320,250 L310,230 L300,250 L280,200 L270,230 L240,250 L220,230 L200,250 L180,200 L160,250 L150,230 L130,250 L120,200 L100,250 L80,200 L60,250 L50,200 L20,250 L0,250 Z' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: bottom;
+    opacity: 0.7;
+    z-index: -1;
+  }
+  
+  /* Add floating particles */
   &::after {
     content: '';
     position: absolute;
@@ -820,65 +853,82 @@ const CTASection = styled.section`
     right: 0;
     bottom: 0;
     background-image: 
-      repeating-linear-gradient(
-        rgba(255, 255, 255, 0.03) 0px,
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px,
-        transparent 20px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.03) 0px,
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px,
-        transparent 20px
-      );
-    pointer-events: none;
-    z-index: 1;
+      radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.2) 0%, transparent 10%),
+      radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.2) 0%, transparent 10%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 15%);
+    z-index: -1;
+    opacity: 0.6;
+    animation: pulse 15s infinite alternate ease-in-out;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.3; }
   }
 `
 
 const CTAContent = styled.div`
   position: relative;
   z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    0 1px 1px rgba(255, 255, 255, 0.1) inset;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
 `
 
 const CTATitle = styled.h2`
-  font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 700;
-  margin-bottom: 1.25rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #ffffff, #e0e0ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  
+  @media (max-width: 768px) {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
 `
 
 const CTADescription = styled.p`
-  font-size: clamp(0.9rem, 1.15vw, 1rem);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  margin-bottom: 2rem;
   color: rgba(255, 255, 255, 0.9);
   max-width: 600px;
-  margin: 0 auto 2rem;
-  line-height: 1.7;
+  margin-left: auto;
+  margin-right: auto;
+  
+  @media (max-width: 768px) {
+    font-size: clamp(0.9rem, 4vw, 1.1rem);
+  }
 `
 
 const CTAButton = styled(motion(Link))`
-  padding: 1rem 2.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  text-align: center;
-  background: white;
-  color: ${({ theme }) => theme.colors.primary};
-  border: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #4e54c8, #8f94fb);
+  color: white;
+  font-weight: 600;
+  padding: 0.8rem 2.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
-
+  
   &::before {
     content: '';
     position: absolute;
@@ -886,22 +936,20 @@ const CTAButton = styled(motion(Link))`
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      rgba(255, 255, 255, 0.5) 0%,
-      rgba(255, 255, 255, 0) 60%,
-      rgba(0, 0, 0, 0.05) 100%
-    );
-    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+    z-index: 1;
   }
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  
+  svg {
+    transition: transform 0.3s ease;
   }
-
+  
+  &:hover svg {
+    transform: translateX(5px);
+  }
+  
   @media (max-width: 768px) {
-    padding: 0.9rem 1.8rem;
-    font-size: 0.9rem;
+    padding: 0.7rem 2rem;
   }
 `
 
