@@ -19,6 +19,7 @@ import Waitlist from './pages/Waitlist';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 import Unauthorized from './pages/Unauthorized';
+import Login from './pages/Login';
 
 // Define a simple placeholder component for pages still under development
 const Placeholder = ({ title }) => (
@@ -98,7 +99,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <AppLayout><Placeholder title="Login" /></AppLayout>
+    element: <AppLayout><Login /></AppLayout>
   },
   {
     path: "/dashboard",

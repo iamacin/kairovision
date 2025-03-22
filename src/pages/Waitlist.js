@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { secureClient } from '../utils/supabase';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { motion } from 'framer-motion';
 
 // Styled components for better UI management
 const WaitlistContainer = styled.div`
@@ -21,7 +22,7 @@ const CenteredContent = styled.div`
   justify-content: center;
 `;
 
-const Title = styled.h1`
+const Title = styled(motion.h1)`
   font-size: 2.5rem;
   margin-bottom: 20px;
   color: ${props => props.theme.colors.text};
@@ -32,7 +33,7 @@ const Title = styled.h1`
   }
 `;
 
-const Subtitle = styled.p`
+const Subtitle = styled(motion.p)`
   font-size: 1.2rem;
   line-height: 1.6;
   margin-bottom: 40px;
@@ -41,23 +42,48 @@ const Subtitle = styled.p`
   text-align: center;
 `;
 
-const FormContainer = styled.div`
-  background-color: ${props => props.theme.colors.cardBackground};
+const FormContainer = styled(motion.div)`
+  background-color: ${props => props.theme.colors.cardBackground || props.theme.colors.background};
   padding: 40px;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   width: 100%;
   max-width: 600px;
+  position: relative;
+  overflow: hidden;
+  
+  /* Glass morphism effect */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(${({ theme }) => theme.colors.primaryRgb}, 0.1);
+  
+  /* Glossy effect */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(${props => props.theme.colors.primaryRgb}, 0.03) 0%,
+      transparent 50%
+    );
+    z-index: 0;
+  }
 `;
 
 const InputGroup = styled.div`
   margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 `;
 
 const Label = styled.label`
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
+  color: ${props => props.theme.colors.text};
 `;
 
 const Input = styled.input`
@@ -66,12 +92,14 @@ const Input = styled.input`
   border-radius: 8px;
   border: 1px solid ${props => props.hasError ? props.theme.colors.error : props.theme.colors.border};
   font-size: 1rem;
-  background-color: ${props => props.theme.colors.inputBackground};
+  background-color: ${props => props.theme.colors.inputBackground || 'rgba(255, 255, 255, 0.8)'};
   color: ${props => props.theme.colors.text};
+  transition: all 0.2s ease;
   
   &:focus {
     outline: none;
     border-color: ${props => props.hasError ? props.theme.colors.error : props.theme.colors.primary};
+    box-shadow: 0 0 0 3px rgba(${props => props.theme.colors.primaryRgb}, 0.1);
   }
 `;
 
@@ -81,9 +109,12 @@ const InputError = styled.div`
   margin-top: 4px;
 `;
 
-const Button = styled.button`
+const Button = styled(motion.button)`
   padding: 14px 24px;
-  background-color: ${props => props.theme.colors.primary};
+  background: linear-gradient(135deg, 
+    ${props => props.theme.colors.primary} 0%, 
+    ${props => props.theme.colors.primaryDark} 100%
+  );
   color: white;
   border: none;
   border-radius: 8px;
@@ -91,57 +122,65 @@ const Button = styled.button`
   font-weight: 600;
   cursor: pointer;
   margin-top: 16px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   width: 100%;
+  position: relative;
+  z-index: 1;
   
   &:hover {
-    background-color: ${props => props.theme.colors.primaryDark};
+    filter: brightness(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(${props => props.theme.colors.primaryRgb}, 0.4);
   }
   
   &:disabled {
-    background-color: ${props => props.theme.colors.disabled};
+    background: ${props => props.theme.colors.disabled || '#cccccc'};
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `;
 
-const Message = styled.div`
+const Message = styled(motion.div)`
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
   font-size: 1rem;
   text-align: center;
+  position: relative;
+  z-index: 1;
 `;
 
 const SuccessMessage = styled(Message)`
-  color: ${props => props.theme.colors.success};
-  background-color: ${props => props.theme.colors.successLight};
-  border: 1px solid ${props => props.theme.colors.success};
+  color: ${props => props.theme.colors.success || '#2e7d32'};
+  background-color: ${props => props.theme.colors.successLight || 'rgba(46, 125, 50, 0.1)'};
+  border: 1px solid ${props => props.theme.colors.success || '#2e7d32'};
 `;
 
 const ErrorMessage = styled(Message)`
-  color: ${props => props.theme.colors.error};
-  background-color: ${props => props.theme.colors.errorLight};
-  border: 1px solid ${props => props.theme.colors.error};
+  color: ${props => props.theme.colors.error || '#d32f2f'};
+  background-color: ${props => props.theme.colors.errorLight || 'rgba(211, 47, 47, 0.1)'};
+  border: 1px solid ${props => props.theme.colors.error || '#d32f2f'};
 `;
 
 const InfoMessage = styled(Message)`
-  color: ${props => props.theme.colors.info};
-  background-color: ${props => props.theme.colors.infoLight};
-  border: 1px solid ${props => props.theme.colors.info};
+  color: ${props => props.theme.colors.info || '#0288d1'};
+  background-color: ${props => props.theme.colors.infoLight || 'rgba(2, 136, 209, 0.1)'};
+  border: 1px solid ${props => props.theme.colors.info || '#0288d1'};
 `;
 
-const ErrorContainer = styled.div`
+const ErrorContainer = styled(motion.div)`
   max-width: 600px;
   margin: 40px auto;
   text-align: center;
   padding: 30px;
   border-radius: 12px;
-  background-color: ${props => props.theme.colors.cardBackground};
+  background-color: ${props => props.theme.colors.cardBackground || props.theme.colors.background};
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 `;
 
 const ErrorTitle = styled.h2`
-  color: ${props => props.theme.colors.error};
+  color: ${props => props.theme.colors.error || '#d32f2f'};
   margin-bottom: 16px;
 `;
 
@@ -150,7 +189,7 @@ const ErrorText = styled.p`
   color: ${props => props.theme.colors.textSecondary};
 `;
 
-const RefreshButton = styled.button`
+const RefreshButton = styled(motion.button)`
   padding: 12px 24px;
   background-color: ${props => props.theme.colors.primary};
   color: white;
@@ -159,10 +198,11 @@ const RefreshButton = styled.button`
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   
   &:hover {
     background-color: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-2px);
   }
 `;
 
@@ -229,13 +269,13 @@ const Waitlist = () => {
     const errors = {};
     
     if (!name.trim()) {
-      errors.name = 'Name is required';
+      errors.name = 'Veuillez entrer votre nom';
     }
     
     if (!email.trim()) {
-      errors.email = 'Email is required';
+      errors.email = 'Veuillez entrer votre adresse email';
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = 'Please enter a valid email address';
+      errors.email = 'Veuillez entrer une adresse email valide';
     }
     
     setValidationErrors(errors);
@@ -278,30 +318,30 @@ const Waitlist = () => {
         setEmail('');
       } else {
         console.error('Unexpected response:', response);
-        setApiError('There was an issue adding you to the waitlist. Please try again later.');
+        setApiError('Un problème est survenu lors de votre inscription à la liste d\'attente. Veuillez réessayer plus tard.');
       }
     } catch (error) {
       console.error('Error submitting waitlist form:', error);
       
       if (error.message && error.message.includes('timeout')) {
-        setApiError('The request timed out. Our servers might be experiencing high load. Please try again later.');
+        setApiError('La requête a expiré. Nos serveurs peuvent être en surcharge. Veuillez réessayer plus tard.');
       } else if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         if (error.response.status === 409) {
-          setApiError('This email is already on our waitlist. Thank you for your interest!');
+          setApiError('Cette adresse email est déjà sur notre liste d\'attente. Merci pour votre intérêt !');
         } else if (error.response.status === 400) {
-          setApiError('Please check your information and try again.');
+          setApiError('Veuillez vérifier vos informations et réessayer.');
         } else {
-          setApiError(`Something went wrong (${error.response.status}). Please try again later.`);
+          setApiError(`Une erreur est survenue (${error.response.status}). Veuillez réessayer plus tard.`);
         }
       } else if (error.request) {
         // The request was made but no response was received
         setIsOfflineMode(true);
-        setApiError('Could not connect to our servers. Please check your internet connection and try again.');
+        setApiError('Impossible de se connecter à nos serveurs. Veuillez vérifier votre connexion internet et réessayer.');
       } else {
         // Something happened in setting up the request that triggered an Error
-        setApiError('An unexpected error occurred. Please try again later.');
+        setApiError('Une erreur inattendue est survenue. Veuillez réessayer plus tard.');
       }
     } finally {
       setIsLoading(false);
@@ -318,10 +358,20 @@ const Waitlist = () => {
     return (
       <WaitlistContainer>
         <CenteredContent>
-          <ErrorContainer>
-            <ErrorTitle>Something went wrong</ErrorTitle>
-            <ErrorText>We're having trouble loading the waitlist page. Please try refreshing.</ErrorText>
-            <RefreshButton onClick={handleRefresh}>Refresh Page</RefreshButton>
+          <ErrorContainer
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <ErrorTitle>Un problème est survenu</ErrorTitle>
+            <ErrorText>Nous rencontrons des difficultés pour charger la page de liste d'attente. Veuillez rafraîchir.</ErrorText>
+            <RefreshButton 
+              onClick={handleRefresh}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Rafraîchir la page
+            </RefreshButton>
           </ErrorContainer>
         </CenteredContent>
       </WaitlistContainer>
@@ -331,32 +381,64 @@ const Waitlist = () => {
   return (
     <WaitlistContainer>
       <CenteredContent>
-        <Title>Join Our Waitlist</Title>
-        <Subtitle>Be among the first to access our innovative platform when we launch.</Subtitle>
+        <Title
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Rejoignez notre liste d'attente
+        </Title>
+        <Subtitle
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          Soyez parmi les premiers à accéder à notre plateforme innovante lors de son lancement.
+        </Subtitle>
         
         {isOfflineMode && (
-          <InfoMessage>
-            Note: You're viewing this page in offline mode. Form submissions will be simulated.
+          <InfoMessage
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Note : Vous consultez cette page en mode hors ligne. Les soumissions de formulaire seront simulées.
           </InfoMessage>
         )}
         
-        <FormContainer>
+        <FormContainer
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           {submissionSuccess ? (
-            <SuccessMessage>
-              Thank you for joining our waitlist! We'll notify you when we launch.
+            <SuccessMessage
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              Merci de vous être inscrit à notre liste d'attente ! Nous vous informerons lors de notre lancement.
             </SuccessMessage>
           ) : (
             <form onSubmit={handleSubmit}>
-              {apiError && <ErrorMessage>{apiError}</ErrorMessage>}
+              {apiError && (
+                <ErrorMessage
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {apiError}
+                </ErrorMessage>
+              )}
               
               <InputGroup>
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">Nom complet</Label>
                 <Input
                   id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your full name"
+                  placeholder="Entrez votre nom complet"
                   hasError={!!validationErrors.name}
                   disabled={isLoading}
                 />
@@ -364,21 +446,26 @@ const Waitlist = () => {
               </InputGroup>
               
               <InputGroup>
-                <Label htmlFor="email">Email Address</Label>
+                <Label htmlFor="email">Adresse email</Label>
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
+                  placeholder="Entrez votre adresse email"
                   hasError={!!validationErrors.email}
                   disabled={isLoading}
                 />
                 {validationErrors.email && <InputError>{validationErrors.email}</InputError>}
               </InputGroup>
               
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? <LoadingSpinner /> : 'Join Waitlist'}
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                whileTap={{ scale: isLoading ? 1 : 0.98 }}
+              >
+                {isLoading ? <LoadingSpinner /> : 'Rejoindre la liste d\'attente'}
               </Button>
             </form>
           )}
