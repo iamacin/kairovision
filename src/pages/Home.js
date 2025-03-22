@@ -123,7 +123,7 @@ const HeroContent = styled.div`
 `
 
 const MainTitle = styled(motion.h1)`
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1.5rem;
   line-height: 1.1;
@@ -139,7 +139,7 @@ const MainTitle = styled(motion.h1)`
 `
 
 const SubTitle = styled(motion.p)`
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
   line-height: 1.7;
   margin-bottom: 2.5rem;
   max-width: 700px;
@@ -149,15 +149,15 @@ const SubTitle = styled(motion.p)`
   font-weight: 400;
 
   @media (max-width: 768px) {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     margin-bottom: 2rem;
   }
 `
 
 const GlossyButton = styled(motion(Link))`
   position: relative;
-  padding: 1.1rem 2.5rem;
-  font-size: 1.1rem;
+  padding: 1rem 2.25rem;
+  font-size: 1rem;
   font-weight: 600;
   border-radius: 12px;
   cursor: pointer;
@@ -221,14 +221,14 @@ const GlossyButton = styled(motion(Link))`
   }
 
   @media (max-width: 768px) {
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: 0.9rem 1.8rem;
+    font-size: 0.9rem;
   }
 `
 
 const SecondaryButton = styled(motion(Link))`
-  padding: 1.1rem 2.5rem;
-  font-size: 1.1rem;
+  padding: 1rem 2.25rem;
+  font-size: 1rem;
   font-weight: 600;
   border-radius: 12px;
   cursor: pointer;
@@ -267,8 +267,8 @@ const SecondaryButton = styled(motion(Link))`
   }
 
   @media (max-width: 768px) {
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: 0.9rem 1.8rem;
+    font-size: 0.9rem;
   }
 `
 
@@ -294,7 +294,7 @@ const Section = styled.section`
 `
 
 const SectionTitle = styled.h2`
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.25rem);
   font-weight: 700;
   margin-bottom: 1.25rem;
   text-align: center;
@@ -306,7 +306,7 @@ const SectionTitle = styled.h2`
 `
 
 const SectionSubtitle = styled.p`
-  font-size: clamp(1rem, 1.25vw, 1.1rem);
+  font-size: clamp(0.9rem, 1.15vw, 1rem);
   color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
   max-width: 700px;
@@ -413,7 +413,7 @@ const Card = styled(motion.div)`
 `
 
 const CardTitle = styled.h3`
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.text};
@@ -421,20 +421,20 @@ const CardTitle = styled.h3`
   z-index: 1;
   
   @media (max-width: 768px) {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     margin-bottom: 0.75rem;
   }
 `
 
 const CardDescription = styled.p`
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.7;
   color: ${({ theme }) => theme.colors.textSecondary};
   position: relative;
   z-index: 1;
   
   @media (max-width: 768px) {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
 `
 
@@ -522,7 +522,7 @@ const PropertyContent = styled.div`
 `
 
 const PropertyTitle = styled.h3`
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-bottom: 6px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
@@ -533,11 +533,11 @@ const PropertyLocation = styled.div`
   align-items: center;
   gap: 6px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   margin-bottom: 10px;
   
   svg {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 `
 
@@ -548,7 +548,7 @@ const PropertyDetails = styled.div`
   padding-top: 10px;
   margin-top: 10px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 `
 
 const PropertyDetail = styled.span`
@@ -602,7 +602,7 @@ const CTAContent = styled.div`
 `
 
 const CTATitle = styled.h2`
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.25rem);
   font-weight: 700;
   margin-bottom: 1.25rem;
   max-width: 700px;
@@ -611,7 +611,7 @@ const CTATitle = styled.h2`
 `
 
 const CTADescription = styled.p`
-  font-size: clamp(1rem, 1.25vw, 1.1rem);
+  font-size: clamp(0.9rem, 1.15vw, 1rem);
   color: rgba(255, 255, 255, 0.9);
   max-width: 600px;
   margin: 0 auto 2rem;
@@ -619,8 +619,8 @@ const CTADescription = styled.p`
 `
 
 const CTAButton = styled(motion(Link))`
-  padding: 1.1rem 2.5rem;
-  font-size: 1.1rem;
+  padding: 1rem 2.25rem;
+  font-size: 1rem;
   font-weight: 600;
   border-radius: 12px;
   cursor: pointer;
@@ -658,8 +658,8 @@ const CTAButton = styled(motion(Link))`
   }
 
   @media (max-width: 768px) {
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: 0.9rem 1.8rem;
+    font-size: 0.9rem;
   }
 `
 
@@ -775,11 +775,11 @@ const Home = () => {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
             <GlossyButton 
-              to="/waitlist"
+              to="/login"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Rejoindre Kairo
+              Se connecter
             </GlossyButton>
             <SecondaryButton 
               to="/contact"
@@ -882,11 +882,11 @@ const Home = () => {
             Rejoignez la liste d'attente dès maintenant pour être parmi les premiers à découvrir Kairo Vision.
           </CTADescription>
           <CTAButton 
-            to="/waitlist"
+            to="/login"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Rejoindre Kairo <FiArrowRight />
+            Se connecter <FiArrowRight />
           </CTAButton>
         </CTAContent>
       </CTASection>

@@ -145,8 +145,6 @@ const Footer = () => {
         <FooterColumn>
           <FooterTitle>Découvrir</FooterTitle>
           <FooterLinks>
-            <FooterLink><Link to="/#properties">Acheter</Link></FooterLink>
-            <FooterLink><Link to="/#properties">Louer</Link></FooterLink>
             <FooterLink><Link to="/#kairo-vision">Kairo Vision</Link></FooterLink>
             <FooterLink><Link to="/waitlist">Liste d'attente</Link></FooterLink>
           </FooterLinks>

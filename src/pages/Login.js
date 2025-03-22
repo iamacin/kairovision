@@ -111,7 +111,7 @@ const FormCard = styled(motion.div)`
 `;
 
 const Title = styled(motion.h1)`
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 10px;
@@ -119,7 +119,7 @@ const Title = styled(motion.h1)`
 `;
 
 const Subtitle = styled(motion.p)`
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: ${({ theme }) => theme.colors.textSecondary};
   margin-bottom: 30px;
   text-align: center;
@@ -149,11 +149,11 @@ const InputIcon = styled.div`
 
 const Input = styled.input`
   width: 100%;
-  padding: 15px 15px 15px 45px;
+  padding: 14px 15px 14px 45px;
   border: 1px solid ${({ hasError, theme }) => 
     hasError ? theme.colors.error : theme.colors.border || 'rgba(0, 0, 0, 0.1)'};
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   background-color: ${({ theme }) => theme.colors.inputBackground || 'rgba(255, 255, 255, 0.8)'};
   color: ${({ theme }) => theme.colors.text};
   transition: all 0.3s ease;
@@ -172,14 +172,14 @@ const Input = styled.input`
 
 const InputError = styled.div`
   color: ${({ theme }) => theme.colors.error || '#d32f2f'};
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   margin-top: 5px;
   margin-left: 8px;
 `;
 
 const SubmitButton = styled(motion.button)`
   width: 100%;
-  padding: 15px;
+  padding: 14px;
   background: linear-gradient(135deg, 
     ${({ theme }) => theme.colors.primary} 0%,
     ${({ theme }) => theme.colors.primaryDark} 100%
@@ -187,7 +187,7 @@ const SubmitButton = styled(motion.button)`
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -229,7 +229,7 @@ const ErrorMessage = styled(motion.div)`
   padding: 12px;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.colors.error || '#d32f2f'};
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   margin-bottom: 20px;
   text-align: center;
 `;
@@ -239,7 +239,7 @@ const Options = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 `;
 
 const TextLink = styled(Link)`
@@ -256,7 +256,7 @@ const TextLink = styled(Link)`
 const Divider = styled.div`
   display: flex;
   align-items: center;
-  margin: 20px 0;
+  margin: 25px 0;
   
   &::before, &::after {
     content: '';
@@ -268,19 +268,27 @@ const Divider = styled.div`
   span {
     padding: 0 15px;
     color: ${({ theme }) => theme.colors.textSecondary};
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
+`;
+
+const WaitlistInfo = styled.p`
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  text-align: center;
+  margin-bottom: 15px;
+  line-height: 1.5;
 `;
 
 const WaitlistLink = styled(motion(Link))`
   display: block;
   text-align: center;
-  padding: 15px;
+  padding: 14px;
   background-color: transparent;
   color: ${({ theme }) => theme.colors.primary};
   border: 1px solid ${({ theme }) => theme.colors.primary};
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
@@ -452,6 +460,10 @@ const Login = () => {
         <Divider>
           <span>ou</span>
         </Divider>
+        
+        <WaitlistInfo>
+          Vous n'avez pas encore de compte ? Rejoignez notre liste d'attente pour être parmi les premiers à accéder à notre plateforme.
+        </WaitlistInfo>
         
         <WaitlistLink 
           to="/waitlist"

@@ -23,18 +23,18 @@ const CenteredContent = styled.div`
 `;
 
 const Title = styled(motion.h1)`
-  font-size: 2.25rem;
+  font-size: 2rem;
   margin-bottom: 20px;
   color: ${props => props.theme.colors.text};
   text-align: center;
   
   @media (max-width: 768px) {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
   }
 `;
 
 const Subtitle = styled(motion.p)`
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 40px;
   color: ${props => props.theme.colors.textSecondary};
@@ -42,7 +42,7 @@ const Subtitle = styled(motion.p)`
   text-align: center;
   
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 `;
 
@@ -127,6 +127,7 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-weight: 500;
   color: ${props => props.theme.colors.text};
+  font-size: 0.95rem;
 `;
 
 const Input = styled.input`
@@ -134,7 +135,7 @@ const Input = styled.input`
   padding: 12px 16px;
   border-radius: 10px;
   border: 1px solid ${props => props.hasError ? props.theme.colors.error : props.theme.colors.border};
-  font-size: 1rem;
+  font-size: 0.95rem;
   background-color: ${props => props.theme.colors.inputBackground || 'rgba(255, 255, 255, 0.8)'};
   color: ${props => props.theme.colors.text};
   transition: all 0.3s ease;
@@ -149,7 +150,7 @@ const Input = styled.input`
 
 const InputError = styled.div`
   color: ${props => props.theme.colors.error};
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   margin-top: 4px;
 `;
 
@@ -162,7 +163,7 @@ const Button = styled(motion.button)`
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   margin-top: 16px;
@@ -203,7 +204,7 @@ const Message = styled(motion.div)`
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: center;
   position: relative;
   z-index: 1;
@@ -245,11 +246,13 @@ const ErrorContainer = styled(motion.div)`
 const ErrorTitle = styled.h2`
   color: ${props => props.theme.colors.error};
   margin-bottom: 16px;
+  font-size: 1.5rem;
 `;
 
 const ErrorText = styled.p`
   margin-bottom: 20px;
   color: ${props => props.theme.colors.textSecondary};
+  font-size: 0.95rem;
 `;
 
 const RefreshButton = styled(motion.button)`
@@ -258,7 +261,7 @@ const RefreshButton = styled(motion.button)`
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
