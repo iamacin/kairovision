@@ -260,16 +260,8 @@ const Navbar = () => {
             <>
               <AuthButton to="/login">
                 <FiLogIn />
-                Login
+                Se connecter
               </AuthButton>
-              <JoinButton
-                as={Link}
-                to="/waitlist"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Rejoignez-nous
-              </JoinButton>
             </>
           )}
           
@@ -312,10 +304,7 @@ const Navbar = () => {
             ) : (
               <>
                 <MobileMenuItem to="/login" onClick={() => setMobileMenuOpen(false)}>
-                  Login
-                </MobileMenuItem>
-                <MobileMenuItem to="/waitlist" onClick={() => setMobileMenuOpen(false)}>
-                  Rejoignez-nous
+                  Se connecter
                 </MobileMenuItem>
               </>
             )}
