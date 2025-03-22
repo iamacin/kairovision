@@ -54,6 +54,7 @@
     "@supabase/supabase-js": "^2.49.1",
     "dotenv": "^16.4.7",
     "framer-motion": "^12.5.0",
+    "jsonwebtoken": "^9.0.2",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
